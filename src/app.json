@@ -1,0 +1,12 @@
+{
+  "name": "complex-number-calculator",
+  "displayName": "complex-number-calculator",
+  "expo": {
+    "name": "complex-number-calculator",
+    "slug": "complex-number-calculator",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
