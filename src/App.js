@@ -1,16 +1,44 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, {Component} from 'react';
+import { TouchableOpacity, Text, View } from 'react-native';
+import styles from './styles'
 
-const HelloWorldApp = () => {
+const TestFunction = (props) => {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-      }}>
-      <Text>This is a live update</Text>
-    </View>
-  )
+    <Text>{props.in}</Text>
+  );
 }
-export default HelloWorldApp;
+
+class ComplexNumberCalculator extends Component
+{
+  state = {
+    count: 0,
+  }
+
+  onPress = () => {
+    this.setState({
+      count: this.state.count + 1
+    })
+  }
+
+  render = () => {
+    return (
+      <View
+        style={styles.center}
+      >
+        <TestFunction in="Hello World!" />
+        <TestFunction in="This is done with a function call" />
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.onPress}
+        >
+          <Text>Button Example</Text>
+        </TouchableOpacity>
+        
+        <Text>You've clicked the button {this.state.count} times</Text>
+      </View>
+    )
+  }
+}
+
+export default ComplexNumberCalculator;
