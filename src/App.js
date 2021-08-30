@@ -1,6 +1,8 @@
-import React, {Component} from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import React from 'react';
+import { Alert, ShadowPropTypesIOS, Text, View } from 'react-native';
 import styles from './styles'
+import Button from './button'
+import math from './math'
 
 const TestFunction = (props) => {
   return (
@@ -8,34 +10,79 @@ const TestFunction = (props) => {
   );
 }
 
-class ComplexNumberCalculator extends Component
+class ComplexNumberCalculator extends React.Component
 {
+  inputs = [
+    [7, 8, 9, "DEL", "AC"],
+    [4, 5, 6, "x", "÷"],
+    [1, 2, 3, "+", "-"],
+    [0, ".", "+j", "-j", "="]
+  ];
+  operands = ["+","-","x","÷"];
+
   state = {
-    count: 0,
+    inputs: [],
+    count: 0
   }
 
-  onPress = () => {
-    this.setState({
-      count: this.state.count + 1
-    })
+  removeLastItem = (array) => {
+    return array.slice(0,-1)
+  }
+
+  handleButtonInput = (input) => {
+    this.setState({count: this.state.count+1});
+    var array = [...this.state.inputs];
+
+    if(input == "DEL") array = this.removeLastItem(array);
+    else if(input == "AC") array = [];
+    else if(input == "=") {
+      // var answer = math.doMath(...this.state.inputs)
+      var answer = "Insert Answer Here"
+      array = [answer];
+    } else if(this.operands.includes(input)) { // Put a filter on the operators
+      if(array.length>0) { // Disallow having first input be an operator
+        if(this.operands.includes(array[array.length-1])) array = this.removeLastItem(array); // Disallow 2 consecutive ops
+        array = [...array, input];
+      }
+    } else {
+      array = [...array, input];
+    }
+    this.setState({inputs: array});
+  }
+
+  renderButtons = (inputs) => {
+    var buttons = [];
+    var buttonRows = [];
+
+    for (let i=0; i<this.inputs.length; i++) {
+      buttons = [];
+      // buttons[i].push();
+      for (let j=0; j<this.inputs[i].length; j++) {
+        buttons.push(<Button key={i.toString()+"_"+j.toString()} content={this.inputs[i][j]} onPress={this.handleButtonInput} />)
+      }
+      buttonRows.push(<View key={"renderButtonView_"+i.toString()} style={styles.buttonRow}>{buttons}</View>);
+    }
+
+    return (
+      <View 
+        key="renderButtons"
+        style={styles.buttonContainer}
+      >
+        {buttonRows}
+      </View>
+    )
   }
 
   render = () => {
     return (
-      <View
-        style={styles.center}
-      >
-        <TestFunction in="Hello World!" />
-        <TestFunction in="This is done with a function call" />
-
-        <TouchableOpacity
-          style={styles.button}
-          onPress={this.onPress}
-        >
-          <Text>Button Example</Text>
-        </TouchableOpacity>
+      <View key="mainView" style={styles.center}>
+        <TestFunction key="test1" in="Hello World!" />
+        <TestFunction key="test2" in="This is done with a function call" />
         
-        <Text>You've clicked the button {this.state.count} times</Text>
+        <Text key="output"> {this.state.inputs} </Text>
+        {this.renderButtons(this.inputs)}
+
+        <Text>You've pressed the buttons {this.state.count} times</Text>
       </View>
     )
   }
