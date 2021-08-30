@@ -22,7 +22,8 @@ class ComplexNumberCalculator extends React.Component
 
   state = {
     inputs: [],
-    count: 0
+    count: 0,
+    allowDecimal: true,
   }
 
   removeLastItem = (array) => {
@@ -32,22 +33,40 @@ class ComplexNumberCalculator extends React.Component
   handleButtonInput = (input) => {
     this.setState({count: this.state.count+1});
     var array = [...this.state.inputs];
+    var lastElement = array[array.length-1];
+    var allowDecimal = this.state.allowDecimal;
 
-    if(input == "DEL") array = this.removeLastItem(array);
-    else if(input == "AC") array = [];
-    else if(input == "=") {
-      // var answer = math.doMath(...this.state.inputs)
-      var answer = "Insert Answer Here"
-      array = [answer];
+    if(input == "AC") {
+      array = [];
+      allowDecimal = true;
+    } else if(input == "DEL") {
+      if(lastElement == ".") allowDecimal = true;
+      array = this.removeLastItem(array);
+    } else if(input == "=") { // Disallow compute right after an operand
+      if(!this.operands.includes(lastElement)) {
+        // var answer = math.doMath(...this.state.inputs)
+        var answer = "Insert Answer Here"
+        array = [answer];
+        allowDecimal = !answer.includes(".");
+      }
     } else if(this.operands.includes(input)) { // Put a filter on the operators
       if(array.length>0) { // Disallow having first input be an operator
-        if(this.operands.includes(array[array.length-1])) array = this.removeLastItem(array); // Disallow 2 consecutive ops
+        if(this.operands.includes(lastElement)) array = this.removeLastItem(array); // Disallow 2 consecutive ops
         array = [...array, input];
+        allowDecimal = true;
       }
+    } else if(input == ".") { // Disallow 2 decimals in one number
+      if (allowDecimal) {
+        array = [...array, input];
+        allowDecimal = false;
+      }
+    } else if(input == "+j" || input == "-j") { // Imaginary number stuff
+      array = [...array, input];
+      allowDecimal = true;
     } else {
       array = [...array, input];
     }
-    this.setState({inputs: array});
+    this.setState({inputs: array, allowDecimal: allowDecimal});
   }
 
   renderButtons = (inputs) => {
