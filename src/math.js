@@ -1,7 +1,6 @@
+import complex from './complex'
+
 // Handles all the math...
-
-import { exp } from "react-native/Libraries/Animated/src/Easing";
-
 const operands = ["+","-","x","÷"];
 
 // Piece together an expression from an array of just singular variables
@@ -51,6 +50,13 @@ function doMath(inputs)
       i--; // to account for removed elements
     }
   }
+
+  // var a = new complex(1,2);
+  // var b = new complex(3,4);
+
+  // a.div(b);
+  // alert(a.re);
+  // alert(a.im);
 
   return expression;
 }
