@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, ShadowPropTypesIOS, Text, View } from 'react-native';
 import styles from './styles'
 import Button from './button'
-import math from './math'
+import doMath from './math'
 
 const TestFunction = (props) => {
   return (
@@ -43,11 +43,11 @@ class ComplexNumberCalculator extends React.Component
       if(lastElement == ".") allowDecimal = true;
       array = this.removeLastItem(array);
     } else if(input == "=") { // Disallow compute right after an operand
-      if(!this.operands.includes(lastElement)) {
-        // var answer = math.doMath(...this.state.inputs)
-        var answer = "Insert Answer Here"
+      if(!this.operands.includes(lastElement) && array.length>0) {
+        var answer = doMath(array)
+        // var answer = "Insert Answer Here"
         array = [answer];
-        allowDecimal = !answer.includes(".");
+        allowDecimal = !answer[0].toString().includes(".");
       }
     } else if(this.operands.includes(input)) { // Put a filter on the operators
       if(array.length>0) { // Disallow having first input be an operator
