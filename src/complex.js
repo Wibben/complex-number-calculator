@@ -48,6 +48,18 @@ export default class complex
     this.im = this.im / temp.re;
   }
 
+  exp(num: complex) {
+    var temp = new complex({"re": this.re, "im": this.im});;
+
+    // Anything to the 0th power is 0
+    this.re = 1;
+    this.im = 0;
+
+    for(let i=0; i<num.re; i++) {
+      this.mult(temp);
+    }
+  }
+
   conj() {return new complex({"re": this.re, "im": -1 * this.im});}
 
   toOutput() {

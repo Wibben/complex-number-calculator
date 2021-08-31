@@ -1,8 +1,9 @@
+import { exp } from 'react-native/Libraries/Animated/src/Easing';
 import complex from './complex'
 import * as utils from './utils'
 
 // Handles all the math...
-export const operands = ["+","-","x","÷"];
+export const operands = ["+","-","×","÷","(",")","ₓ₁₀","exp"];
 
 // Piece together an expression from an array of just singular variables
 function createExpression(inputs)
@@ -27,41 +28,84 @@ function createExpression(inputs)
   return expression;
 }
 
-export function doMath(inputs)
-{
-  var expression = createExpression(inputs);
-  var answer = [];
+function getPrecedence(operator) {
+  if(["+","-"].includes(operator)) {
+     return 1;            //Precedence of + or - is 1
+  } else if(["×","÷"].includes(operator)) {
+     return 2;            //Precedence of * or / is 2
+  } else if(["exp"].includes(operator)) {
+     return 3;            //Precedence of ^ is 3
+  } else return 0;
+}
 
-  // TODO: look into using mathjs instead
-  
-  // Current Method: evaluate * / first and then + - after, shortening the inputs one at a time
-  for(let i=1; i<expression.length; i++) {
-    if(expression[i] == "x") {
-      expression[i-1].mult(expression[i+1]);
-      expression.splice(i,2);
-      i--; // to account for removed elements
-    } else if(expression[i] == "÷") {
-      expression[i-1].div(expression[i+1]);
-      expression.splice(i,2);
-      i--; // to account for removed elements
+// Takes an infix expression and expresses it in postfix, an array can actually functiona as a stack for the postfix data
+function generatePostfix(expression) 
+{
+  var stack = [];
+  var postfix = [];
+
+  for(let i=0; i<expression.length; i++) {
+    if(expression[i] instanceof complex) 
+      postfix.push(expression[i]); // Add to postfix when item is a number or "("
+    else if(expression[i] == "(") 
+      stack.push(expression[i]);
+    else if(expression[i] == ")") {
+      // Store and pop until ( has found
+      while(stack.length>0 && utils.last(stack) != '(') {
+        postfix.push(stack.pop()); 
+      }
+      stack.pop(); // Remove '(' from stack
+    } else {
+      if(getPrecedence(expression[i]) > getPrecedence(utils.last(stack))) stack.push(expression[i]); // Push if precedence is high
+      else {
+        // Store and pop until higher precedence is found
+        while(stack.length>0 && getPrecedence(expression[i]) <= getPrecedence(utils.last(stack))) {
+          postfix.push(stack.pop());        
+        }
+        stack.push(expression[i]);
+      }
     }
   }
 
-  for(let i=1; i<expression.length; i++) {
-    if(expression[i] == "+") {
-      expression[i-1].add(expression[i+1]);
-      expression.splice(i,2);
-      i--; // to account for removed elements
-    } else if(expression[i] == "-") {
-      expression[i-1].sub(expression[i+1]);
-      expression.splice(i,2);
-      i--; // to account for removed elements
-    }
+  // Store remaining data in stack
+  while(stack.length>0) {
+    postfix.push(stack.pop());
+  }
+
+  return postfix;
+}
+
+export function doMath(inputs)
+{
+  var expression = createExpression(inputs);
+  var postfix = generatePostfix(expression);
+  var answer = [];
+
+  // TODO: look into using mathjs instead
+
+  // Use a stack and postfix notation to simplify calculations, loop through postfix and pop each element
+  // into answer stack until an operator is reached, when operator is reached do calculation with last 
+  // 2 elements of answer and push back into answer
+  for(let i=0; i<postfix.length; i++) {
+    var element = postfix[i];
+
+    if(operands.includes(element)) {
+      var b = answer.pop();
+      var a = answer.pop();
+
+      if(element == "×") a.mult(b);
+      else if(element == ("÷")) a.div(b);
+      else if(element == ("+")) a.add(b);
+      else if(element == ("-")) a.sub(b);
+      else if(element == ("exp")) a.exp(b);
+
+      // Push computed value back into answer
+      answer.push(a);
+    } else answer.push(element);
   }
 
   // var a = new complex({"re": 1,"im": 2});
   // var b = new complex({"re": 3,"im": 4});
-
   // a.div(b);
   // alert(a.re);
   // alert(a.im);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { Platform, TouchableOpacity, Text } from 'react-native';
 import styles from './styles'
 import * as math from './math'
 import * as utils from './utils'
@@ -56,9 +56,14 @@ export class Button extends React.Component
   }
 
   render() {
+    var style;
+    // On mobile view, want to just make the = sign wide for kicks
+    if(Platform.OS != "web" && this.state.content == "=") style = styles.wideButton;
+    else style = styles.button;
+
     return (
       <TouchableOpacity 
-        style={styles.button}
+        style={style}
         onPress={this.callBack} 
       >
         <Text> {this.state.content} </Text>

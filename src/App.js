@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 import styles from './styles'
 import * as button from './button'
 
@@ -11,11 +11,18 @@ const TestFunction = (props) => {
 
 class ComplexNumberCalculator extends React.Component
 {
-  inputs = [
+  webInputs = [
     [7, 8, 9, "DEL", "AC"],
-    [4, 5, 6, "x", "÷"],
+    [4, 5, 6, "×", "÷"],
     [1, 2, 3, "+", "-"],
-    [0, ".", "+j", "-j", "="]
+    [0, ".", "+j", "-j", "="],
+  ];
+  mobileInputs = [
+    ["exp", "(" , ")", "+j", "-j" ],
+    [7, 8, 9, "DEL", "AC"],
+    [4, 5, 6, "×", "÷"],
+    [1, 2, 3, "+", "-"],
+    [0, ".", "ₓ₁₀", "="],
   ];
 
   state = {
@@ -38,11 +45,11 @@ class ComplexNumberCalculator extends React.Component
     var buttons = [];
     var buttonRows = [];
 
-    for (let i=0; i<this.inputs.length; i++) {
+    for (let i=0; i<inputs.length; i++) {
       buttons = [];
       // buttons[i].push();
-      for (let j=0; j<this.inputs[i].length; j++) {
-        buttons.push(<button.Button key={i.toString()+"_"+j.toString()} content={this.inputs[i][j]} onPress={this.handleButtonInput} />)
+      for (let j=0; j<inputs[i].length; j++) {
+        buttons.push(<button.Button key={i.toString()+"_"+j.toString()} content={inputs[i][j]} onPress={this.handleButtonInput} />)
       }
       buttonRows.push(<View key={"renderButtonView_"+i.toString()} style={styles.buttonRow}>{buttons}</View>);
     }
@@ -58,13 +65,17 @@ class ComplexNumberCalculator extends React.Component
   }
 
   render = () => {
+    var inputs;
+    if(Platform.OS == "web") inputs = this.webInputs;
+    else inputs = this.mobileInputs;
+
     return (
       <View key="mainView" style={styles.center}>
         <TestFunction key="test1" in="Hello World!" />
         <TestFunction key="test2" in="This is done with a function call" />
         
         <Text key="output"> {this.state.inputs} </Text>
-        {this.renderButtons(this.inputs)}
+        {this.renderButtons(inputs)}
 
         <Text>You've pressed the buttons {this.state.count} times</Text>
       </View>
