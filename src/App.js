@@ -1,8 +1,7 @@
 import React from 'react';
 import { Alert, ShadowPropTypesIOS, Text, View } from 'react-native';
 import styles from './styles'
-import Button from './button'
-import doMath from './math'
+import * as button from './button'
 
 const TestFunction = (props) => {
   return (
@@ -18,7 +17,6 @@ class ComplexNumberCalculator extends React.Component
     [1, 2, 3, "+", "-"],
     [0, ".", "+j", "-j", "="]
   ];
-  operands = ["+","-","x","÷"];
 
   state = {
     inputs: [],
@@ -26,46 +24,13 @@ class ComplexNumberCalculator extends React.Component
     allowDecimal: true,
   }
 
-  removeLastItem = (array) => {
-    return array.slice(0,-1)
-  }
-
   handleButtonInput = (input) => {
     this.setState({count: this.state.count+1});
     var array = [...this.state.inputs];
-    var lastElement = array[array.length-1];
     var allowDecimal = this.state.allowDecimal;
 
-    if(input == "AC") {
-      array = [];
-      allowDecimal = true;
-    } else if(input == "DEL") {
-      if(lastElement == ".") allowDecimal = true;
-      array = this.removeLastItem(array);
-    } else if(input == "=") { // Disallow compute right after an operand
-      if(!this.operands.includes(lastElement) && array.length>0) {
-        var answer = doMath(array)
-        // var answer = "Insert Answer Here"
-        array = [answer];
-        allowDecimal = !answer[0].toString().includes(".");
-      }
-    } else if(this.operands.includes(input)) { // Put a filter on the operators
-      if(array.length>0) { // Disallow having first input be an operator
-        if(this.operands.includes(lastElement)) array = this.removeLastItem(array); // Disallow 2 consecutive ops
-        array = [...array, input];
-        allowDecimal = true;
-      }
-    } else if(input == ".") { // Disallow 2 decimals in one number
-      if (allowDecimal) {
-        array = [...array, input];
-        allowDecimal = false;
-      }
-    } else if(input == "+j" || input == "-j") { // Imaginary number stuff
-      array = [...array, input];
-      allowDecimal = true;
-    } else {
-      array = [...array, input];
-    }
+    [array, allowDecimal] = button.parseButtonInput(input, array, allowDecimal);
+    
     this.setState({inputs: array, allowDecimal: allowDecimal});
   }
 
@@ -77,7 +42,7 @@ class ComplexNumberCalculator extends React.Component
       buttons = [];
       // buttons[i].push();
       for (let j=0; j<this.inputs[i].length; j++) {
-        buttons.push(<Button key={i.toString()+"_"+j.toString()} content={this.inputs[i][j]} onPress={this.handleButtonInput} />)
+        buttons.push(<button.Button key={i.toString()+"_"+j.toString()} content={this.inputs[i][j]} onPress={this.handleButtonInput} />)
       }
       buttonRows.push(<View key={"renderButtonView_"+i.toString()} style={styles.buttonRow}>{buttons}</View>);
     }
