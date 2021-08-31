@@ -1,4 +1,5 @@
 import complex from './complex'
+import * as utils from './utils'
 
 // Handles all the math...
 export const operands = ["+","-","x","÷"];
@@ -12,7 +13,7 @@ function createExpression(inputs)
   expression.push(inputs[0]);
 
   for(let i=1; i<inputs.length; i++) {
-    var lastElement = expression[expression.length-1];
+    var lastElement = utils.last(expression);
 
     if(operands.includes(lastElement) || operands.includes(inputs[i])) expression.push(inputs[i]);
     else expression[expression.length-1] = `${lastElement}${inputs[i]}`

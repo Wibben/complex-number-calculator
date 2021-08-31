@@ -1,29 +1,28 @@
 import React from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 import styles from './styles'
 import * as math from './math'
-
-function removeLastItem(array) {return array.slice(0,-1);}
+import * as utils from './utils'
 
 export function parseButtonInput(input, array, allowDecimal)
 {
-  var lastElement = array[array.length-1];
+  var lastElement = utils.last(array);
 
   if(input == "AC") {
     array = [];
     allowDecimal = true;
   } else if(input == "DEL") {
     if(lastElement == ".") allowDecimal = true;
-    array = removeLastItem(array);
+    array = utils.removeLastItem(array);
   } else if(input == "=") { // Disallow compute right after an operand
     if(!math.operands.includes(lastElement) && array.length>0) {
       var answer = math.doMath(array)
       array = [...answer];
-      allowDecimal = !answer[0].toString().includes(".");
+      allowDecimal = !utils.last(answer).toString().includes(".");
     }
   } else if(math.operands.includes(input)) { // Put a filter on the operators
     if(array.length>0) { // Disallow having first input be an operator
-      if(math.operands.includes(lastElement)) array = removeLastItem(array); // Disallow 2 consecutive ops
+      if(math.operands.includes(lastElement)) array = utils.removeLastItem(array); // Disallow 2 consecutive ops
       array = [...array, input];
       allowDecimal = true;
     }
