@@ -29,7 +29,7 @@ class ComplexNumberCalculator extends React.Component
     inputs: [],
     count: 0,
     allowDecimal: true,
-  }
+  };
 
   handleButtonInput = (input) => {
     this.setState({count: this.state.count+1});

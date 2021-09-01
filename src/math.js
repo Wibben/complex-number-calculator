@@ -29,13 +29,11 @@ function createExpression(inputs)
 }
 
 function getPrecedence(operator) {
-  if(["+","-"].includes(operator)) {
-     return 1;            //Precedence of + or - is 1
-  } else if(["×","÷"].includes(operator)) {
-     return 2;            //Precedence of * or / is 2
-  } else if(["exp"].includes(operator)) {
-     return 3;            //Precedence of ^ is 3
-  } else return 0;
+  if(["+","-"].includes(operator)) return 1;            //Precedence of + or - is 1
+  else if(["×","÷"].includes(operator)) return 2;       //Precedence of * or / is 2
+  else if(["exp"].includes(operator)) return 3;         //Precedence of ^ is 3
+  else if(["ₓ₁₀"].includes(operator)) return 4;         //Precedence of ₓ₁₀ is 3
+  else return 0;
 }
 
 // Takes an infix expression and expresses it in postfix, an array can actually functiona as a stack for the postfix data
@@ -98,6 +96,7 @@ export function doMath(inputs)
       else if(element == ("+")) a.add(b);
       else if(element == ("-")) a.sub(b);
       else if(element == ("exp")) a.exp(b);
+      else if(element == ("ₓ₁₀")) a.mult(new complex({"re": Math.pow(10,b.re), "im": 0}));
 
       // Push computed value back into answer
       answer.push(a);
