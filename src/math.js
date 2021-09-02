@@ -3,7 +3,7 @@ import complex from './complex'
 import * as utils from './utils'
 
 // Handles all the math...
-export const operands = ["+","-","×","÷","(",")","ₓ₁₀","exp"];
+export const operands = ["+","-","×","÷","(",")","ₓ₁₀","^"];
 
 // Piece together an expression from an array of just singular variables
 function createExpression(inputs)
@@ -31,7 +31,7 @@ function createExpression(inputs)
 function getPrecedence(operator) {
   if(["+","-"].includes(operator)) return 1;            //Precedence of + or - is 1
   else if(["×","÷"].includes(operator)) return 2;       //Precedence of * or / is 2
-  else if(["exp"].includes(operator)) return 3;         //Precedence of ^ is 3
+  else if(["^"].includes(operator)) return 3;         //Precedence of ^ is 3
   else if(["ₓ₁₀"].includes(operator)) return 4;         //Precedence of ₓ₁₀ is 3
   else return 0;
 }
@@ -95,7 +95,7 @@ export function doMath(inputs)
       else if(element == ("÷")) a.div(b);
       else if(element == ("+")) a.add(b);
       else if(element == ("-")) a.sub(b);
-      else if(element == ("exp")) a.exp(b);
+      else if(element == ("^")) a.exp(b);
       else if(element == ("ₓ₁₀")) a.mult(new complex({"re": Math.pow(10,b.re), "im": 0}));
 
       // Push computed value back into answer
