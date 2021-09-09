@@ -4,6 +4,7 @@ export default class complex
     if (opts["re"]) {
       this.re = opts["re"];
       this.im = opts["im"];
+      this.form = "cart";
     } else if(opts["str"]) {
       var str = opts["str"].toString();
       // Check if +-j even exists in the value
@@ -61,6 +62,10 @@ export default class complex
   }
 
   conj() {return new complex({"re": this.re, "im": -1 * this.im});}
+
+  convert(form) {
+    if(form == this.form) return; // No need to do conversion
+  }
 
   toOutput() {
     var output = [];

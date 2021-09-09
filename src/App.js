@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, Text, View } from 'react-native';
+import { Platform, Text, View, StatusBar } from 'react-native';
 import styles from './styles'
 import * as button from './button'
 
@@ -18,6 +18,7 @@ class ComplexNumberCalculator extends React.Component
     [0, ".", "+j", "-j", "="],
   ];
   mobileInputs = [
+    ["polar", "exp", "cart"],
     ["^", "(" , ")", "+j", "-j" ],
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
@@ -71,13 +72,14 @@ class ComplexNumberCalculator extends React.Component
 
     return (
       <View key="mainView" style={styles.center}>
-        <TestFunction key="test1" in="Hello World!" />
-        <TestFunction key="test2" in="This is done with a function call" />
-        
-        <Text key="output"> {this.state.inputs} </Text>
-        {this.renderButtons(inputs)}
-
+        <Text style={{height: StatusBar.currentHeight}}></Text>
+        {/* <Text>Status bar height: {StatusBar.currentHeight}</Text> */}
+        {/* <TestFunction key="test1" in="Hello World!" />
         <Text>You've pressed the buttons {this.state.count} times</Text>
+        <TestFunction key="test2" in="This is done with a function call" /> */}
+        
+        <Text key="output" numberOfLines={1} adjustsFontSizeToFit style={styles.io}> {this.state.inputs} </Text>
+        {this.renderButtons(inputs)}
       </View>
     )
   }

@@ -4,6 +4,7 @@ import * as utils from './utils'
 
 // Handles all the math...
 export const operands = ["+","-","×","÷","(",")","ₓ₁₀","^"];
+export const conversion = ["polar","exp","cart"];
 
 // Piece together an expression from an array of just singular variables
 function createExpression(inputs)

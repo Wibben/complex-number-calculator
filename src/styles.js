@@ -1,7 +1,6 @@
 import { StyleSheet,Dimensions } from 'react-native';
 
-const width = Dimensions.get('window').width; //full width
-const height = Dimensions.get('window').height; //full height
+const {width, height} = Dimensions.get('window'); //full width and height
 
 const styles = StyleSheet.create({
   center: {
@@ -10,8 +9,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  buttonContainer: {
+  io: {
     flex: 1,
+    textAlign: "right",
+    alignSelf: "stretch",
+    borderWidth: 1,
+    borderColor: "white",
+    backgroundColor: "#EEEEEE",
+    fontSize: 30,
+  },
+
+  buttonContainer: {
+    flex: 5,
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'center',

@@ -34,6 +34,8 @@ export function parseButtonInput(input, array, allowDecimal)
   } else if(input == "+j" || input == "-j") { // Imaginary number stuff
     array = [...array, input];
     allowDecimal = true;
+  } else if(math.conversion.includes(input)) {
+    
   } else {
     array = [...array, input];
   }
