@@ -4,7 +4,7 @@ import styles from './styles'
 import * as math from './math'
 import * as utils from './utils'
 
-export function parseButtonInput(input, array, allowDecimal)
+export function parseButtonInput(input, array, allowDecimal, bracketCount)
 {
   var lastElement = utils.last(array);
 
@@ -27,9 +27,19 @@ export function parseButtonInput(input, array, allowDecimal)
       allowDecimal = true;
     }
   } else if(input == "-") { // The negative sign should only be allowed in certain situations
-      if(array.length == 0 || (math.operands.includes(lastElement) && !["+j","-j","-"].includes(lastElement))) {
-        array = [...array, input];
-      }
+    if(array.length == 0 || (math.operands.includes(lastElement) && !["+j","-j","-"].includes(lastElement))) {
+      array = [...array, input];
+    }
+  } else if(input == "(") { // The left bracket should come after a operand
+    if(array.length == 0 || math.operands.includes(lastElement) || ["+j","-j","-"].includes(lastElement)) {
+      array = [...array, input];
+      bracketCount++;
+    }
+  } else if(input == ")") { // Do not allow right brackets if there is no corresponding left bracket
+    if(bracketCount>0 && !math.operands.includes(lastElement) && !["-"].includes(lastElement)) {
+      array = [...array, input];
+      bracketCount--;
+    }
   } else if(input == ".") { // Disallow 2 decimals in one number
     if (allowDecimal) {
       array = [...array, input];
@@ -44,7 +54,7 @@ export function parseButtonInput(input, array, allowDecimal)
     array = [...array, input];
   }
 
-  return [array, allowDecimal];
+  return [array, allowDecimal, bracketCount];
 }
 
 export class Button extends React.Component

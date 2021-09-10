@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#DDDDDD',
+    backgroundColor: '#BBBBBB',
     padding: 0,
     borderTopWidth: 1,
     borderLeftWidth: 0.5,
@@ -59,6 +59,16 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+
+  tabContentButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 0,
+    borderWidth: 1,
+    borderColor: "#BBBBBB",
   },
 
   mainButtonContainer: {

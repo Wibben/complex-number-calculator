@@ -57,48 +57,109 @@ class ComplexNumberCalculator extends React.Component
     ], 
   };
 
-  state = {
-    inputs: [],
-    count: 0,
-    allowDecimal: true,
-    tab: "STD",
-  };
+  constructor(props) {
+    super(props);
+
+    var inputs,header;
+    if(Platform.OS == "web") inputs = this.webInputs;
+    else inputs = this.mobileInputs;
+
+    this.tabElement = [];
+    this.tabContentElement = [];
+
+    this.state = {
+      inputs: [],
+      count: 0,
+      allowDecimal: true,
+      bracketCount: 0,
+      tab: "STD",
+      tabButtons: this.generateTabButtons(this.tabInputs),
+      tabContent: this.generateTabContent(this.tabInputs),
+      mainButtons: this.generateMainButtons(inputs),
+    };
+  }
 
   handleTabSwitching = (input) => {
     this.setState({tab: input});
+
+    // Change the toggle on the tab
+    for(let i=0; i<this.state.tabButtons.length; i++) {
+      if(this.state.tabButtons[i].props.content == input) this.tabElement[i].current.setState({style: styles.seletedTabButton});
+      else this.tabElement[i].current.setState({style: styles.tabButton});
+    }
+
+    // Change the tab button content based on the toggle
+    for(let i=0; i<this.state.tabContent.length; i++) {
+      for(let j=0; j<this.state.tabContent[i].length; j++) {
+        this.tabContentElement[i][j].current.setState({content: this.tabInputs[input][i][j]});
+      }
+    }
   }
 
   handleButtonInput = (input) => {
     this.setState({count: this.state.count+1});
     var array = [...this.state.inputs];
     var allowDecimal = this.state.allowDecimal;
+    var bracketCount = this.state.bracketCount;
 
-    [array, allowDecimal] = button.parseButtonInput(input, array, allowDecimal);
+    [array, allowDecimal, bracketCount] = button.parseButtonInput(input, array, allowDecimal, bracketCount);
     
-    this.setState({inputs: array, allowDecimal: allowDecimal});
+    this.setState({inputs: array, allowDecimal: allowDecimal, bracketCount: bracketCount});
   }
 
-  renderTabButtons = (inputs) => {
+  generateTabButtons = (inputs) => {
     var tabs = Object.keys(inputs);
     var buttons = [];
+
+    // Generate the tabs
+    for (let i=0; i<tabs.length; i++) {
+      this.tabElement.push(React.createRef());
+      if(tabs[i] == "STD") buttons.push(<button.Button ref={this.tabElement[i]} key={"tab_"+i.toString()} content={tabs[i]} onPress={this.handleTabSwitching} style={styles.seletedTabButton} />)
+      else buttons.push(<button.Button ref={this.tabElement[i]} key={"tab_"+i.toString()} content={tabs[i]} onPress={this.handleTabSwitching} style={styles.tabButton} />)
+    }
+
+    return buttons;
+  }
+
+  generateTabContent = (inputs) => {
+    var buttons = [];
+
+    // Generate the content for the tabs
+    for (let i=0; i<inputs["STD"].length; i++) {
+      buttons.push([]);
+      this.tabContentElement.push([]);
+      for(let j=0; j<inputs["STD"][i].length; j++) {
+        this.tabContentElement[i].push(React.createRef());
+        buttons[i].push(<button.Button ref={this.tabContentElement[i][j]} key={"tab_"+i.toString()+"_"+j.toString()} content={inputs["STD"][i][j]} onPress={this.handleButtonInput} style={styles.tabContentButton} />)
+      }
+    }
+
+    return buttons;
+  }
+
+  generateMainButtons = (inputs) => {
+    var buttons = [];
+
+    for (let i=0; i<inputs.length; i++) {
+      buttons.push([]);
+      for (let j=0; j<inputs[i].length; j++) {
+        buttons[i].push(<button.Button key={i.toString()+"_"+j.toString()} content={inputs[i][j]} onPress={this.handleButtonInput} />)
+      }
+    }
+
+    return buttons;
+  }
+
+  renderTabButtons = () => {
     var buttonRows = [];
     var tabContainer = [];
 
     // Generate the tabs
-    for (let i=0; i<tabs.length; i++) {
-      if(tabs[i] == this.state.tab) buttons.push(<button.Button key={"tab_"+i.toString()} content={tabs[i]} onPress={this.handleTabSwitching} style={styles.seletedTabButton} />)
-      else buttons.push(<button.Button key={"tab_"+i.toString()} content={tabs[i]} onPress={this.handleTabSwitching} style={styles.tabButton} />)
-    }
-    tabContainer.push(<View key={"renderButtonTabs"} style={styles.buttonRow}>{buttons}</View>);
+    tabContainer.push(<View key={"renderButtonTabs"} style={styles.buttonRow}>{this.state.tabButtons}</View>);
 
     // Generate the content for the tabs
-    for (let i=0; i<inputs[this.state.tab].length; i++) {
-      buttons = [];
-      for(let j=0; j<inputs[this.state.tab][i].length; j++) {
-        console.log(inputs[this.state.tab][i][j]);
-        buttons.push(<button.Button key={"tab_"+i.toString()+"_"+j.toString()} content={inputs[this.state.tab][i][j]} onPress={this.handleButtonInput} />)
-      }
-      buttonRows.push(<View key={"renderButtonTabs_"+i.toString()} style={styles.buttonRow}>{buttons}</View>);
+    for (let i=0; i<this.state.tabContent.length; i++) {
+      buttonRows.push(<View key={"renderButtonTabs_"+i.toString()} style={styles.buttonRow}>{this.state.tabContent[i]}</View>);
     }
     tabContainer.push(<View key={"renderButtonTabsContent"} style={styles.tabContent}>{buttonRows}</View>)
     
@@ -112,17 +173,11 @@ class ComplexNumberCalculator extends React.Component
     )
   }
 
-  renderMainButtons = (inputs) => {
-    var buttons = [];
+  renderMainButtons = () => {
     var buttonRows = [];
 
-    for (let i=0; i<inputs.length; i++) {
-      buttons = [];
-      // buttons[i].push();
-      for (let j=0; j<inputs[i].length; j++) {
-        buttons.push(<button.Button key={i.toString()+"_"+j.toString()} content={inputs[i][j]} onPress={this.handleButtonInput} />)
-      }
-      buttonRows.push(<View key={"renderButtonView_"+i.toString()} style={styles.buttonRow}>{buttons}</View>);
+    for (let i=0; i<this.state.mainButtons.length; i++) {
+      buttonRows.push(<View key={"renderButtonView_"+i.toString()} style={styles.buttonRow}>{this.state.mainButtons[i]}</View>);
     }
 
     return (
@@ -153,10 +208,8 @@ class ComplexNumberCalculator extends React.Component
         
         <Text key="output" numberOfLines={1} adjustsFontSizeToFit style={styles.io}> {this.state.inputs} </Text>
 
-        {/* <Tab value={index} onChange={setIndex}>  <Tab.Item title="recent" />  <Tab.Item title="favorite" />  <Tab.Item title="cart" /></Tab> */}
-
-        {this.renderTabButtons(this.tabInputs)}
-        {this.renderMainButtons(inputs)}
+        {this.renderTabButtons()}
+        {this.renderMainButtons()}
       </SafeAreaView>
     )
   }
