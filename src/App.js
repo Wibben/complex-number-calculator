@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform, Text, View, SafeAreaView, StatusBar } from 'react-native';
-import styles from './styles'
-import * as button from './button'
+import styles from './styles';
+import * as button from './button';
 
 const TestFunction = (props) => {
   return (
@@ -18,19 +18,55 @@ class ComplexNumberCalculator extends React.Component
     [0, ".", "+j", "-j", "="],
   ];
   mobileInputs = [
-    ["polar", "exp", "cart"],
     ["^", "(" , ")", "+j", "-j" ],
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
     [1, 2, 3, "+", "−"],
     [0, ".", "ₓ₁₀", "-", "="],
   ];
+  tabInputs = {
+    "STD": [
+      ["polar","exp","cart"],
+      ["","",""],
+      ["","",""],
+      ["","",""],
+    ], 
+    "TRIG": [
+      ["sin","cos","tan"],
+      ["","",""],
+      ["","",""],
+      ["","test",""],
+    ],
+    "temp1": [
+      ["","",""],
+      ["temp1","",""],
+      ["","",""],
+      ["","",""],
+    ], 
+    "temp2": [
+      ["","",""],
+      ["","",""],
+      ["","","temp2"],
+      ["","",""],
+    ], 
+    "temp3": [
+      ["","temp3",""],
+      ["","",""],
+      ["","",""],
+      ["","",""],
+    ], 
+  };
 
   state = {
     inputs: [],
     count: 0,
     allowDecimal: true,
+    tab: "STD",
   };
+
+  handleTabSwitching = (input) => {
+    this.setState({tab: input});
+  }
 
   handleButtonInput = (input) => {
     this.setState({count: this.state.count+1});
@@ -42,7 +78,41 @@ class ComplexNumberCalculator extends React.Component
     this.setState({inputs: array, allowDecimal: allowDecimal});
   }
 
-  renderButtons = (inputs) => {
+  renderTabButtons = (inputs) => {
+    var tabs = Object.keys(inputs);
+    var buttons = [];
+    var buttonRows = [];
+    var tabContainer = [];
+
+    // Generate the tabs
+    for (let i=0; i<tabs.length; i++) {
+      if(tabs[i] == this.state.tab) buttons.push(<button.Button key={"tab_"+i.toString()} content={tabs[i]} onPress={this.handleTabSwitching} style={styles.seletedTabButton} />)
+      else buttons.push(<button.Button key={"tab_"+i.toString()} content={tabs[i]} onPress={this.handleTabSwitching} style={styles.tabButton} />)
+    }
+    tabContainer.push(<View key={"renderButtonTabs"} style={styles.buttonRow}>{buttons}</View>);
+
+    // Generate the content for the tabs
+    for (let i=0; i<inputs[this.state.tab].length; i++) {
+      buttons = [];
+      for(let j=0; j<inputs[this.state.tab][i].length; j++) {
+        console.log(inputs[this.state.tab][i][j]);
+        buttons.push(<button.Button key={"tab_"+i.toString()+"_"+j.toString()} content={inputs[this.state.tab][i][j]} onPress={this.handleButtonInput} />)
+      }
+      buttonRows.push(<View key={"renderButtonTabs_"+i.toString()} style={styles.buttonRow}>{buttons}</View>);
+    }
+    tabContainer.push(<View key={"renderButtonTabsContent"} style={styles.tabContent}>{buttonRows}</View>)
+    
+    return (
+      <View
+        key="tabButtons"
+        style={styles.tabContainer}
+      >
+        {tabContainer}
+      </View>
+    )
+  }
+
+  renderMainButtons = (inputs) => {
     var buttons = [];
     var buttonRows = [];
 
@@ -58,7 +128,7 @@ class ComplexNumberCalculator extends React.Component
     return (
       <View 
         key="renderButtons"
-        style={styles.buttonContainer}
+        style={styles.mainButtonContainer}
       >
         {buttonRows}
       </View>
@@ -85,7 +155,8 @@ class ComplexNumberCalculator extends React.Component
 
         {/* <Tab value={index} onChange={setIndex}>  <Tab.Item title="recent" />  <Tab.Item title="favorite" />  <Tab.Item title="cart" /></Tab> */}
 
-        {this.renderButtons(inputs)}
+        {this.renderTabButtons(this.tabInputs)}
+        {this.renderMainButtons(inputs)}
       </SafeAreaView>
     )
   }

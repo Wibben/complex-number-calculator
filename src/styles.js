@@ -19,10 +19,52 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
 
-  buttonContainer: {
-    flex: 5,
+  tabContainer: {
+    flex: 2,
     flexDirection: 'column',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+
+  tabButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F0F0F0',
+    padding: 0,
+    borderTopWidth: 1,
+    borderLeftWidth: 0.5,
+    borderRightWidth: 0.5,
+    borderColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+
+  seletedTabButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 0,
+    borderTopWidth: 1,
+    borderLeftWidth: 0.5,
+    borderRightWidth: 0.5,
+    borderColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+
+  tabContent: {
+    flex: 6,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+
+  mainButtonContainer: {
+    flex: 3,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
 
@@ -47,16 +89,14 @@ const styles = StyleSheet.create({
     // aspectRatio: 3/2,
   },
 
-  wideButton: {
-    flex: 2,
+  nonExistentButton: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#DDDDDD',
+    backgroundColor: '#BBBBBB',
     padding: 0,
-    borderWidth: 2,
-    borderColor: "white",
-    // margin: 1,
-    // aspectRatio: 3/2,
+    borderWidth: 0,
+    borderColor: "#BBBBBB",
   },
 })
 

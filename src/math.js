@@ -1,4 +1,3 @@
-import { exp } from 'react-native/Libraries/Animated/src/Easing';
 import complex from './complex'
 import * as utils from './utils'
 

@@ -54,6 +54,7 @@ export class Button extends React.Component
     this.state = {
       content: props.content,
       onPress: props.onPress,
+      style: props.style==null ? styles.button:props.style,
     }
   }
 
@@ -62,16 +63,20 @@ export class Button extends React.Component
   }
 
   render() {
-    var style;
-    // On mobile view, want to just make the = sign wide for kicks
-    // if(Platform.OS != "web" && this.state.content == "=") style = styles.wideButton;
-    // else style = styles.button;
-    style = styles.button;
+    var style,disabled;
+    
+    // Some buttons in the tabs may be disabled because they aren't filled out yet
+    // Do a literal string check for === to make sure
+    disabled = (this.state.content === "");
+
+    if(disabled) style = styles.nonExistentButton;
+    else style = this.state.style;
 
     return (
       <TouchableOpacity 
         style={style}
         onPress={this.callBack} 
+        disabled={disabled}
       >
         <Text> {this.state.content} </Text>
       </TouchableOpacity>
