@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, Text, View, StatusBar } from 'react-native';
+import { Platform, Text, View, SafeAreaView, StatusBar } from 'react-native';
 import styles from './styles'
 import * as button from './button'
 
@@ -66,21 +66,27 @@ class ComplexNumberCalculator extends React.Component
   }
 
   render = () => {
-    var inputs;
+    var inputs,header;
     if(Platform.OS == "web") inputs = this.webInputs;
     else inputs = this.mobileInputs;
 
+    // The header just takes care of the header/notch sometimes for Android / iOS devices
+    if(Platform.OS == "ios") header = null;
+    else header = (<Text style={{height: StatusBar.currentHeight}}></Text>);
+
     return (
-      <View key="mainView" style={styles.center}>
-        <Text style={{height: StatusBar.currentHeight}}></Text>
-        {/* <Text>Status bar height: {StatusBar.currentHeight}</Text> */}
+      <SafeAreaView key="mainView" style={styles.center}>
+        {header}
         {/* <TestFunction key="test1" in="Hello World!" />
         <Text>You've pressed the buttons {this.state.count} times</Text>
         <TestFunction key="test2" in="This is done with a function call" /> */}
         
         <Text key="output" numberOfLines={1} adjustsFontSizeToFit style={styles.io}> {this.state.inputs} </Text>
+
+        {/* <Tab value={index} onChange={setIndex}>  <Tab.Item title="recent" />  <Tab.Item title="favorite" />  <Tab.Item title="cart" /></Tab> */}
+
         {this.renderButtons(inputs)}
-      </View>
+      </SafeAreaView>
     )
   }
 }

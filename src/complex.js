@@ -82,7 +82,7 @@ export default class complex
 
     output.push(this.re);
     if(this.im > 0) output.push(...["+j", this.im]);
-    else if(this.im < 0) output.push(...["-j", this.im]);
+    else if(this.im < 0) output.push(...["-j", this.im*-1]);
 
     return output;
   }
