@@ -1,7 +1,11 @@
 export default class complex
 {
   constructor(opts) {
-    if (opts["re"]) {
+    if (opts instanceof complex) {
+      this.re = opts.re;
+      this.im = opts.im;
+      this.form = opts.form;
+    } else if (opts["re"]) {
       this.re = opts["re"];
       this.im = opts["im"];
       this.form = "cart";
@@ -41,7 +45,7 @@ export default class complex
   }
 
   div(num: complex) {
-    var temp = num;
+    var temp = new complex(num);;
     this.mult(temp.conj());
     temp.mult(num.conj());
 
@@ -50,14 +54,20 @@ export default class complex
   }
 
   exp(num: complex) {
-    var temp = new complex({"re": this.re, "im": this.im});;
+    var temp = new complex(this);
 
     // Anything to the 0th power is 0
     this.re = 1;
     this.im = 0;
 
-    for(let i=0; i<num.re; i++) {
-      this.mult(temp);
+    if(num.re >= 0) { // Positve powers
+      for(let i=0; i<num.re; i++) {
+        this.mult(temp);
+      }
+    } else { // Negative powers
+      for(let i=0; i>num.re; i--) {
+        this.div(temp);
+      }
     }
   }
 

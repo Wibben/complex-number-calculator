@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#DDDDDD',
     padding: 0,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: "white",
     // margin: 1,
     // aspectRatio: 3/2,

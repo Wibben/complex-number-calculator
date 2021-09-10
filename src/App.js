@@ -14,7 +14,7 @@ class ComplexNumberCalculator extends React.Component
   webInputs = [
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
-    [1, 2, 3, "+", "-"],
+    [1, 2, 3, "+", "−"],
     [0, ".", "+j", "-j", "="],
   ];
   mobileInputs = [
@@ -22,8 +22,8 @@ class ComplexNumberCalculator extends React.Component
     ["^", "(" , ")", "+j", "-j" ],
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
-    [1, 2, 3, "+", "-"],
-    [0, ".", "ₓ₁₀", "="],
+    [1, 2, 3, "+", "−"],
+    [0, ".", "ₓ₁₀", "-", "="],
   ];
 
   state = {

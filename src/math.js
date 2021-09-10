@@ -3,7 +3,8 @@ import complex from './complex'
 import * as utils from './utils'
 
 // Handles all the math...
-export const operands = ["+","-","×","÷","(",")","ₓ₁₀","^"];
+export const operands = ["+","−","×","÷","(",")","ₓ₁₀","^"];
+export const specialOps = ["(",")","-"];
 export const conversion = ["polar","exp","cart"];
 
 // Piece together an expression from an array of just singular variables
@@ -30,10 +31,10 @@ function createExpression(inputs)
 }
 
 function getPrecedence(operator) {
-  if(["+","-"].includes(operator)) return 1;            //Precedence of + or - is 1
+  if(["+","−"].includes(operator)) return 1;            //Precedence of + or - is 1
   else if(["×","÷"].includes(operator)) return 2;       //Precedence of * or / is 2
   else if(["^"].includes(operator)) return 3;         //Precedence of ^ is 3
-  else if(["ₓ₁₀"].includes(operator)) return 4;         //Precedence of ₓ₁₀ is 3
+  else if(["ₓ₁₀","-"].includes(operator)) return 4;         //Precedence of ₓ₁₀ or - is 3
   else return 0;
 }
 
@@ -95,12 +96,16 @@ export function doMath(inputs)
       if(element == "×") a.mult(b);
       else if(element == ("÷")) a.div(b);
       else if(element == ("+")) a.add(b);
-      else if(element == ("-")) a.sub(b);
+      else if(element == ("−")) a.sub(b);
       else if(element == ("^")) a.exp(b);
       else if(element == ("ₓ₁₀")) a.mult(new complex({"re": Math.pow(10,b.re), "im": 0}));
 
       // Push computed value back into answer
       answer.push(a);
+      if(element == ("-")) {
+        b.mult(new complex({"re": -1, "im": 0}));
+        answer.push(b);
+      }
     } else answer.push(element);
   }
 
@@ -110,7 +115,7 @@ export function doMath(inputs)
   // alert(a.re);
   // alert(a.im);
 
-  return expression[0].toOutput();
+  return answer[0].toOutput();
 }
 
 export default doMath;

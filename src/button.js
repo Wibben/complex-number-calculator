@@ -15,17 +15,21 @@ export function parseButtonInput(input, array, allowDecimal)
     if(lastElement == ".") allowDecimal = true;
     array = utils.removeLastItem(array);
   } else if(input == "=") { // Disallow compute right after an operand
-    if((!math.operands.includes(lastElement) || ["(",")"].includes(lastElement)) && array.length>0) {
+    if((!math.operands.includes(lastElement) || math.specialOps.includes(lastElement)) && array.length>0) {
       var answer = math.doMath(array)
       array = [...answer];
       allowDecimal = !utils.last(answer).toString().includes(".");
     }
-  } else if(math.operands.includes(input) && !["(",")"].includes(input)) { // Put a filter on the operators
+  } else if(math.operands.includes(input) && !math.specialOps.includes(input)) { // Put a filter on the operators
     if(array.length>0) { // Disallow having first input be an operator
-      if(math.operands.includes(lastElement) && !["(",")"].includes(input)) array = utils.removeLastItem(array); // Disallow 2 consecutive ops
+      if(math.operands.includes(lastElement) && !math.specialOps.includes(lastElement)) array = utils.removeLastItem(array); // Disallow 2 consecutive ops
       array = [...array, input];
       allowDecimal = true;
     }
+  } else if(input == "-") { // The negative sign should only be allowed in certain situations
+      if(array.length == 0 || (math.operands.includes(lastElement) && !["+j","-j","-"].includes(lastElement))) {
+        array = [...array, input];
+      }
   } else if(input == ".") { // Disallow 2 decimals in one number
     if (allowDecimal) {
       array = [...array, input];
@@ -35,7 +39,7 @@ export function parseButtonInput(input, array, allowDecimal)
     array = [...array, input];
     allowDecimal = true;
   } else if(math.conversion.includes(input)) {
-    
+
   } else {
     array = [...array, input];
   }
@@ -60,8 +64,9 @@ export class Button extends React.Component
   render() {
     var style;
     // On mobile view, want to just make the = sign wide for kicks
-    if(Platform.OS != "web" && this.state.content == "=") style = styles.wideButton;
-    else style = styles.button;
+    // if(Platform.OS != "web" && this.state.content == "=") style = styles.wideButton;
+    // else style = styles.button;
+    style = styles.button;
 
     return (
       <TouchableOpacity 
