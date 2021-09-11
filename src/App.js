@@ -27,7 +27,7 @@ class ComplexNumberCalculator extends React.Component
   tabInputs = {
     "STD": [
       ["polar","exp","cart"],
-      ["","",""],
+      ["π","e",""],
       ["","",""],
       ["","",""],
     ], 
@@ -114,7 +114,7 @@ class ComplexNumberCalculator extends React.Component
     // Generate the tabs
     for (let i=0; i<tabs.length; i++) {
       this.tabElement.push(React.createRef());
-      if(tabs[i] == "STD") buttons.push(<button.Button ref={this.tabElement[i]} key={"tab_"+i.toString()} content={tabs[i]} onPress={this.handleTabSwitching} style={styles.seletedTabButton} />)
+      if(tabs[i] == tabs[0]) buttons.push(<button.Button ref={this.tabElement[i]} key={"tab_"+i.toString()} content={tabs[i]} onPress={this.handleTabSwitching} style={styles.seletedTabButton} />)
       else buttons.push(<button.Button ref={this.tabElement[i]} key={"tab_"+i.toString()} content={tabs[i]} onPress={this.handleTabSwitching} style={styles.tabButton} />)
     }
 
@@ -122,15 +122,16 @@ class ComplexNumberCalculator extends React.Component
   }
 
   generateTabContent = (inputs) => {
+    var tabs = Object.keys(inputs);
     var buttons = [];
 
     // Generate the content for the tabs
-    for (let i=0; i<inputs["STD"].length; i++) {
+    for (let i=0; i<inputs[tabs[0]].length; i++) {
       buttons.push([]);
       this.tabContentElement.push([]);
-      for(let j=0; j<inputs["STD"][i].length; j++) {
+      for(let j=0; j<inputs[tabs[0]][i].length; j++) {
         this.tabContentElement[i].push(React.createRef());
-        buttons[i].push(<button.Button ref={this.tabContentElement[i][j]} key={"tab_"+i.toString()+"_"+j.toString()} content={inputs["STD"][i][j]} onPress={this.handleButtonInput} style={styles.tabContentButton} />)
+        buttons[i].push(<button.Button ref={this.tabContentElement[i][j]} key={"tab_"+i.toString()+"_"+j.toString()} content={inputs[tabs[0]][i][j]} onPress={this.handleButtonInput} style={styles.tabContentButton} />)
       }
     }
 
@@ -191,9 +192,9 @@ class ComplexNumberCalculator extends React.Component
   }
 
   render = () => {
-    var inputs,header;
-    if(Platform.OS == "web") inputs = this.webInputs;
-    else inputs = this.mobileInputs;
+    var flexDir,header;
+    if(Platform.OS == "web") flexDir = "row";
+    else flexDir = "column";
 
     // The header just takes care of the header/notch sometimes for Android / iOS devices
     if(Platform.OS == "ios") header = null;
@@ -208,8 +209,10 @@ class ComplexNumberCalculator extends React.Component
         
         <Text key="output" numberOfLines={1} adjustsFontSizeToFit style={styles.io}> {this.state.inputs} </Text>
 
-        {this.renderTabButtons()}
-        {this.renderMainButtons()}
+        <View key="buttonArea" style={{flex: 4, flexDirection: flexDir}}>
+          {this.renderTabButtons()}
+          {this.renderMainButtons()}
+        </View>
       </SafeAreaView>
     )
   }

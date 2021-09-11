@@ -1,4 +1,4 @@
-import { StyleSheet,Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 const {width, height} = Dimensions.get('window'); //full width and height
 
@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
   },
 
   tabContainer: {
-    flex: 2,
-    flexDirection: 'column',
+    flex: (width>height ? 1 : 2),
+    flexDirection: "column",
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
 
   mainButtonContainer: {
-    flex: 3,
+    flex: (width>height ? 1 : 4),
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   buttonRow: {
     flex: 1,
     flexDirection: 'row',
-    width: width,
+    width: (width>height ? width/2 : width),
     justifyContent: 'center',
     // justifyContent: 'space-between',
     // alignItems: 'center',
