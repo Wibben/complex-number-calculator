@@ -1,77 +1,47 @@
+import * as mathjs from 'mathjs'
+
 export default class complex
 {
   constructor(opts) {
     if (opts instanceof complex) {
-      this.re = opts.re;
-      this.im = opts.im;
+      this.val = opts.val.clone();
       this.form = opts.form;
     } else if (opts["re"]) {
-      this.re = opts["re"];
-      this.im = opts["im"];
+      this.val = mathjs.complex(opts["re"],opts["im"]);
       this.form = "cart";
     } else if(opts["str"]) {
       var str = opts["str"].toString();
-      // Check if +-j even exists in the value
-      if(str.includes("+j")) {
-        var idx = str.indexOf("+j");
-        this.re = parseFloat(idx > 0 ? str.substring(0,idx):0);
-        this.im = parseFloat(idx+2 < str.length ? str.substring(idx+2):1);
-      } else if(str.includes("-j")) {
-        var idx = str.indexOf("-j");
-        this.re = parseFloat(idx > 0 ? str.substring(0,idx):0);
-        this.im = -1 * parseFloat(idx+2 < str.length ? str.substring(idx+2):1);
-      } else {
-        this.re = parseFloat(opts["str"]);
-        this.im = 0;
+      // Check if +/-j even exists in the value
+      if(str.includes("j")) {
+        var idx = str.indexOf("j");
+        str =  str.substr(0, idx) + "i" + str.substr(idx+1);;
       }
+      
+      this.val = mathjs.complex(str);
     }
   }
 
   add(num: complex) {
-    this.re += num.re;
-    this.im += num.im;
+    this.val = mathjs.add(this.val,num.val);
   }
 
   sub(num: complex) {
-    this.re -= num.re;
-    this.im -= num.im;
+    this.val = mathjs.subtract(this.val,num.val);
   }
 
   mult(num: complex) {
-    var re = this.re;
-    var im = this.im;
-    this.re = re * num.re - im * num.im;
-    this.im = re * num.im + im * num.re;
+    this.val = mathjs.multiply(this.val,num.val);
   }
 
   div(num: complex) {
-    var temp = new complex(num);;
-    this.mult(temp.conj());
-    temp.mult(num.conj());
-
-    this.re = this.re / temp.re;
-    this.im = this.im / temp.re;
+    this.val = mathjs.divide(this.val,num.val);
   }
 
   exp(num: complex) {
-    var temp = new complex(this);
-
-    // Anything to the 0th power is 0
-    this.re = 1;
-    this.im = 0;
-
-    if(num.re >= 0) { // Positve powers
-      for(let i=0; i<num.re; i++) {
-        this.mult(temp);
-      }
-    } else { // Negative powers
-      for(let i=0; i>num.re; i--) {
-        this.div(temp);
-      }
-    }
+    this.val = mathjs.pow(this.val,num.val);
   }
 
-  conj() {return new complex({"re": this.re, "im": -1 * this.im});}
+  conj() {return new complex({"re": this.val.re, "im": -1 * this.val.im});}
 
   convert(form) {
     if(form == this.form) return; // No need to do conversion
@@ -80,9 +50,9 @@ export default class complex
   toOutput() {
     var output = [];
 
-    output.push(this.re);
-    if(this.im > 0) output.push(...["+j", this.im]);
-    else if(this.im < 0) output.push(...["-j", this.im*-1]);
+    output.push(this.val.re);
+    if(this.val.im > 0) output.push(...["+j", this.val.im]);
+    else if(this.val.im < 0) output.push(...["-j", this.val.im*-1]);
 
     return output;
   }

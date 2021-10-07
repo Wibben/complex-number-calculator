@@ -27,7 +27,11 @@ Our goal, therefore, is to design a calculator (that is at least able to run on 
 ## Developer Guide
 
 ### Setup
-Ensure you have Node 12 LTS installed (at https://nodejs.org/en/download/) so we can use `npm`, and install expo with `npm install -g expo-cli`
+Ensure you have Node 12 LTS installed (at https://nodejs.org/en/download/) so we can use `npm`, and run the following:
+```
+npm install -g expo-cli       # Install expo for development testing
+npm install mathjs            # Install the math library 
+```
 
 On your Android (https://play.google.com/store/apps/details?id=host.exp.exponent) or iOS device (https://itunes.com/apps/exponent), install the Expo Go app to be able to run the app on your device through LAN. Alternatively, you can install a iOS or Android emulator to run the app on the computer.
 
