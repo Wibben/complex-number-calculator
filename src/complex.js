@@ -21,27 +21,17 @@ export default class complex
     }
   }
 
-  add(num: complex) {
-    this.val = mathjs.add(this.val,num.val);
-  }
+  add(num: complex) { this.val = mathjs.add(this.val,num.val); }
 
-  sub(num: complex) {
-    this.val = mathjs.subtract(this.val,num.val);
-  }
+  sub(num: complex) { this.val = mathjs.subtract(this.val,num.val); }
 
-  mult(num: complex) {
-    this.val = mathjs.multiply(this.val,num.val);
-  }
+  mult(num: complex) { this.val = mathjs.multiply(this.val,num.val); }
 
-  div(num: complex) {
-    this.val = mathjs.divide(this.val,num.val);
-  }
+  div(num: complex) { this.val = mathjs.divide(this.val,num.val); }
 
-  exp(num: complex) {
-    this.val = mathjs.pow(this.val,num.val);
-  }
+  exp(num: complex) { this.val = mathjs.pow(this.val,num.val); }
 
-  conj() {return new complex({"re": this.val.re, "im": -1 * this.val.im});}
+  conj() { return new complex({"re": this.val.re, "im": -1 * this.val.im}); }
 
   convert(form) {
     if(form == this.form) return; // No need to do conversion
