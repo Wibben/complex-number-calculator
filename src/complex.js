@@ -43,7 +43,7 @@ export default class complex
 
   exp(num: complex) { this.val = mathjs.pow(this.val,num.val); }
 
-  conj() { return new complex({"re": this.val.re, "im": -1 * this.val.im}); }
+  conj() { return new complex({"re": this.val.re, "im": -1 * this.val.im}).convert(this.form); }
 
   convert(form) {
     // "default" is for keeping the form the same as initial input
