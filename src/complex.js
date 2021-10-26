@@ -46,7 +46,8 @@ export default class complex
   conj() { return new complex({"re": this.val.re, "im": -1 * this.val.im}); }
 
   convert(form) {
-    this.form = form;
+    // "default" is for keeping the form the same as initial input
+    if(form != "default") this.form = form;
   }
 
   toOutput() {

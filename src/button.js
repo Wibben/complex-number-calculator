@@ -16,7 +16,7 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount)
     array = utils.removeLastItem(array);
   } else if(input == "=") { // Disallow compute right after an operand
     if((!math.operands.includes(lastElement) || math.specialOps.includes(lastElement)) && array.length>0) {
-      var answer = math.doMath(array, "cart");
+      var answer = math.doMath(array, "default");
       array = [...answer];
       allowDecimal = !utils.last(answer).toString().includes(".");
     }
