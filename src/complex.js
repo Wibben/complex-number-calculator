@@ -11,13 +11,25 @@ export default class complex
       this.form = "cart";
     } else if(opts["str"]) {
       var str = opts["str"].toString();
-      // Check if +/-j even exists in the value
-      if(str.includes("j")) {
+      // Check if j or ∠ even exists in the value
+      if(str.includes("e^j")) { // Exponential
+        var idx = str.indexOf("e^j");
+        if(str.substr(idx+1) == "") this.val = mathjs.complex({phi: 1, r: str.substr(0, idx)});
+        else this.val = mathjs.complex({phi: str.substr(idx+3), r: str.substr(0, idx)});
+        this.form = "exp";
+      } else if(str.includes("j")) { // Cartesian
         var idx = str.indexOf("j");
-        str =  str.substr(0, idx) + "i" + str.substr(idx+1);;
+        if(str.substr(idx+1) == "") this.val = mathjs.complex({re: str.substr(0, idx), im: 1});
+        else this.val = mathjs.complex({re: str.substr(0, idx), im: str.substr(idx+1)});
+        this.form = "cart";
+      } else if(str.includes("∠")) { // Polar
+        var idx = str.indexOf("∠");
+        this.val = mathjs.complex({phi: str.substr(idx+1), r: str.substr(0, idx)});
+        this.form = "polar";
+      } else { // Scalar
+        this.val = mathjs.complex(str);
+        this.form = "cart";
       }
-      
-      this.val = mathjs.complex(str);
     }
   }
 
@@ -34,15 +46,22 @@ export default class complex
   conj() { return new complex({"re": this.val.re, "im": -1 * this.val.im}); }
 
   convert(form) {
-    if(form == this.form) return; // No need to do conversion
+    this.form = form;
   }
 
   toOutput() {
-    var output = [];
+    var output,args;
 
-    output.push(this.val.re);
-    if(this.val.im > 0) output.push(...["+j", this.val.im]);
-    else if(this.val.im < 0) output.push(...["-j", this.val.im*-1]);
+    if (this.form == "cart") {
+      args = this.val.toVector();
+      output = [mathjs.round(args[0],2),"j",mathjs.round(args[1],2)];
+    } else if(this.form == "polar") {
+      args = this.val.toPolar();
+      output = [mathjs.round(args.r,2),"∠",mathjs.round(args.phi,2)];
+    } else if(this.form == "exp") {
+      args = this.val.toPolar();
+      output = [mathjs.round(args.r,2),"e","^","j",mathjs.round(args.phi,2)]
+    }
 
     return output;
   }

@@ -17,8 +17,12 @@ function createExpression(inputs)
   for(let i=1; i<inputs.length; i++) {
     var lastElement = utils.last(expression);
 
-    if(operands.includes(lastElement) || operands.includes(inputs[i])) expression.push(inputs[i]);
-    else expression[expression.length-1] = `${lastElement}${inputs[i]}`
+    // Parsing for exponential form
+    if(i+2<inputs.length && inputs[i] == "e" && inputs[i+1] == "^" && inputs[i+2] == "j") {
+      expression[expression.length-1] = `${lastElement}${"e^j"}`;
+      i = i+2;
+    } else if(operands.includes(lastElement) || operands.includes(inputs[i])) expression.push(inputs[i]); // Parsing for operands
+    else expression[expression.length-1] = `${lastElement}${inputs[i]}`; // Parsing for values
   }
 
   // From the expression, generate the complex numbers
@@ -74,13 +78,11 @@ function generatePostfix(expression)
   return postfix;
 }
 
-export function doMath(inputs)
+export function doMath(inputs, form)
 {
   var expression = createExpression(inputs);
   var postfix = generatePostfix(expression);
   var answer = [];
-
-  // TODO: look into using mathjs instead
 
   // Use a stack and postfix notation to simplify calculations, loop through postfix and pop each element
   // into answer stack until an operator is reached, when operator is reached do calculation with last 
@@ -113,6 +115,8 @@ export function doMath(inputs)
   // a.div(b);
   // alert(a.re);
   // alert(a.im);
+  // Conversion step
+  answer[0].convert(form);
 
   return answer[0].toOutput();
 }

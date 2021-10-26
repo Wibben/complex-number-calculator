@@ -18,7 +18,7 @@ class ComplexNumberCalculator extends React.Component
     [0, ".", "+j", "-j", "="],
   ];
   mobileInputs = [
-    ["^", "(" , ")", "+j", "-j" ],
+    ["^", "(" , ")", "j", "∠" ],
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
     [1, 2, 3, "+", "−"],

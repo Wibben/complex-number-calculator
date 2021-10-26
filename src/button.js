@@ -16,7 +16,7 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount)
     array = utils.removeLastItem(array);
   } else if(input == "=") { // Disallow compute right after an operand
     if((!math.operands.includes(lastElement) || math.specialOps.includes(lastElement)) && array.length>0) {
-      var answer = math.doMath(array)
+      var answer = math.doMath(array, "cart");
       array = [...answer];
       allowDecimal = !utils.last(answer).toString().includes(".");
     }
@@ -27,11 +27,11 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount)
       allowDecimal = true;
     }
   } else if(input == "-") { // The negative sign should only be allowed in certain situations
-    if(array.length == 0 || (math.operands.includes(lastElement) && !["+j","-j","-"].includes(lastElement))) {
+    if(array.length == 0 || ([...math.operands,"j","∠"].includes(lastElement) && !["-"].includes(lastElement))) {
       array = [...array, input];
     }
   } else if(input == "(") { // The left bracket should come after a operand
-    if(array.length == 0 || math.operands.includes(lastElement) || ["+j","-j","-"].includes(lastElement)) {
+    if(array.length == 0 || math.operands.includes(lastElement) || ["j","∠","-"].includes(lastElement)) {
       array = [...array, input];
       bracketCount++;
     }
@@ -45,11 +45,16 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount)
       array = [...array, input];
       allowDecimal = false;
     }
-  } else if(input == "+j" || input == "-j") { // Imaginary number stuff
+  } else if(input == "j" || input == "∠") { // Imaginary number stuff
     array = [...array, input];
     allowDecimal = true;
-  } else if(math.conversion.includes(input)) {
-
+  } else if(math.conversion.includes(input)) { // Disallow conversion right after an operand
+    // Conversion will compute along with convert
+    if((!math.operands.includes(lastElement) || math.specialOps.includes(lastElement)) && array.length>0) {
+      var answer = math.doMath(array, input);
+      array = [...answer];
+      allowDecimal = !utils.last(answer).toString().includes(".");
+    }
   } else {
     array = [...array, input];
   }
