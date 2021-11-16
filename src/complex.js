@@ -12,8 +12,8 @@ export default class complex
     } else if(opts["str"]) {
       var str = opts["str"].toString();
       // Check if j or ∠ even exists in the value
-      if(str.includes("e^j")) { // Exponential
-        var idx = str.indexOf("e^j");
+      if(str.includes("eʲ")) { // Exponential
+        var idx = str.indexOf("eʲ");
         if(str.substr(idx+1) == "") this.val = mathjs.complex({phi: 1, r: str.substr(0, idx)});
         else this.val = mathjs.complex({phi: str.substr(idx+3), r: str.substr(0, idx)});
         this.form = "exp";

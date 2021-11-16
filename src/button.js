@@ -1,12 +1,19 @@
 import React from 'react';
 import { Platform, TouchableOpacity, Text } from 'react-native';
-import styles from './styles'
-import * as math from './math'
-import * as utils from './utils'
+import styles from './styles';
+import * as math from './math';
+import * as utils from './utils';
+import {op,fn,sp} from "./operation";
+
 
 export function parseButtonInput(input, array, allowDecimal, bracketCount)
 {
   var lastElement = utils.last(array);
+
+  if(input instanceof fn) {
+    console.log(input.button);
+    return;
+  }
 
   if(input == "AC") {
     array = [];
@@ -80,14 +87,18 @@ export class Button extends React.Component
   }
 
   render() {
-    var style,disabled;
+    var style,disabled,text;
     
     // Some buttons in the tabs may be disabled because they aren't filled out yet
     // Do a literal string check for === to make sure
-    disabled = (this.state.content === "");
+    disabled = (this.state.content.button === "");
 
     if(disabled) style = styles.nonExistentButton;
     else style = this.state.style;
+
+    // Check if button is pure text (tab header) or a calculator input
+    if(this.state.content instanceof op || this.state.content instanceof fn || this.state.content instanceof sp) text = this.state.content.button;
+    else text = this.state.content;
 
     return (
       <TouchableOpacity 
@@ -95,7 +106,7 @@ export class Button extends React.Component
         onPress={this.callBack} 
         disabled={disabled}
       >
-        <Text> {this.state.content} </Text>
+        <Text> {text} </Text>
       </TouchableOpacity>
     );
   }
