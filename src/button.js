@@ -27,16 +27,16 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount)
       allowDecimal = true;
     }
   } else if(input == "-") { // The negative sign should only be allowed in certain situations
-    if(array.length == 0 || ([...math.operands,...math.complexOp].includes(lastElement) && !["-"].includes(lastElement))) {
+    if(array.length == 0 || ([...math.operands,...math.complexOps].includes(lastElement) && !["-"].includes(lastElement))) {
       array = [...array, input];
     }
   } else if(input == "(") { // The left bracket should come after a operand
-    if(array.length == 0 || math.operands.includes(lastElement) || [...math.complexOp,"-"].includes(lastElement)) {
+    if(array.length == 0 || math.operands.includes(lastElement) || [...math.complexOps,"-"].includes(lastElement)) {
       array = [...array, input];
       bracketCount++;
     }
   } else if(input == ")") { // Do not allow right brackets if there is no corresponding left bracket
-    if(bracketCount>0 && !math.operands.includes(lastElement) && !["-"].includes(lastElement)) {
+    if(bracketCount>0 && (!math.operands.includes(lastElement) || lastElement==")") && !["-"].includes(lastElement)) {
       array = [...array, input];
       bracketCount--;
     }
@@ -45,7 +45,7 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount)
       array = [...array, input];
       allowDecimal = false;
     }
-  } else if(math.complexOp.includes(input)) { // Imaginary number stuff
+  } else if(math.complexOps.includes(input)) { // Imaginary number stuff
     array = [...array, input];
     allowDecimal = true;
   } else if(math.trigonometric.includes(input)) { // trigonometric
@@ -62,6 +62,8 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount)
   } else {
     array = [...array, input];
   }
+
+  console.log(array);
 
   return [array, allowDecimal, bracketCount];
 }

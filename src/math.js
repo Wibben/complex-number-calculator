@@ -1,12 +1,15 @@
-import complex from './complex'
-import * as utils from './utils'
+import complex from './complex';
+import * as utils from './utils';
+import * as mathjs from 'mathjs';
 
 // Handles all the math...
 export const operands = ["+","−","×","÷","(",")","ₓ₁₀","^"];
 export const specialOps = ["(",")","-"];
 export const conversion = ["polar","exp","cart"];
 export const trigonometric = ["sin","cos","tan","asin","acos","atan"];
-export const complexOp = ["j","∠","eʲ"];
+export const complexOps = ["j","∠","eʲ"];
+export const constants = ["π","e"];
+export const constantVals = [mathjs.pi,mathjs.e];
 
 // Piece together an expression from an array of just singular variables
 function createExpression(inputs)
@@ -14,7 +17,8 @@ function createExpression(inputs)
   var expression = [];
 
   // Piece together expression, separating operands from operators
-  expression.push(inputs[0]);
+  if(constants.includes(inputs[0])) expression.push(`${""}${constantVals[constants.findIndex((item) => item===inputs[0])]}`); // Convert constants into values
+  else expression.push(inputs[0]);
 
   for(let i=1; i<inputs.length; i++) {
     var lastElement = utils.last(expression);
@@ -23,8 +27,25 @@ function createExpression(inputs)
     if(i+2<inputs.length && inputs[i] == "e" && inputs[i+1] == "^" && inputs[i+2] == "j") {
       expression[expression.length-1] = `${lastElement}${"eʲ"}`;
       i = i+2;
-    } else if(operands.includes(lastElement) || operands.includes(inputs[i])) expression.push(inputs[i]); // Parsing for operands
-    else expression[expression.length-1] = `${lastElement}${inputs[i]}`; // Parsing for values
+    // } else if(complexOps.includes(inputs[i])) { // Parsing for complex entries
+    //   if(lastElement == ")") {
+    //     expression.push("+");
+    //     if(inputs[i+1] == "(") expression.push(`${inputs[i]}${"1"}`,"×",inputs[i]);
+    //     else expression.push(inputs[i]);
+    //   } else if(inputs[i+1] == "(") expression.push(`${inputs[i]}${"1"}`,"×",inputs[i]);
+
+      
+    //   // else expression[expression.length-1] = `${lastElement}${inputs[i]}`;
+    } else if(operands.includes(lastElement) || operands.includes(inputs[i])) { // Parsing for operands
+      expression.push(inputs[i]);
+    } else if(constants.includes(inputs[i])) { // Parsing for constants
+      // Parse constants as a multiplication if there were values before it
+      var complexVal = `${""}${constantVals[constants.findIndex((item) => item===inputs[i])]}`;
+      if(!operands.includes(lastElement)) {
+        expression = utils.removeLastItem(expression);
+        expression.push("(",lastElement,"×",complexVal,")");
+      } else expression.push(complexVal); // Convert constants into values
+    } else expression[expression.length-1] = `${lastElement}${inputs[i]}`; // Parsing for values
   }
 
   // From the expression, generate the complex numbers
@@ -101,7 +122,7 @@ export function doMath(inputs, form)
       else if(element == ("+")) a.add(b);
       else if(element == ("−")) a.sub(b);
       else if(element == ("^")) a.exp(b);
-      else if(element == ("ₓ₁₀")) a.mult(new complex({"re": Math.pow(10,b.re), "im": 0}));
+      else if(element == ("ₓ₁₀")) a.mult(new complex({"re": Math.pow(10,b.val.re), "im": 0}));
 
       // Push computed value back into answer
       answer.push(a);

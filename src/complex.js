@@ -8,6 +8,7 @@ export default class complex
       this.form = opts.form;
     } else if (opts["re"]) {
       this.val = mathjs.complex(opts["re"],opts["im"]);
+      console.log(this.val);
       this.form = "cart";
     } else if(opts["str"]) {
       var str = opts["str"].toString();
@@ -37,7 +38,10 @@ export default class complex
 
   sub(num: complex) { this.val = mathjs.subtract(this.val,num.val); }
 
-  mult(num: complex) { this.val = mathjs.multiply(this.val,num.val); }
+  mult(num: complex) { 
+    console.log("MULTIPLY:");
+    console.log(this.val,num.val);
+    this.val = mathjs.multiply(this.val,num.val); }
 
   div(num: complex) { this.val = mathjs.divide(this.val,num.val); }
 

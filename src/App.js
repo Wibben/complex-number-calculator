@@ -35,7 +35,7 @@ class ComplexNumberCalculator extends React.Component
       ["sin","cos","tan"],
       ["asin","acos","atan"],
       ["","",""],
-      ["","test",""],
+      ["","",""],
     ],
     "temp1": [
       ["","",""],
