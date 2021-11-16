@@ -55,6 +55,8 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount)
       array = [...answer];
       allowDecimal = !utils.last(answer).toString().includes(".");
     }
+  } else if (math.trig.includes(lastElement)) { // Trigonometric functions
+    
   } else {
     array = [...array, input];
   }

@@ -1,10 +1,12 @@
 import complex from './complex'
 import * as utils from './utils'
+import {op,fn} from './operation'
 
 // Handles all the math...
 export const operands = ["+","−","×","÷","(",")","ₓ₁₀","^"];
 export const specialOps = ["(",")","-"];
 export const conversion = ["polar","exp","cart"];
+export const trig = ["sin","cos","tan","asin","acos","atan"];
 
 // Piece together an expression from an array of just singular variables
 function createExpression(inputs)
@@ -19,7 +21,7 @@ function createExpression(inputs)
 
     // Parsing for exponential form
     if(i+2<inputs.length && inputs[i] == "e" && inputs[i+1] == "^" && inputs[i+2] == "j") {
-      expression[expression.length-1] = `${lastElement}${"e^j"}`;
+      expression[expression.length-1] = `${lastElement}${"eʲ"}`;
       i = i+2;
     } else if(operands.includes(lastElement) || operands.includes(inputs[i])) expression.push(inputs[i]); // Parsing for operands
     else expression[expression.length-1] = `${lastElement}${inputs[i]}`; // Parsing for values

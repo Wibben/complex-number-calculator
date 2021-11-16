@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform, Text, View, SafeAreaView, StatusBar } from 'react-native';
 import styles from './styles';
 import * as button from './button';
+import * as utils from './utils';
 
 const TestFunction = (props) => {
   return (
@@ -33,7 +34,7 @@ class ComplexNumberCalculator extends React.Component
     ], 
     "TRIG": [
       ["sin","cos","tan"],
-      ["","",""],
+      ["asin","acos","atan"],
       ["","",""],
       ["","test",""],
     ],
@@ -61,8 +62,8 @@ class ComplexNumberCalculator extends React.Component
     super(props);
 
     var inputs,header;
-    if(Platform.OS == "web") inputs = this.webInputs;
-    else inputs = this.mobileInputs;
+    if(Platform.OS == "web") inputs = utils.webInputs;
+    else inputs = utils.mobileInputs;
 
     this.tabElement = [];
     this.tabContentElement = [];
@@ -73,8 +74,8 @@ class ComplexNumberCalculator extends React.Component
       allowDecimal: true,
       bracketCount: 0,
       tab: "STD",
-      tabButtons: this.generateTabButtons(this.tabInputs),
-      tabContent: this.generateTabContent(this.tabInputs),
+      tabButtons: this.generateTabButtons(utils.tabInputs),
+      tabContent: this.generateTabContent(utils.tabInputs),
       mainButtons: this.generateMainButtons(inputs),
     };
   }
@@ -91,7 +92,7 @@ class ComplexNumberCalculator extends React.Component
     // Change the tab button content based on the toggle
     for(let i=0; i<this.state.tabContent.length; i++) {
       for(let j=0; j<this.state.tabContent[i].length; j++) {
-        this.tabContentElement[i][j].current.setState({content: this.tabInputs[input][i][j]});
+        this.tabContentElement[i][j].current.setState({content: utils.tabInputs[input][i][j].button});
       }
     }
   }
@@ -131,7 +132,7 @@ class ComplexNumberCalculator extends React.Component
       this.tabContentElement.push([]);
       for(let j=0; j<inputs[tabs[0]][i].length; j++) {
         this.tabContentElement[i].push(React.createRef());
-        buttons[i].push(<button.Button ref={this.tabContentElement[i][j]} key={"tab_"+i.toString()+"_"+j.toString()} content={inputs[tabs[0]][i][j]} onPress={this.handleButtonInput} style={styles.tabContentButton} />)
+        buttons[i].push(<button.Button ref={this.tabContentElement[i][j]} key={"tab_"+i.toString()+"_"+j.toString()} content={inputs[tabs[0]][i][j].button} onPress={this.handleButtonInput} style={styles.tabContentButton} />)
       }
     }
 
@@ -144,7 +145,7 @@ class ComplexNumberCalculator extends React.Component
     for (let i=0; i<inputs.length; i++) {
       buttons.push([]);
       for (let j=0; j<inputs[i].length; j++) {
-        buttons[i].push(<button.Button key={i.toString()+"_"+j.toString()} content={inputs[i][j]} onPress={this.handleButtonInput} />)
+        buttons[i].push(<button.Button key={i.toString()+"_"+j.toString()} content={inputs[i][j].button} onPress={this.handleButtonInput} />)
       }
     }
 
