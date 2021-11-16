@@ -45,6 +45,31 @@ export default class complex
 
   conj() { return new complex({"re": this.val.re, "im": -1 * this.val.im}).convert(this.form); }
 
+  trig(fn) {
+    switch(fn) {
+      case "sin":
+        this.val = mathjs.sin(this.val);
+        break;
+      case "cos":
+        this.val = mathjs.cos(this.val);
+        break;
+      case "tan":
+        this.val = mathjs.tan(this.val);
+        break;
+      case "asin":
+        this.val = mathjs.asin(this.val);
+        break;
+      case "acos":
+        this.val = mathjs.acos(this.val);
+        break;
+      case "atan":
+        this.val = mathjs.atan(this.val);
+        break;
+      default:
+        break;
+    }
+  }
+
   convert(form) {
     // "default" is for keeping the form the same as initial input
     if(form != "default") this.form = form;

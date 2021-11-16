@@ -29,7 +29,7 @@ function createExpression(inputs)
 
   // From the expression, generate the complex numbers
   for(let i=0; i<expression.length; i++) {
-    if(!operands.includes(expression[i])) expression[i] = new complex({"str": expression[i]});
+    if(![...operands,...trigonometric].includes(expression[i])) expression[i] = new complex({"str": `${""}${expression[i]}`});
   }
 
   return expression;
@@ -38,7 +38,7 @@ function createExpression(inputs)
 function getPrecedence(operator) {
   if(["+","−"].includes(operator)) return 1;            //Precedence of + or - is 1
   else if(["×","÷"].includes(operator)) return 2;       //Precedence of * or / is 2
-  else if(["^"].includes(operator)) return 3;         //Precedence of ^ is 3
+  else if([...trigonometric,"^"].includes(operator)) return 3;         //Precedence of ^ is 3
   else if(["ₓ₁₀","-"].includes(operator)) return 4;         //Precedence of ₓ₁₀ or - is 3
   else return 0;
 }
@@ -83,7 +83,6 @@ function generatePostfix(expression)
 export function doMath(inputs, form)
 {
   var expression = createExpression(inputs);
-  console.log(expression);
   var postfix = generatePostfix(expression);
   var answer = [];
 
@@ -106,10 +105,15 @@ export function doMath(inputs, form)
 
       // Push computed value back into answer
       answer.push(a);
-      if(element == ("-")) {
-        b.mult(new complex({"re": -1, "im": 0}));
-        answer.push(b);
-      }
+      // if(element == ("-")) {
+      //   b.mult(new complex({"re": -1, "im": 0}));
+      //   answer.push(b);
+      // }
+    } else if(trigonometric.includes(element)) { // Compute the trig functions
+      var a = answer.pop();
+
+      a.trig(element);
+      answer.push(a);
     } else answer.push(element);
   }
 
