@@ -3,7 +3,7 @@ import * as utils from './utils';
 import * as mathjs from 'mathjs';
 
 // Handles all the math...
-export const operands = ["+","−","×","÷","(",")","ₓ₁₀","^"];
+export const operands = ["+","−","×","÷","(",")","ₓ₁₀","^","₊"]; // ₊ is a "shadow" plus sign used to skirt around precedence issues
 export const specialOps = ["(",")","-"];
 export const conversion = ["polar","exp","cart"];
 export const trigonometric = ["sin","cos","tan","asin","acos","atan"];
@@ -27,15 +27,13 @@ function createExpression(inputs)
     if(i+2<inputs.length && inputs[i] == "e" && inputs[i+1] == "^" && inputs[i+2] == "j") {
       expression[expression.length-1] = `${lastElement}${"eʲ"}`;
       i = i+2;
-    // } else if(complexOps.includes(inputs[i])) { // Parsing for complex entries
-    //   if(lastElement == ")") {
-    //     expression.push("+");
-    //     if(inputs[i+1] == "(") expression.push(`${inputs[i]}${"1"}`,"×",inputs[i]);
-    //     else expression.push(inputs[i]);
-    //   } else if(inputs[i+1] == "(") expression.push(`${inputs[i]}${"1"}`,"×",inputs[i]);
+    } else if(complexOps.includes(inputs[i])) { // Parsing for complex entries
+      expression.push("₊");
 
+      if(inputs[i+1] == "(") expression.push(`${inputs[i]}${"1"}`,"×",inputs[i]);
+      else expression.push(inputs[i]);
       
-    //   // else expression[expression.length-1] = `${lastElement}${inputs[i]}`;
+      // else expression[expression.length-1] = `${lastElement}${inputs[i]}`;
     } else if(operands.includes(lastElement) || operands.includes(inputs[i])) { // Parsing for operands
       expression.push(inputs[i]);
     } else if(constants.includes(inputs[i])) { // Parsing for constants
@@ -61,6 +59,7 @@ function getPrecedence(operator) {
   else if(["×","÷"].includes(operator)) return 2;       //Precedence of * or / is 2
   else if([...trigonometric,"^"].includes(operator)) return 3;         //Precedence of ^ is 3
   else if(["ₓ₁₀","-"].includes(operator)) return 4;         //Precedence of ₓ₁₀ or - is 3
+  else if(["₊"].includes(operator)) return 100;         // ₊ is used to concatenate (expr)j without losing precedence
   else return 0;
 }
 
@@ -118,11 +117,12 @@ export function doMath(inputs, form)
       var a = answer.pop();
 
       if(element == "×") a.mult(b);
-      else if(element == ("÷")) a.div(b);
-      else if(element == ("+")) a.add(b);
-      else if(element == ("−")) a.sub(b);
-      else if(element == ("^")) a.exp(b);
-      else if(element == ("ₓ₁₀")) a.mult(new complex({"re": Math.pow(10,b.val.re), "im": 0}));
+      else if(element == "÷") a.div(b);
+      else if(element == "+") a.add(b);
+      else if(element == "₊") a.add(b);
+      else if(element == "−") a.sub(b);
+      else if(element == "^") a.exp(b);
+      else if(element == "ₓ₁₀") a.mult(new complex({"re": Math.pow(10,b.val.re), "im": 0}));
 
       // Push computed value back into answer
       answer.push(a);

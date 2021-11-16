@@ -63,8 +63,6 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount)
     array = [...array, input];
   }
 
-  console.log(array);
-
   return [array, allowDecimal, bracketCount];
 }
 
