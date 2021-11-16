@@ -3,7 +3,6 @@ export class op
 {
   constructor(button,display,numInputs) {
     this.button = button;
-    this.display = display;
     this.numInputs = numInputs;
   }
 }
@@ -18,6 +17,14 @@ export class fn
 
 // Special characters...
 export class sp
+{
+  constructor(button) {
+    this.button = button;
+  }
+}
+
+// Constants
+export class cst 
 {
   constructor(button,val) {
     this.button = button;

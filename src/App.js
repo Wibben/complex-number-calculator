@@ -194,13 +194,19 @@ class ComplexNumberCalculator extends React.Component
   }
 
   render = () => {
-    var flexDir,header;
+    var flexDir,header,text;
     if(Platform.OS == "web") flexDir = "row";
     else flexDir = "column";
 
     // The header just takes care of the header/notch sometimes for Android / iOS devices
     if(Platform.OS == "ios") header = null;
     else header = (<Text style={{height: StatusBar.currentHeight}}></Text>);
+
+    // Parse the inputs/text and change into output
+    text = "";
+    for(let i=0; i<this.state.inputs.length; i++) {
+      text = `${text}${this.state.inputs[i].button}`;
+    }
 
     return (
       <SafeAreaView key="mainView" style={styles.center}>
@@ -209,7 +215,7 @@ class ComplexNumberCalculator extends React.Component
         <Text>You've pressed the buttons {this.state.count} times</Text>
         <TestFunction key="test2" in="This is done with a function call" /> */}
         
-        <Text key="output" numberOfLines={1} adjustsFontSizeToFit style={styles.io}> {this.state.inputs} </Text>
+        <Text key="output" numberOfLines={1} adjustsFontSizeToFit style={styles.io}> {text} </Text>
 
         <View key="buttonArea" style={{flex: 4, flexDirection: flexDir}}>
           {this.renderTabButtons()}

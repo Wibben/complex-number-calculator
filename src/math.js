@@ -1,12 +1,13 @@
 import complex from './complex'
 import * as utils from './utils'
-import {op,fn} from './operation'
+import {op,fn, cst} from './operation'
 
 // Handles all the math...
 export const operands = ["+","−","×","÷","(",")","ₓ₁₀","^"];
 export const specialOps = ["(",")","-"];
 export const conversion = ["polar","exp","cart"];
 export const trig = ["sin","cos","tan","asin","acos","atan"];
+export const constants = ["π","e"];
 
 // Piece together an expression from an array of just singular variables
 function createExpression(inputs)
@@ -14,20 +15,23 @@ function createExpression(inputs)
   var expression = [];
 
   // Piece together expression, separating operands from operators
-  expression.push(inputs[0]);
+  expression.push(inputs[0].val);
 
   for(let i=1; i<inputs.length; i++) {
     var lastElement = utils.last(expression);
 
     // Parsing for exponential form
-    if(i+2<inputs.length && inputs[i] == "e" && inputs[i+1] == "^" && inputs[i+2] == "j") {
-      expression[expression.length-1] = `${lastElement}${"eʲ"}`;
+    if(i+2<inputs.length && inputs[i].button == "e" && inputs[i+1].button == "^" && inputs[i+2].button == "j") {
+      expression.push(new op("eʲ",2));
       i = i+2;
-    } else if(operands.includes(lastElement) || operands.includes(inputs[i])) expression.push(inputs[i]); // Parsing for operands
-    else expression[expression.length-1] = `${lastElement}${inputs[i]}`; // Parsing for values
+    } else if(operands.includes(lastElement) || operands.includes(inputs[i].button)) expression.push(inputs[i]); // Parsing for operands
+    else if(inputs[i] instanceof cst) { // Parsing for real special characters, treat as if a bunch of multiplication is applied
+      if(constants.includes(inputs[i].button)) expression.push(inputs[i]);
+      else expression[expression.length-1] = `${lastElement}${inputs[i].val}`; // Parsing for values
+    } 
   }
 
-  // From the expression, generate the complex numbers
+  // From the expression, generate the base complex numbers
   for(let i=0; i<expression.length; i++) {
     if(!operands.includes(expression[i])) expression[i] = new complex({"str": expression[i]});
   }
@@ -83,6 +87,8 @@ function generatePostfix(expression)
 export function doMath(inputs, form)
 {
   var expression = createExpression(inputs);
+  console.log(expression);
+  return;
   var postfix = generatePostfix(expression);
   var answer = [];
 
