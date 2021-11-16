@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, TouchableOpacity, Text } from 'react-native';
+import { Platform, TouchableOpacity, Text, InputAccessoryView } from 'react-native';
 import styles from './styles'
 import * as math from './math'
 import * as utils from './utils'
@@ -27,11 +27,11 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount)
       allowDecimal = true;
     }
   } else if(input == "-") { // The negative sign should only be allowed in certain situations
-    if(array.length == 0 || ([...math.operands,"j","∠"].includes(lastElement) && !["-"].includes(lastElement))) {
+    if(array.length == 0 || ([...math.operands,...math.complexOp].includes(lastElement) && !["-"].includes(lastElement))) {
       array = [...array, input];
     }
   } else if(input == "(") { // The left bracket should come after a operand
-    if(array.length == 0 || math.operands.includes(lastElement) || ["j","∠","-"].includes(lastElement)) {
+    if(array.length == 0 || math.operands.includes(lastElement) || [...math.complexOp,"-"].includes(lastElement)) {
       array = [...array, input];
       bracketCount++;
     }
@@ -45,8 +45,12 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount)
       array = [...array, input];
       allowDecimal = false;
     }
-  } else if(input == "j" || input == "∠") { // Imaginary number stuff
+  } else if(math.complexOp.includes(input)) { // Imaginary number stuff
     array = [...array, input];
+    allowDecimal = true;
+  } else if(math.trigonometric.includes(input)) { // trigonometric
+    array = [...array, input, "("];
+    bracketCount++;
     allowDecimal = true;
   } else if(math.conversion.includes(input)) { // Disallow conversion right after an operand
     // Conversion will compute along with convert

@@ -18,7 +18,7 @@ class ComplexNumberCalculator extends React.Component
     [0, ".", "+j", "-j", "="],
   ];
   mobileInputs = [
-    ["^", "(" , ")", "j", "∠" ],
+    ["^", "(" , ")", "π","e" ],
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
     [1, 2, 3, "+", "−"],
@@ -27,13 +27,13 @@ class ComplexNumberCalculator extends React.Component
   tabInputs = {
     "STD": [
       ["polar","exp","cart"],
-      ["π","e",""],
+      ["j","∠","eʲ"],
       ["","",""],
       ["","",""],
     ], 
     "TRIG": [
       ["sin","cos","tan"],
-      ["","",""],
+      ["asin","acos","atan"],
       ["","",""],
       ["","test",""],
     ],

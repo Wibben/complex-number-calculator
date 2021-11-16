@@ -12,10 +12,10 @@ export default class complex
     } else if(opts["str"]) {
       var str = opts["str"].toString();
       // Check if j or ∠ even exists in the value
-      if(str.includes("e^j")) { // Exponential
-        var idx = str.indexOf("e^j");
-        if(str.substr(idx+1) == "") this.val = mathjs.complex({phi: 1, r: str.substr(0, idx)});
-        else this.val = mathjs.complex({phi: str.substr(idx+3), r: str.substr(0, idx)});
+      if(str.includes("eʲ")) { // Exponential
+        var idx = str.indexOf("eʲ");
+        if(str.substr(idx+2) == "") this.val = mathjs.complex({phi: 1, r: str.substr(0, idx)});
+        else this.val = mathjs.complex({phi: str.substr(idx+2), r: str.substr(0, idx)});
         this.form = "exp";
       } else if(str.includes("j")) { // Cartesian
         var idx = str.indexOf("j");
@@ -61,7 +61,7 @@ export default class complex
       output = [mathjs.round(args.r,2),"∠",mathjs.round(args.phi,2)];
     } else if(this.form == "exp") {
       args = this.val.toPolar();
-      output = [mathjs.round(args.r,2),"e","^","j",mathjs.round(args.phi,2)]
+      output = [mathjs.round(args.r,2),"eʲ",mathjs.round(args.phi,2)]
     }
 
     return output;
