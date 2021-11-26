@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     borderWidth: 1,
     borderColor: "white",
-    backgroundColor: "#EEEEEE",
+    backgroundColor: "#FFFFFF",
     fontSize: 30,
   },
 
@@ -30,28 +30,29 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F0F0F0',
-    padding: 0,
+    backgroundColor: '#D8E9F3',
+    marginLeft: 5,
+    marginRight: 5,
     borderTopWidth: 1,
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
     borderColor: "white",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderRadius: 20
   },
 
   seletedTabButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#BBBBBB',
+    backgroundColor: '#8DBDD8',
     padding: 0,
+    marginLeft: 5,
+    marginRight: 5,
     borderTopWidth: 1,
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
     borderColor: "white",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderRadius: 20
   },
 
   tabContent: {
@@ -59,16 +60,20 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    backgroundColor: '#8DBDD8',
+    marginTop: 10
   },
 
   tabContentButton: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 0,
+    backgroundColor: '#D8E9F3',
+    color: '#FF0000',
+    margin: 3,
     borderWidth: 1,
-    borderColor: "#BBBBBB",
+    borderRadius: 5,
+    borderColor: "#8DBDD8",
   },
 
   mainButtonContainer: {
@@ -76,6 +81,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    padding: 5
   },
 
   buttonRow: {
@@ -91,10 +97,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#DDDDDD',
+    backgroundColor: '#D8E9F3',
     padding: 0,
     borderWidth: 1,
     borderColor: "white",
+    borderRadius: 15,
+    margin: 4
     // margin: 1,
     // aspectRatio: 3/2,
   },
@@ -103,10 +111,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#BBBBBB',
-    padding: 0,
-    borderWidth: 0,
-    borderColor: "#BBBBBB",
+    backgroundColor: '#8DBDD8',
+    padding: 0
   },
 })
 
