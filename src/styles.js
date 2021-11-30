@@ -1,6 +1,6 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions } from "react-native";
 
-const {width, height} = Dimensions.get('window'); //full width and height
+const { width, height } = Dimensions.get("window"); //full width and height
 
 const styles = StyleSheet.create({
   center: {
@@ -20,10 +20,10 @@ const styles = StyleSheet.create({
   },
 
   tabContainer: {
-    flex: (width>height ? 1 : 2),
+    flex: width > height ? 1 : 2,
     flexDirection: "column",
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
 
   tabButton: {
@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
 
   buttonRow: {
     flex: 1,
-    flexDirection: 'row',
-    width: (width>height ? width/2 : width),
-    justifyContent: 'center',
+    flexDirection: "row",
+    width: width > height ? width / 2 : width,
+    justifyContent: "center",
     // justifyContent: 'space-between',
     // alignItems: 'center',
   },
@@ -114,6 +114,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#8DBDD8',
     padding: 0
   },
-})
+});
 
 export default styles;
