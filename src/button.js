@@ -17,6 +17,8 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount) {
     allowDecimal = true;
   } else if (input == "DEL") {
     if (lastElement == ".") allowDecimal = true;
+    else if (lastElement == "(") bracketCount--;
+    else if (lastElement == ")") bracketCount++;
     array = utils.removeLastItem(array);
   } else if (input == "=") {
     // Disallow compute right after an operand
