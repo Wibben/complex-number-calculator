@@ -14,31 +14,25 @@ export default class complex {
       if (str.includes("eʲ")) {
         // Exponential
         var idx = str.indexOf("eʲ");
-        if (str.substr(idx + 2) == "")
-          this.val = mathjs.complex({ phi: 1, r: str.substr(0, idx) });
-        else
-          this.val = mathjs.complex({
-            phi: str.substr(idx + 2),
-            r: str.substr(0, idx),
-          });
+        this.val = mathjs.complex({
+          phi: (str.substr(idx + 2) == "") ? 1:str.substr(idx + 2),
+          r: (idx==0) ? 1:str.substr(0, idx),
+        });
         this.form = "exp";
       } else if (str.includes("j")) {
         // Cartesian
         var idx = str.indexOf("j");
-        if (str.substr(idx + 1) == "")
-          this.val = mathjs.complex({ re: str.substr(0, idx), im: 1 });
-        else
-          this.val = mathjs.complex({
-            re: str.substr(0, idx),
-            im: str.substr(idx + 1),
-          });
+        this.val = mathjs.complex({
+          re: (idx==0) ? 0:str.substr(0, idx),
+          im: (str.substr(idx+1)=="") ? 1:parseFloat(str.substr(idx + 1)),
+        });
         this.form = "cart";
       } else if (str.includes("∠")) {
         // Polar
         var idx = str.indexOf("∠");
         this.val = mathjs.complex({
-          phi: str.substr(idx + 1),
-          r: str.substr(0, idx),
+          phi: (str.substr(idx+1)=="") ? 0:str.substr(idx + 1),
+          r: (idx==0) ? 1:str.substr(0, idx),
         });
         this.form = "polar";
       } else {
