@@ -9,11 +9,12 @@ import styles from "./styles";
 import * as math from "./math";
 import * as utils from "./utils";
 
-export function parseButtonInput(input, array, allowDecimal, bracketCount) {
+export function parseButtonInput(input, array, answer, allowDecimal, bracketCount) {
   var lastElement = utils.last(array);
 
   if (input == "AC") {
     array = [];
+    answer = [];
     allowDecimal = true;
   } else if (input == "DEL") {
     if (lastElement == ".") allowDecimal = true;
@@ -27,8 +28,7 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount) {
         math.specialOps.includes(lastElement)) &&
       array.length > 0
     ) {
-      var answer = math.doMath(array, "default");
-      array = [...answer];
+      answer = math.doMath(array, "default");
       allowDecimal = !utils.last(answer).toString().includes(".");
     }
   } else if (
@@ -92,21 +92,20 @@ export function parseButtonInput(input, array, allowDecimal, bracketCount) {
     allowDecimal = true;
   } else if (math.conversion.includes(input)) {
     // Disallow conversion right after an operand
-    // Conversion will compute along with convert
+    // Conversion will only apply to the answer
     if (
       (!math.operands.includes(lastElement) ||
         math.specialOps.includes(lastElement)) &&
       array.length > 0
     ) {
-      var answer = math.doMath(array, input);
-      array = [...answer];
+      answer = math.doMath(answer, input);
       allowDecimal = !utils.last(answer).toString().includes(".");
     }
   } else {
     array = [...array, input];
   }
 
-  return [array, allowDecimal, bracketCount];
+  return [array, answer, allowDecimal, bracketCount];
 }
 
 export class Button extends React.Component {

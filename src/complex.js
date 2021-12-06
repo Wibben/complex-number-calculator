@@ -105,12 +105,15 @@ export default class complex {
     if (this.form == "cart") {
       args = this.val.toVector();
       output = [mathjs.round(args[0], 2), "j", mathjs.round(args[1], 2)];
+      // output = [args[0], "j", args[1]];
     } else if (this.form == "polar") {
       args = this.val.toPolar();
       output = [mathjs.round(args.r, 2), "∠", mathjs.round(args.phi, 2)];
+      // output = [args.r, "∠", args.ph];
     } else if (this.form == "exp") {
       args = this.val.toPolar();
-      output = [mathjs.round(args.r, 2), "eʲ", mathjs.round(args.phi, 2)];
+      output = [mathjs.round(args.r, 2), "∠", mathjs.round(args.phi, 2)];
+      // output = [args.r, "∠", args.phi];
     }
 
     return output;

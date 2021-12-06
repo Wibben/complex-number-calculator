@@ -9,14 +9,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  io: {
-    flex: 1,
+  inputField: {
+    flex: 4,
     textAlign: "right",
     alignSelf: "stretch",
     borderWidth: 1,
     borderColor: "white",
     backgroundColor: "#FFFFFF",
     fontSize: 30,
+  },
+
+  answerField: {
+    flex: 6,
+    textAlign: "right",
+    alignSelf: "stretch",
+    borderWidth: 1,
+    borderColor: "white",
+    backgroundColor: "#FFFFFF",
+    fontSize: 40,
   },
 
   tabContainer: {

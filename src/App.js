@@ -69,6 +69,7 @@ class ComplexNumberCalculator extends React.Component
 
     this.state = {
       inputs: [],
+      outputs: [],
       count: 0,
       allowDecimal: true,
       bracketCount: 0,
@@ -99,12 +100,13 @@ class ComplexNumberCalculator extends React.Component
   handleButtonInput = (input) => {
     this.setState({count: this.state.count+1});
     var array = [...this.state.inputs];
+    var answer = [...this.state.outputs];
     var allowDecimal = this.state.allowDecimal;
     var bracketCount = this.state.bracketCount;
 
-    [array, allowDecimal, bracketCount] = button.parseButtonInput(input, array, allowDecimal, bracketCount);
+    [array, answer, allowDecimal, bracketCount] = button.parseButtonInput(input, array, answer, allowDecimal, bracketCount);
     
-    this.setState({inputs: array, allowDecimal: allowDecimal, bracketCount: bracketCount});
+    this.setState({inputs: array, outputs: answer, allowDecimal: allowDecimal, bracketCount: bracketCount});
   }
 
   generateTabButtons = (inputs) => {
@@ -200,6 +202,10 @@ class ComplexNumberCalculator extends React.Component
     if(Platform.OS == "ios") header = null;
     else header = (<Text style={{height: StatusBar.currentHeight}}></Text>);
 
+    var output;
+    if(this.state.outputs.length == 0) output = "";
+    else output = ["= ",...this.state.outputs];
+
     return (
       <SafeAreaView key="mainView" style={styles.center}>
         {header}
@@ -207,7 +213,10 @@ class ComplexNumberCalculator extends React.Component
         <Text>You've pressed the buttons {this.state.count} times</Text>
         <TestFunction key="test2" in="This is done with a function call" /> */}
         
-        <Text key="output" numberOfLines={1} adjustsFontSizeToFit style={styles.io}> {this.state.inputs} </Text>
+        <View key="io" style={{flex:1, alignSelf: "stretch"}}>
+          <Text key="input" numberOfLines={1} adjustsFontSizeToFit style={styles.inputField}> {this.state.inputs} </Text>
+          <Text key="output" numberOfLines={1} adjustsFontSizeToFit style={styles.answerField}> {output} </Text>
+        </View>
 
         <View key="buttonArea" style={{flex: 4, flexDirection: flexDir}}>
           {this.renderTabButtons()}
