@@ -36,14 +36,15 @@ function createExpression(inputs) {
       expression[expression.length - 1] = `${lastElement}${"eʲ"}`;
       i = i + 2;
     } else if (complexOps.includes(inputs[i])) {
-      // Parsing for complex entries
-      expression.push("₊");
+      // Parsing for complex entries - specifically j
+      if(inputs[i] == "j") {
+        expression.push("₊");
 
-      if (inputs[i + 1] == "(")
-        expression.push(`${inputs[i]}${"1"}`, "×", inputs[i]);
-      else expression.push(inputs[i]);
-
-      // else expression[expression.length-1] = `${lastElement}${inputs[i]}`;
+        if (inputs[i + 1] == "(")
+          expression.push(`${inputs[i]}${"1"}`, "×", inputs[i]);
+        else expression.push(inputs[i]);
+        
+      } else expression[expression.length - 1] = `${lastElement}${inputs[i]}`
     } else if (operands.includes(lastElement) || operands.includes(inputs[i])) {
       // Parsing for operands
       expression.push(inputs[i]);

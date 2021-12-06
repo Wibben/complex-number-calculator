@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#D8E9F3',
-    marginLeft: 5,
-    marginRight: 5,
+    marginLeft: 2,
+    marginRight: 2,
     borderTopWidth: 1,
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#8DBDD8',
     padding: 0,
-    marginLeft: 5,
-    marginRight: 5,
+    marginLeft: 2,
+    marginRight: 2,
     borderTopWidth: 1,
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#8DBDD8',
-    marginTop: 10
+    marginTop: 5,
+    padding: 2
   },
 
   tabContentButton: {
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#D8E9F3',
     color: '#FF0000',
-    margin: 3,
+    margin: 2,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: "#8DBDD8",
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "white",
     borderRadius: 15,
-    margin: 4
+    margin: 1
     // margin: 1,
     // aspectRatio: 3/2,
   },
