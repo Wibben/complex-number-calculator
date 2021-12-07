@@ -112,7 +112,7 @@ export default class complex {
       // output = [args.r, "∠", args.ph];
     } else if (this.form == "exp") {
       args = this.val.toPolar();
-      output = [mathjs.round(args.r, 2), "∠", mathjs.round(args.phi, 2)];
+      output = [mathjs.round(args.r, 2), "eʲ", mathjs.round(args.phi, 2)];
       // output = [args.r, "∠", args.phi];
     }
 

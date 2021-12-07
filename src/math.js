@@ -12,7 +12,7 @@ export const constants = ["π", "e"];
 export const constantVals = [mathjs.pi, mathjs.e];
 
 // Piece together an expression from an array of just singular variables
-function createExpression(inputs) {
+function createExpression(inputs, prevAnswer) {
   var expression = [];
 
   // Piece together expression, separating operands from operators
@@ -20,6 +20,7 @@ function createExpression(inputs) {
     expression.push(
       `${""}${constantVals[constants.findIndex((item) => item === inputs[0])]}`
     );
+  else if(inputs[0] == "ANS") expression.push(prevAnswer);
   // Convert constants into values
   else expression.push(inputs[0]);
 
@@ -45,6 +46,9 @@ function createExpression(inputs) {
         else expression.push(inputs[i]);
         
       } else expression[expression.length - 1] = `${lastElement}${inputs[i]}`
+    } else if(inputs[i] == "ANS") {
+      // Performing substitution for the ANS operator
+      expression.push(prevAnswer);
     } else if (operands.includes(lastElement) || operands.includes(inputs[i])) {
       // Parsing for operands
       expression.push(inputs[i]);
@@ -63,7 +67,7 @@ function createExpression(inputs) {
 
   // From the expression, generate the complex numbers
   for (let i = 0; i < expression.length; i++) {
-    if (![...operands, ...trigonometric].includes(expression[i]))
+    if (![...operands, ...trigonometric].includes(expression[i]) && !(expression[i] instanceof complex))
       expression[i] = new complex({ str: `${""}${expression[i]}` });
   }
 
@@ -124,8 +128,10 @@ function generatePostfix(expression) {
   return postfix;
 }
 
-export function doMath(inputs, form) {
-  var expression = createExpression(inputs);
+export function doMath(inputs, prevAnswer, form) {
+  console.log(prevAnswer);
+  var expression = createExpression(inputs, prevAnswer);
+  console.log(expression);
   var postfix = generatePostfix(expression);
   var answer = [];
 
@@ -171,7 +177,7 @@ export function doMath(inputs, form) {
   // Conversion step
   answer[0].convert(form);
 
-  return answer[0].toOutput();
+  return answer[0];
 }
 
 export default doMath;

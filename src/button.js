@@ -14,7 +14,7 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
 
   if (input == "AC") {
     array = [];
-    answer = [];
+    answer = null;
     allowDecimal = true;
   } else if (input == "DEL") {
     if (lastElement == ".") allowDecimal = true;
@@ -28,8 +28,8 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
         math.specialOps.includes(lastElement)) &&
       array.length > 0
     ) {
-      answer = math.doMath(array, "default");
-      allowDecimal = !utils.last(answer).toString().includes(".");
+      answer = math.doMath(array, answer, "default");
+      allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
     }
   } else if (
     math.operands.includes(input) &&
@@ -46,14 +46,14 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
       array = [...array, input];
       allowDecimal = true;
     }
-  } else if (input == "-") {
+  } else if (input == "( - )") {
     // The negative sign should only be allowed in certain situations
     if (
       array.length == 0 ||
       ([...math.operands, ...math.complexOps].includes(lastElement) &&
         !["-"].includes(lastElement))
     ) {
-      array = [...array, input];
+      array = [...array, "-"];
     }
   } else if (input == "(") {
     // The left bracket should come after a operand
@@ -93,14 +93,12 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
   } else if (math.conversion.includes(input)) {
     // Disallow conversion right after an operand
     // Conversion will only apply to the answer
-    if (
-      (!math.operands.includes(lastElement) ||
-        math.specialOps.includes(lastElement)) &&
-      array.length > 0
-    ) {
-      answer = math.doMath(answer, input);
-      allowDecimal = !utils.last(answer).toString().includes(".");
+    if (answer != null) {
+      answer.convert(input);
+      allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
     }
+  } else if(input == "ANS") {
+    if(answer != null) array = [...array, input];
   } else {
     array = [...array, input];
   }

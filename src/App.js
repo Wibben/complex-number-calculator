@@ -18,17 +18,17 @@ class ComplexNumberCalculator extends React.Component
     [0, ".", "+j", "-j", "="],
   ];
   mobileInputs = [
-    ["^", "(" , ")", "π","e" ],
+    ["( - )", "(" , ")", "π","e" ],
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
     [1, 2, 3, "+", "−"],
-    [0, ".", "ₓ₁₀", "-", "="],
+    [0, ".", "ₓ₁₀", "ANS", "="],
   ];
   tabInputs = {
     "STD": [
       ["polar","exp","cart"],
       ["∠","eʲ","j"],
-      ["","",""],
+      ["^","",""],
       ["","",""],
     ], 
     "TRIG": [
@@ -69,7 +69,7 @@ class ComplexNumberCalculator extends React.Component
 
     this.state = {
       inputs: [],
-      outputs: [],
+      outputs: null,
       count: 0,
       allowDecimal: true,
       bracketCount: 0,
@@ -100,7 +100,7 @@ class ComplexNumberCalculator extends React.Component
   handleButtonInput = (input) => {
     this.setState({count: this.state.count+1});
     var array = [...this.state.inputs];
-    var answer = [...this.state.outputs];
+    var answer = this.state.outputs;
     var allowDecimal = this.state.allowDecimal;
     var bracketCount = this.state.bracketCount;
 
@@ -203,8 +203,8 @@ class ComplexNumberCalculator extends React.Component
     else header = (<Text style={{height: StatusBar.currentHeight}}></Text>);
 
     var output;
-    if(this.state.outputs.length == 0) output = "";
-    else output = ["= ",...this.state.outputs];
+    if(this.state.outputs == null) output = "";
+    else output = ["= ",...(this.state.outputs.toOutput())];
 
     return (
       <SafeAreaView key="mainView" style={styles.center}>
