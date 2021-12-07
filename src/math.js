@@ -129,9 +129,7 @@ function generatePostfix(expression) {
 }
 
 export function doMath(inputs, prevAnswer, form) {
-  console.log(prevAnswer);
   var expression = createExpression(inputs, prevAnswer);
-  console.log(expression);
   var postfix = generatePostfix(expression);
   var answer = [];
 
