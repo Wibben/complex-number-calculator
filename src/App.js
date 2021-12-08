@@ -18,7 +18,7 @@ class ComplexNumberCalculator extends React.Component
     [0, ".", "+j", "-j", "="],
   ];
   mobileInputs = [
-    ["( - )", "(" , ")", "π","e" ],
+    ["( - )", "(" , ")", "^", "j" ],
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
     [1, 2, 3, "+", "−"],
@@ -26,10 +26,10 @@ class ComplexNumberCalculator extends React.Component
   ];
   tabInputs = {
     "STD": [
-      ["polar","exp","cart"],
-      ["∠","eʲ","j"],
-      ["^","",""],
+      ["π","e", ""],
+      ["","", ""],
       ["","",""],
+      ["","ANS Mode: cart","Input Mode: cart"],
     ], 
     "TRIG": [
       ["sin","cos","tan"],
@@ -56,6 +56,10 @@ class ComplexNumberCalculator extends React.Component
       ["","",""],
     ], 
   };
+  complexInput = {
+    "Mode": ["cart","polar","exp"],
+    "Input": ["j","∠","eʲ"],
+  };
 
   constructor(props) {
     super(props);
@@ -66,6 +70,7 @@ class ComplexNumberCalculator extends React.Component
 
     this.tabElement = [];
     this.tabContentElement = [];
+    this.mainElement = [];
 
     this.state = {
       inputs: [],
@@ -74,6 +79,8 @@ class ComplexNumberCalculator extends React.Component
       allowDecimal: true,
       bracketCount: 0,
       tab: "STD",
+      inputMode: 0,
+      outputMode: 0,
       tabButtons: this.generateTabButtons(this.tabInputs),
       tabContent: this.generateTabContent(this.tabInputs),
       mainButtons: this.generateMainButtons(inputs),
@@ -92,21 +99,46 @@ class ComplexNumberCalculator extends React.Component
     // Change the tab button content based on the toggle
     for(let i=0; i<this.state.tabContent.length; i++) {
       for(let j=0; j<this.state.tabContent[i].length; j++) {
-        this.tabContentElement[i][j].current.setState({content: this.tabInputs[input][i][j]});
+        var content;
+        if(this.tabInputs[input][i][j].includes("Input Mode")) content = "Input Mode: "+this.complexInput["Mode"][this.state.inputMode];
+        else if (this.tabInputs[input][i][j].includes("ANS Mode")) content = "ANS Mode: "+this.complexInput["Mode"][this.state.outputMode];
+        else content = this.tabInputs[input][i][j];
+
+        this.tabContentElement[i][j].current.setState({content: content});
       }
     }
   }
 
   handleButtonInput = (input) => {
     this.setState({count: this.state.count+1});
-    var array = [...this.state.inputs];
-    var answer = this.state.outputs;
-    var allowDecimal = this.state.allowDecimal;
-    var bracketCount = this.state.bracketCount;
 
-    [array, answer, allowDecimal, bracketCount] = button.parseButtonInput(input, array, answer, allowDecimal, bracketCount);
-    
-    this.setState({inputs: array, outputs: answer, allowDecimal: allowDecimal, bracketCount: bracketCount});
+    // Mode switching will be handled right here
+    if(input.toString().includes("Input Mode")) {
+      var inputMode = (this.state.inputMode+1)%3;
+
+      this.tabContentElement[3][2].current.setState({content: "Input Mode: "+this.complexInput["Mode"][inputMode]});
+      this.mainElement[0][4].current.setState({content: this.complexInput["Input"][inputMode]});
+      this.setState({inputMode: inputMode});
+    } else { // Actual calculator operations
+      // Output Mode is also a toggle, parse it and then pass it into the calculator
+      if(input.toString().includes("ANS Mode")) {
+        var outputMode = (this.state.outputMode+1)%3;
+
+        this.tabContentElement[3][1].current.setState({content: "ANS Mode: "+this.complexInput["Mode"][outputMode]});
+        this.setState({outputMode: outputMode});
+
+        input = this.complexInput["Mode"][outputMode];
+      }
+
+      var array = [...this.state.inputs];
+      var answer = this.state.outputs;
+      var allowDecimal = this.state.allowDecimal;
+      var bracketCount = this.state.bracketCount;
+
+      [array, answer, allowDecimal, bracketCount] = button.parseButtonInput(input, array, answer, allowDecimal, bracketCount);
+      
+      this.setState({inputs: array, outputs: answer, allowDecimal: allowDecimal, bracketCount: bracketCount});
+    }
   }
 
   generateTabButtons = (inputs) => {
@@ -145,8 +177,10 @@ class ComplexNumberCalculator extends React.Component
 
     for (let i=0; i<inputs.length; i++) {
       buttons.push([]);
+      this.mainElement.push([]);
       for (let j=0; j<inputs[i].length; j++) {
-        buttons[i].push(<button.Button key={i.toString()+"_"+j.toString()} content={inputs[i][j]} onPress={this.handleButtonInput} />)
+        this.mainElement[i].push(React.createRef());
+        buttons[i].push(<button.Button ref={this.mainElement[i][j]} key={i.toString()+"_"+j.toString()} content={inputs[i][j]} onPress={this.handleButtonInput} />)
       }
     }
 

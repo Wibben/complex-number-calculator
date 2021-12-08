@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
     borderColor: "white",
-    borderRadius: 20
+    borderRadius: 20,
   },
 
   seletedTabButton: {
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
     borderColor: "white",
-    borderRadius: 20
+    borderRadius: 20,
   },
 
   tabContent: {
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#8DBDD8',
     marginTop: 5,
-    padding: 2
+    padding: 2,
   },
 
   tabContentButton: {
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: 5
+    padding: 5,
   },
 
   buttonRow: {
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "white",
     borderRadius: 15,
-    margin: 1
+    margin: 1,
     // margin: 1,
     // aspectRatio: 3/2,
   },
@@ -123,7 +123,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#8DBDD8',
-    padding: 0
+    padding: 0,
+    borderWidth: 1,
+    borderColor: '#8DBDD8',
+    borderRadius: 5,
+    margin: 2,
   },
 });
 
