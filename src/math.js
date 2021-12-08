@@ -39,7 +39,7 @@ function createExpression(inputs, prevAnswer) {
     } else if (complexOps.includes(inputs[i])) {
       // Parsing for complex entries - specifically j
       if(inputs[i] == "j") {
-        expression.push("₊");
+        if(!operands.includes(lastElement)) expression.push("₊");
 
         if (inputs[i + 1] == "(")
           expression.push(`${inputs[i]}${"1"}`, "×", inputs[i]);
