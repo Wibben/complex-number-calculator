@@ -29,7 +29,7 @@ class ComplexNumberCalculator extends React.Component
       ["π","e", ""],
       ["","", ""],
       ["","",""],
-      ["","ANS Mode: cart","Input Mode: cart"],
+      ["Angle Mode: deg","ANS Mode: cart","Input Mode: cart"],
     ], 
     "TRIG": [
       ["sin","cos","tan"],
@@ -56,9 +56,11 @@ class ComplexNumberCalculator extends React.Component
       ["","",""],
     ], 
   };
-  complexInput = {
-    "Mode": ["cart","polar","exp"],
-    "Input": ["j","∠","eʲ"],
+  modeInput = {
+    "Input": ["cart","polar","exp"],
+    "ANS": ["cart","polar","exp"],
+    "Symbol": ["j","∠","eʲ"],
+    "Angle": ["deg","rad","grad"],
   };
 
   constructor(props) {
@@ -81,6 +83,7 @@ class ComplexNumberCalculator extends React.Component
       tab: "STD",
       inputMode: 0,
       outputMode: 0,
+      angleMode: 0,
       tabButtons: this.generateTabButtons(this.tabInputs),
       tabContent: this.generateTabContent(this.tabInputs),
       mainButtons: this.generateMainButtons(inputs),
@@ -100,8 +103,9 @@ class ComplexNumberCalculator extends React.Component
     for(let i=0; i<this.state.tabContent.length; i++) {
       for(let j=0; j<this.state.tabContent[i].length; j++) {
         var content;
-        if(this.tabInputs[input][i][j].includes("Input Mode")) content = "Input Mode: "+this.complexInput["Mode"][this.state.inputMode];
-        else if (this.tabInputs[input][i][j].includes("ANS Mode")) content = "ANS Mode: "+this.complexInput["Mode"][this.state.outputMode];
+        if(this.tabInputs[input][i][j].includes("Input Mode")) content = "Input Mode: "+this.modeInput["Input"][this.state.inputMode];
+        else if (this.tabInputs[input][i][j].includes("ANS Mode")) content = "ANS Mode: "+this.modeInput["ANS"][this.state.outputMode];
+        else if (this.tabInputs[input][i][j].includes("Angle Mode")) content = "Angle Mode: "+this.modeInput["Angle"][this.state.angleMode];
         else content = this.tabInputs[input][i][j];
 
         this.tabContentElement[i][j].current.setState({content: content});
@@ -109,36 +113,50 @@ class ComplexNumberCalculator extends React.Component
     }
   }
 
+  handleToggleInput = (input) => {
+    var mode,buttonCol;
+    var source = input.substr(0,input.indexOf("Mode")-1);
+
+    // Determine
+    if(source == "Input") {
+      [mode, buttonCol] = [this.state.inputMode, 2];
+    } else if(source == "ANS") {
+      [mode, buttonCol] = [this.state.outputMode, 1];
+    } else if(source == "Angle") {
+      [mode, buttonCol] = [this.state.angleMode, 0];
+    }
+
+    // Move onto next mode
+    mode = (mode+1)%3;
+    this.tabContentElement[3][buttonCol].current.setState({content: source+" Mode: "+this.modeInput[source][mode]});
+
+    // Set states
+    if(source == "Input") {
+      this.setState({inputMode: mode});
+
+      // Input toggle will also toggle the j, ∠, eʲ button on the main panel
+      this.mainElement[0][4].current.setState({content: this.modeInput["Symbol"][mode]});
+    } else if(source == "ANS") {
+      this.setState({outputMode: mode});
+
+      // The ANS toggle will also trigger a form switch in the output
+      this.handleButtonInput(this.modeInput["ANS"][mode]);
+    } else if(source == "Angle") {
+      this.setState({angleMode: mode});
+    }    
+  }
+
   handleButtonInput = (input) => {
     this.setState({count: this.state.count+1});
 
-    // Mode switching will be handled right here
-    if(input.toString().includes("Input Mode")) {
-      var inputMode = (this.state.inputMode+1)%3;
+    var array = [...this.state.inputs];
+    var answer = this.state.outputs;
+    var allowDecimal = this.state.allowDecimal;
+    var bracketCount = this.state.bracketCount;
 
-      this.tabContentElement[3][2].current.setState({content: "Input Mode: "+this.complexInput["Mode"][inputMode]});
-      this.mainElement[0][4].current.setState({content: this.complexInput["Input"][inputMode]});
-      this.setState({inputMode: inputMode});
-    } else { // Actual calculator operations
-      // Output Mode is also a toggle, parse it and then pass it into the calculator
-      if(input.toString().includes("ANS Mode")) {
-        var outputMode = (this.state.outputMode+1)%3;
-
-        this.tabContentElement[3][1].current.setState({content: "ANS Mode: "+this.complexInput["Mode"][outputMode]});
-        this.setState({outputMode: outputMode});
-
-        input = this.complexInput["Mode"][outputMode];
-      }
-
-      var array = [...this.state.inputs];
-      var answer = this.state.outputs;
-      var allowDecimal = this.state.allowDecimal;
-      var bracketCount = this.state.bracketCount;
-
-      [array, answer, allowDecimal, bracketCount] = button.parseButtonInput(input, array, answer, allowDecimal, bracketCount);
-      
-      this.setState({inputs: array, outputs: answer, allowDecimal: allowDecimal, bracketCount: bracketCount});
-    }
+    [array, answer, allowDecimal, bracketCount] = button.parseButtonInput(input, array, answer, allowDecimal, bracketCount);
+    
+    this.setState({inputs: array, outputs: answer, allowDecimal: allowDecimal, bracketCount: bracketCount});
   }
 
   generateTabButtons = (inputs) => {
@@ -165,7 +183,12 @@ class ComplexNumberCalculator extends React.Component
       this.tabContentElement.push([]);
       for(let j=0; j<inputs[tabs[0]][i].length; j++) {
         this.tabContentElement[i].push(React.createRef());
-        buttons[i].push(<button.Button ref={this.tabContentElement[i][j]} key={"tab_"+i.toString()+"_"+j.toString()} content={inputs[tabs[0]][i][j]} onPress={this.handleButtonInput} style={styles.tabContentButton} />)
+
+        // Use a difference callback for toggle buttons for code clarity
+        if(inputs[tabs[0]][i][j].includes("Mode"))
+          buttons[i].push(<button.Button ref={this.tabContentElement[i][j]} key={"tab_"+i.toString()+"_"+j.toString()} content={inputs[tabs[0]][i][j]} onPress={this.handleToggleInput} style={styles.tabContentButton} />)
+        else
+          buttons[i].push(<button.Button ref={this.tabContentElement[i][j]} key={"tab_"+i.toString()+"_"+j.toString()} content={inputs[tabs[0]][i][j]} onPress={this.handleButtonInput} style={styles.tabContentButton} />)
       }
     }
 
