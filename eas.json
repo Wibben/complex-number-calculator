@@ -1,0 +1,18 @@
+{
+  "cli": {
+    "version": ">= 0.34.0"
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "../path/to/api-xxx-yyy-zzz.json",
+        "track": "internal"
+      },
+      "ios": {
+        "appleId": "toby.kurniawan@mail.utoronto.ca",
+        "ascAppId": "1597763663",
+        "appleTeamId": "CK69244FFY"
+      }
+    }
+  }
+}
