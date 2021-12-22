@@ -77,7 +77,9 @@ function createExpression(inputs, prevAnswer) {
       expression.push(prevAnswer);
     } else if (operands.includes(lastElement) || operands.includes(inputs[i])) {
       // Parsing for operands
-      if(inputs[i]=="(" && ![...operands,...trigonometric,...complexOps,...specialOps].includes(lastElement)) {
+      if(inputs[i]=="(" && (![...operands,...trigonometric,...complexOps,...specialOps].includes(lastElement) || lastElement==")")) {
+        expression.push("×",inputs[i]);
+      } else if(lastElement==")" && ![...operands,...trigonometric,...complexOps,...specialOps].includes(inputs[i])) {
         expression.push("×",inputs[i]);
       } else expression.push(inputs[i]);
     } else if (constants.includes(inputs[i])) {
