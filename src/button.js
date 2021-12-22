@@ -5,7 +5,7 @@ import {
   Text,
   InputAccessoryView,
 } from "react-native";
-import styles from "./styles";
+import styles from "./portraitStyles";
 import * as math from "./math";
 import * as utils from "./utils";
 
