@@ -18,7 +18,7 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
     selection = -1;
     answer = null;
     allowDecimal = true;
-  } else if (input == "DEL" && selection!=-1) {
+  } else if (input == "DEL") {
     if (lastElement == ".") allowDecimal = true;
     else if (lastElement == "(") bracketCount--;
     else if (lastElement == ")") bracketCount++;

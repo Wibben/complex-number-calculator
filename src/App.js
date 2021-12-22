@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, Text, View, SafeAreaView, StatusBar } from 'react-native';
+import { Platform, Text, View, SafeAreaView, StatusBar, Keyboard } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from './styles';
 import * as button from './button';
@@ -281,7 +281,7 @@ class ComplexNumberCalculator extends React.Component
         <TestFunction key="test2" in="This is done with a function call" /> */}
         
         <View key="io" style={{flex:1, alignSelf: "stretch"}}>
-          <TextInput key="input" showSoftInputOnFocus={false} numberOfLines={1} autoFocus={true} adjustsFontSizeToFit style={styles.inputField} value={input} selection={this.state.selection} onSelectionChange={this.handleSelectionChange}/>
+          <TextInput key="input" showSoftInputOnFocus={false} keyboardType={null} numberOfLines={1} autoFocus={true} adjustsFontSizeToFit style={styles.inputField} value={input} selection={this.state.selection} onSelectionChange={this.handleSelectionChange} onFocus={()=>Keyboard.dismiss()}/>
           <Text key="output" numberOfLines={1} adjustsFontSizeToFit style={styles.answerField}> {output} </Text>
         </View>
 
