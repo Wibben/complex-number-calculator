@@ -77,7 +77,9 @@ function createExpression(inputs, prevAnswer) {
       expression.push(prevAnswer);
     } else if (operands.includes(lastElement) || operands.includes(inputs[i])) {
       // Parsing for operands
-      expression.push(inputs[i]);
+      if(inputs[i]=="(" && ![...operands,...trigonometric,...complexOps,...specialOps].includes(lastElement)) {
+        expression.push("×",inputs[i]);
+      } else expression.push(inputs[i]);
     } else if (constants.includes(inputs[i])) {
       // Parsing for constants
       // Parse constants as a multiplication if there were values before it

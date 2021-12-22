@@ -63,7 +63,7 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
     if (
       array.length == 0 ||
       math.operands.includes(lastElement) ||
-      [...math.complexOps, "-"].includes(lastElement)
+      [...math.complexOps, "-", 0,1,2,3,4,5,6,7,8,9].includes(lastElement)
     ) {
       array = utils.addItem(array, [input], selection);
       selection++;
