@@ -1,5 +1,6 @@
 import React from 'react';
 import { Platform, Text, View, SafeAreaView, StatusBar } from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
 import styles from './styles';
 import * as button from './button';
 
@@ -76,6 +77,7 @@ class ComplexNumberCalculator extends React.Component
 
     this.state = {
       inputs: [],
+      selection: {start: 0, end: 0},
       outputs: null,
       count: 0,
       allowDecimal: true,
@@ -114,17 +116,15 @@ class ComplexNumberCalculator extends React.Component
   }
 
   handleToggleInput = (input) => {
-    var mode,buttonCol;
-    var source = input.substr(0,input.indexOf("Mode")-1);
-
-    // Determine
-    if(source == "Input") {
-      [mode, buttonCol] = [this.state.inputMode, 2];
-    } else if(source == "ANS") {
-      [mode, buttonCol] = [this.state.outputMode, 1];
-    } else if(source == "Angle") {
-      [mode, buttonCol] = [this.state.angleMode, 0];
+    var config = {
+      "Input":  {mode: this.state.inputMode,  buttonCol: 2},
+      "ANS":    {mode: this.state.outputMode, buttonCol: 1},
+      "Angle":  {mode: this.state.angleMode,  buttonCol: 0},
     }
+
+    var source = input.substr(0,input.indexOf("Mode")-1);
+    var mode = config[source].mode;
+    var buttonCol = config[source].buttonCol;
 
     // Move onto next mode
     mode = (mode+1)%3;
@@ -153,10 +153,15 @@ class ComplexNumberCalculator extends React.Component
     var answer = this.state.outputs;
     var allowDecimal = this.state.allowDecimal;
     var bracketCount = this.state.bracketCount;
+    var selection = this.state.selection.start;
 
-    [array, answer, allowDecimal, bracketCount] = button.parseButtonInput(input, array, answer, allowDecimal, bracketCount);
+    [array, answer, allowDecimal, bracketCount, selection] = button.parseButtonInput(input, array, answer, allowDecimal, bracketCount, selection);
     
-    this.setState({inputs: array, outputs: answer, allowDecimal: allowDecimal, bracketCount: bracketCount});
+    this.setState({inputs: array, outputs: answer, allowDecimal: allowDecimal, bracketCount: bracketCount, selection: selection});
+  }
+
+  handleSelectionChange = ({nativeEvent: {selection}}) => {
+    this.setState({selection: selection});
   }
 
   generateTabButtons = (inputs) => {
@@ -263,6 +268,11 @@ class ComplexNumberCalculator extends React.Component
     if(this.state.outputs == null) output = "";
     else output = ["= ",...(this.state.outputs.toOutput())];
 
+    var input = "";
+    for (let i=0; i<this.state.inputs.length; i++) {
+      input = `${input}${this.state.inputs[i]}`;
+    }
+
     return (
       <SafeAreaView key="mainView" style={styles.center}>
         {header}
@@ -271,7 +281,7 @@ class ComplexNumberCalculator extends React.Component
         <TestFunction key="test2" in="This is done with a function call" /> */}
         
         <View key="io" style={{flex:1, alignSelf: "stretch"}}>
-          <Text key="input" numberOfLines={1} adjustsFontSizeToFit style={styles.inputField}> {this.state.inputs} </Text>
+          <TextInput key="input" showSoftInputOnFocus={false} numberOfLines={1} autoFocus={true} adjustsFontSizeToFit style={styles.inputField} value={input} selection={this.state.selection} onSelectionChange={this.handleSelectionChange}/>
           <Text key="output" numberOfLines={1} adjustsFontSizeToFit style={styles.answerField}> {output} </Text>
         </View>
 

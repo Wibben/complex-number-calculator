@@ -9,18 +9,21 @@ import styles from "./styles";
 import * as math from "./math";
 import * as utils from "./utils";
 
-export function parseButtonInput(input, array, answer, allowDecimal, bracketCount) {
-  var lastElement = utils.last(array);
+export function parseButtonInput(input, array, answer, allowDecimal, bracketCount, selection) {
+  var selection = utils.snapSelectionToInput(array,selection);
+  var lastElement = utils.lastSelected(array,selection);
 
   if (input == "AC") {
     array = [];
+    selection = -1;
     answer = null;
     allowDecimal = true;
-  } else if (input == "DEL") {
+  } else if (input == "DEL" && selection!=-1) {
     if (lastElement == ".") allowDecimal = true;
     else if (lastElement == "(") bracketCount--;
     else if (lastElement == ")") bracketCount++;
-    array = utils.removeLastItem(array);
+    array = utils.removeSelectedItem(array,selection);
+    selection--;
   } else if (input == "=") {
     // Disallow compute right after an operand
     if (
@@ -42,8 +45,11 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
         math.operands.includes(lastElement) &&
         !math.specialOps.includes(lastElement)
       )
-        array = utils.removeLastItem(array); // Disallow 2 consecutive ops
-      array = [...array, input];
+        array[selection] = input; // Disallow 2 consecutive ops
+      else {
+        array = utils.addItem(array, [input], selection);
+        selection++;
+      }
       allowDecimal = true;
     }
   } else if (input == "( - )") {
@@ -53,7 +59,8 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
       ([...math.operands, ...math.complexOps].includes(lastElement) &&
         !["-"].includes(lastElement))
     ) {
-      array = [...array, "-"];
+      array = utils.addItem(array, ["-"], selection);
+      selection++;
     }
   } else if (input == "(") {
     // The left bracket should come after a operand
@@ -62,7 +69,8 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
       math.operands.includes(lastElement) ||
       [...math.complexOps, "-"].includes(lastElement)
     ) {
-      array = [...array, input];
+      array = utils.addItem(array, [input], selection);
+      selection++;
       bracketCount++;
     }
   } else if (input == ")") {
@@ -72,22 +80,26 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
       (!math.operands.includes(lastElement) || lastElement == ")") &&
       !["-"].includes(lastElement)
     ) {
-      array = [...array, input];
+      array = utils.addItem(array, [input], selection);
+      selection++;
       bracketCount--;
     }
   } else if (input == ".") {
     // Disallow 2 decimals in one number
     if (allowDecimal) {
-      array = [...array, input];
+      array = utils.addItem(array, [input], selection);
+      selection++;
       allowDecimal = false;
     }
   } else if (math.complexOps.includes(input)) {
     // Imaginary number stuff
-    array = [...array, input];
+    array = utils.addItem(array, [input], selection);
+    selection++;
     allowDecimal = true;
   } else if (math.trigonometric.includes(input)) {
     // trigonometric
-    array = [...array, input, "("];
+    array = utils.addItem(array, [input, "("], selection);
+    selection+=2;
     bracketCount++;
     allowDecimal = true;
   } else if (math.conversion.includes(input)) {
@@ -98,12 +110,18 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
       allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
     }
   } else if(input == "ANS") {
-    if(answer != null) array = [...array, input];
+    if(answer != null) {
+      array = utils.addItem(array, [input], selection);
+      selection++;
+    }
   } else {
-    array = [...array, input];
+    array = utils.addItem(array, [input], selection);
+    selection++;
   }
 
-  return [array, answer, allowDecimal, bracketCount];
+  selection = utils.snapSelectionToText(array,selection);
+
+  return [array, answer, allowDecimal, bracketCount, {start:selection,end:selection}];
 }
 
 export class Button extends React.Component {

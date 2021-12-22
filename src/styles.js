@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
     borderColor: "white",
     backgroundColor: "#FFFFFF",
     fontSize: 30,
+    margin: 5,
   },
 
   answerField: {
