@@ -11,6 +11,32 @@ export const complexOps = ["j", "∠", "eʲ"];
 export const constants = ["π", "e"];
 export const constantVals = [mathjs.pi, mathjs.e];
 
+// Validate a mathematical expression by essentially simulating an answer
+export function validateExpression(inputs) {
+  var expression = createExpression(inputs, "2");
+  var postfix = generatePostfix(expression);
+  var answer = [];
+
+  // Go through and pretend to compute the expression, if the answer array does not have enough
+  // values for the operands, it is an invalid expression
+  for (let i = 0; i < postfix.length; i++) {
+    var element = postfix[i];
+
+    if (operands.includes(element)) {
+      // Normal operands pop 2 elements and push 1 element, so just pop 1 in sim
+      if(answer.length<2) return false;
+      answer.pop();
+    } else if (trigonometric.includes(element)) {
+      // Trig functions pop 1 elements and push 1 element, no change in sim
+      if(answer.length<1) return false;
+    } else answer.push(element);
+  }
+
+  // If there are multiple values left in answer, expression is invalid
+  if(answer.length>1) return false;
+  else return true;
+}
+
 // Piece together an expression from an array of just singular variables
 function createExpression(inputs, prevAnswer) {
   var expression = [];

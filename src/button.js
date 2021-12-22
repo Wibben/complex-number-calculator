@@ -26,11 +26,7 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
     selection--;
   } else if (input == "=") {
     // Disallow compute right after an operand
-    if (
-      (!math.operands.includes(lastElement) ||
-        math.specialOps.includes(lastElement)) &&
-      array.length > 0
-    ) {
+    if (math.validateExpression(array)) {
       answer = math.doMath(array, answer, "default");
       allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
     }
