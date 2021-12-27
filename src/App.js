@@ -154,8 +154,12 @@ class ComplexNumberCalculator extends React.Component
     var allowDecimal = this.state.allowDecimal;
     var bracketCount = this.state.bracketCount;
     var selection = this.state.selection.start;
+    var mode = {
+        inputMode: this.modeInput["Input"][this.state.inputMode],
+        outputMode: this.modeInput["ANS"][this.state.outputMode]
+    };
 
-    [array, answer, allowDecimal, bracketCount, selection] = button.parseButtonInput(input, array, answer, allowDecimal, bracketCount, selection);
+    [array, answer, allowDecimal, bracketCount, selection] = button.parseButtonInput(input, array, answer, allowDecimal, bracketCount, selection, mode);
     
     this.setState({inputs: array, outputs: answer, allowDecimal: allowDecimal, bracketCount: bracketCount, selection: selection});
   }

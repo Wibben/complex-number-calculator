@@ -9,7 +9,7 @@ import styles from "./styles";
 import * as math from "./math";
 import * as utils from "./utils";
 
-export function parseButtonInput(input, array, answer, allowDecimal, bracketCount, selection) {
+export function parseButtonInput(input, array, answer, allowDecimal, bracketCount, selection, mode) {
   var selection = utils.snapSelectionToInput(array,selection);
   var lastElement = utils.lastSelected(array,selection);
 
@@ -27,7 +27,7 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
   } else if (input == "=") {
     // Disallow compute right after an operand
     if (math.validateExpression(array)) {
-      answer = math.doMath(array, answer, "default");
+      answer = math.doMath(array, answer, mode.outputMode);
       allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
     }
   } else if (
