@@ -43,23 +43,23 @@ export default class complex {
     }
   }
 
-  add(num: complex) {
+  add(num) {
     this.val = mathjs.add(this.val, num.val);
   }
 
-  sub(num: complex) {
+  sub(num) {
     this.val = mathjs.subtract(this.val, num.val);
   }
 
-  mult(num: complex) {
+  mult(num) {
     this.val = mathjs.multiply(this.val, num.val);
   }
 
-  div(num: complex) {
+  div(num) {
     this.val = mathjs.divide(this.val, num.val);
   }
 
-  exp(num: complex) {
+  exp(num) {
     this.val = mathjs.pow(this.val, num.val);
   }
 
