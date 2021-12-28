@@ -54,3 +54,9 @@ Hitting `Ctrl+C` in the terminal will exit the app.
 
 ### Debugging
 Saving files while expo is running will automatically update them, in order to debug by printf, the `console.log()` function can be used and the results will be printed into the same terminal as the expo instance. Most of the time the errors thrown will give very little hints on the error locations so this type of debug might be very much needed.
+
+### Testing
+Ensure your node modules are up to date with `npm i`.
+All test suites can be run with `npm run test`.
+To create a new test, name any file with the `{filename}.test.js` extension and jest should pick
+up these tests by default.
