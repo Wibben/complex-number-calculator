@@ -57,3 +57,19 @@ export function convertRadians(angle, mode) {
   }
   return result;
 }
+
+export function convertToRadians(angle, mode) {
+  var result;
+  switch(mode) {
+    case "deg":
+      result = multiply(angle, (2 * Math.PI) / 360);
+      break;
+    case "grad":
+      result = multiply(angle, (2 * Math.PI) / 400);
+      break;
+    default:
+      result = angle;
+      break;
+  }
+  return result;
+}

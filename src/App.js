@@ -143,6 +143,9 @@ class ComplexNumberCalculator extends React.Component
       this.handleButtonInput(this.modeInput["ANS"][mode]);
     } else if(source == "Angle") {
       this.setState({angleMode: mode});
+
+      // The Angle toggle will also trigger a form switch in the output
+      this.handleButtonInput(this.modeInput["Angle"][mode]);
     }    
   }
 

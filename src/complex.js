@@ -1,8 +1,10 @@
 import * as mathjs from "mathjs";
-import { convertRadians } from "./utils";
+import { convertRadians, convertToRadians } from "./utils";
 
 export default class complex {
   constructor(opts) {
+    this.angleMode = (opts["angleMode"]) ? opts["angleMode"] : "deg";
+
     if (opts instanceof complex) {
       this.val = opts.val.clone();
       this.form = opts.form;
@@ -16,7 +18,7 @@ export default class complex {
         // Exponential
         var idx = str.indexOf("eʲ");
         this.val = mathjs.complex({
-          phi: (str.substr(idx + 2) == "") ? 1:str.substr(idx + 2),
+          phi: (str.substr(idx + 2) == "") ? 1:str.substr(idx + 2), // Always entered as radians
           r: (idx==0) ? 1:str.substr(0, idx),
         });
         this.form = "exp";
@@ -31,9 +33,10 @@ export default class complex {
       } else if (str.includes("∠")) {
         // Polar
         var idx = str.indexOf("∠");
+        var angle = (str.substr(idx+1)=="") ? 0:convertToRadians(str.substr(idx + 1), this.angleMode);
         this.val = mathjs.complex({
-          phi: (str.substr(idx+1)=="") ? 0:str.substr(idx + 1),
-          r: (idx==0) ? 1:str.substr(0, idx),
+          phi: angle,
+          r: (idx==0) ? 1:Number(str.substr(0, idx)),
         });
         this.form = "polar";
       } else {
@@ -65,30 +68,30 @@ export default class complex {
   }
 
   conj() {
-    return new complex({ re: this.val.re, im: -1 * this.val.im }).convert(
-      this.form
-    );
+    return new complex({ re: this.val.re, im: -1 * this.val.im })
+      .convert(this.form)
+      .convertAngle(this.angleMode);
   }
 
-  trig(fn, angleMode) {
+  trig(fn) {
     switch (fn) {
       case "sin":
-        this.val = mathjs.sin(mathjs.unit(this.val, angleMode));
+        this.val = mathjs.sin(mathjs.unit(this.val, this.angleMode));
         break;
       case "cos":
-        this.val = mathjs.cos(mathjs.unit(this.val, angleMode));
+        this.val = mathjs.cos(mathjs.unit(this.val, this.angleMode));
         break;
       case "tan":
-        this.val = mathjs.tan(mathjs.unit(this.val, angleMode));
+        this.val = mathjs.tan(mathjs.unit(this.val, this.angleMode));
         break;
       case "asin":
-        this.val = convertRadians(mathjs.asin(this.val), angleMode);
+        this.val = convertRadians(mathjs.asin(this.val), this.angleMode);
         break;
       case "acos":
-        this.val = convertRadians(mathjs.acos(this.val), angleMode);
+        this.val = convertRadians(mathjs.acos(this.val), this.angleMode);
         break;
       case "atan":
-        this.val = convertRadians(mathjs.atan(this.val), angleMode);
+        this.val = convertRadians(mathjs.atan(this.val), this.angleMode);
         break;
       default:
         break;
@@ -100,6 +103,10 @@ export default class complex {
     if (form != "default") this.form = form;
   }
 
+  convertAngle(angleMode) {
+    this.angleMode = angleMode;
+  }
+
   toOutput() {
     var output, args;
 
@@ -109,11 +116,12 @@ export default class complex {
       // output = [args[0], "j", args[1]];
     } else if (this.form == "polar") {
       args = this.val.toPolar();
-      output = [mathjs.round(args.r, 2), "∠", mathjs.round(args.phi, 2)];
+      var angle = convertRadians(args.phi, this.angleMode);
+      output = [mathjs.round(args.r, 2), "∠", mathjs.round(angle, 2)];
       // output = [args.r, "∠", args.ph];
     } else if (this.form == "exp") {
       args = this.val.toPolar();
-      output = [mathjs.round(args.r, 2), "eʲ", mathjs.round(args.phi, 2)];
+      output = [mathjs.round(args.r, 2), "eʲ", mathjs.round(args.phi, 2)]; // Always radians
       // output = [args.r, "∠", args.phi];
     }
 

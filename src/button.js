@@ -105,6 +105,10 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
       answer.convert(input);
       allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
     }
+  } else if (math.angleConversion.includes(input)) {
+    if (answer != null) {
+      answer.convertAngle(input);
+    }
   } else if(input == "ANS") {
     if(answer != null) {
       array = utils.addItem(array, [input], selection);
