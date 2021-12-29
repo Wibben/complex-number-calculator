@@ -1,4 +1,5 @@
 import * as mathjs from "mathjs";
+import { convertRadians } from "./utils";
 
 export default class complex {
   constructor(opts) {
@@ -69,25 +70,25 @@ export default class complex {
     );
   }
 
-  trig(fn) {
+  trig(fn, angleMode) {
     switch (fn) {
       case "sin":
-        this.val = mathjs.sin(this.val);
+        this.val = mathjs.sin(mathjs.unit(this.val, angleMode));
         break;
       case "cos":
-        this.val = mathjs.cos(this.val);
+        this.val = mathjs.cos(mathjs.unit(this.val, angleMode));
         break;
       case "tan":
-        this.val = mathjs.tan(this.val);
+        this.val = mathjs.tan(mathjs.unit(this.val, angleMode));
         break;
       case "asin":
-        this.val = mathjs.asin(this.val);
+        this.val = convertRadians(mathjs.asin(this.val), angleMode);
         break;
       case "acos":
-        this.val = mathjs.acos(this.val);
+        this.val = convertRadians(mathjs.acos(this.val), angleMode);
         break;
       case "atan":
-        this.val = mathjs.atan(this.val);
+        this.val = convertRadians(mathjs.atan(this.val), angleMode);
         break;
       default:
         break;

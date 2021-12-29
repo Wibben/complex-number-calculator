@@ -1,3 +1,5 @@
+import { multiply } from "mathjs";
+
 export function snapSelectionToInput(array, selection) {
   // Due to the fact that certain inputs consist of multiple characters, we need to snap the selection to the end of the input
   // to better modify them and to nost cause events like "co2pis("
@@ -38,4 +40,20 @@ export function addItem(array,input,n) {
   if(n==array.length-1) return [...array,...input];
   else if(n==-1) return [...input,...array];
   else return [...array.slice(0,n+1), ...input, ...array.slice(n+1)];
+}
+
+export function convertRadians(angle, mode) {
+  var result;
+  switch(mode) {
+    case "deg":
+      result = multiply(angle, 360 / (2 * Math.PI));
+      break;
+    case "grad":
+      result = multiply(angle, 400 / (2 * Math.PI));
+      break;
+    default:
+      result = angle;
+      break;
+  }
+  return result;
 }

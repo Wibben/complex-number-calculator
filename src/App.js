@@ -156,7 +156,8 @@ class ComplexNumberCalculator extends React.Component
     var selection = this.state.selection.start;
     var mode = {
         inputMode: this.modeInput["Input"][this.state.inputMode],
-        outputMode: this.modeInput["ANS"][this.state.outputMode]
+        outputMode: this.modeInput["ANS"][this.state.outputMode],
+        angleMode: this.modeInput["Angle"][this.state.angleMode]
     };
 
     [array, answer, allowDecimal, bracketCount, selection] = button.parseButtonInput(input, array, answer, allowDecimal, bracketCount, selection, mode);

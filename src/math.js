@@ -158,7 +158,7 @@ function generatePostfix(expression) {
   return postfix;
 }
 
-export function doMath(inputs, prevAnswer, form) {
+export function doMath(inputs, prevAnswer, mode) {
   var expression = createExpression(inputs, prevAnswer);
   var postfix = generatePostfix(expression);
   var answer = [];
@@ -192,7 +192,7 @@ export function doMath(inputs, prevAnswer, form) {
       // Compute the trig functions
       var a = answer.pop();
 
-      a.trig(element);
+      a.trig(element, mode.angleMode);
       answer.push(a);
     } else answer.push(element);
   }
@@ -203,7 +203,7 @@ export function doMath(inputs, prevAnswer, form) {
   // alert(a.re);
   // alert(a.im);
   // Conversion step
-  answer[0].convert(form);
+  answer[0].convert(mode.outputMode);
 
   return answer[0];
 }
