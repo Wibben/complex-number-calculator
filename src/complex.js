@@ -18,8 +18,8 @@ export default class complex {
         // Exponential
         var idx = str.indexOf("eʲ");
         this.val = mathjs.complex({
-          phi: (str.substr(idx + 2) == "") ? 1:str.substr(idx + 2), // Always entered as radians
-          r: (idx==0) ? 1:str.substr(0, idx),
+          phi: (str.substr(idx + 2) == "") ? "1":str.substr(idx + 2), // Always entered as radians
+          r: (idx==0) ? "1":str.substr(0, idx),
         });
         this.form = "exp";
       } else if (str.includes("j")) {
@@ -50,7 +50,7 @@ export default class complex {
       } else if (str.includes("∠")) {
         // Polar
         var idx = str.indexOf("∠");
-        var angle = (str.substr(idx+1)=="") ? 0:convertToRadians(str.substr(idx + 1), this.angleMode);
+        var angle = (str.substr(idx+1)=="") ? "":convertToRadians(str.substr(idx + 1), this.angleMode);
         this.val = mathjs.complex({
           phi: angle,
           r: (idx==0) ? 1:Number(str.substr(0, idx)),
