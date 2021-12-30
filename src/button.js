@@ -1,15 +1,18 @@
 import React from "react";
 import {
-  Platform,
   TouchableOpacity,
   Text,
-  InputAccessoryView,
 } from "react-native";
 import styles from "./styles";
 import * as math from "./math";
 import * as utils from "./utils";
 
-export function parseButtonInput(input, array, answer, allowDecimal, bracketCount, selection, mode) {
+export function parseButtonInput(input, array, answer, options, mode) {
+  var allowDecimal = options.allowDecimal;
+  var bracketCount = options.bracketCount;
+  var selection = options.selection;
+  var clearInput = options.clearInput;
+
   var selection = utils.snapSelectionToInput(array,selection);
   var lastElement = utils.lastSelected(array,selection);
 
@@ -19,6 +22,7 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
     bracketCount = 0;
     answer = null;
     allowDecimal = true;
+    clearInput = false;
   } else if (input == "DEL") {
     if (lastElement == ".") allowDecimal = true;
     else if (lastElement == "(") bracketCount--;
@@ -37,13 +41,15 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
     if (math.validateExpression(array)) {
       answer = math.doMath(array, answer, mode);
       allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
+      // After a valid calculations, the next button press will clear the input field
+      clearInput = true;
     }
   } else if (
     math.operands.includes(input) &&
     !math.specialOps.includes(input)
   ) {
     // Put a filter on the operators
-    if (array.length > 0) {
+    if (array.length > 0 && !clearInput) {
       // Disallow having first input be an operator
       if (
         math.operands.includes(lastElement) &&
@@ -55,6 +61,7 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
         selection++;
       }
       allowDecimal = true;
+      clearInput = false;
     }
   } else if (input == "( - )") {
     // The negative sign should only be allowed in certain situations
@@ -65,6 +72,7 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
     ) {
       array = utils.addItem(array, ["-"], selection);
       selection++;
+      clearInput = false;
     }
   } else if (input == "(") {
     // The left bracket should come after a operand
@@ -73,6 +81,12 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
       math.operands.includes(lastElement) ||
       [...math.complexOps, "-", 0,1,2,3,4,5,6,7,8,9].includes(lastElement)
     ) {
+      if(clearInput) {
+        array = [];
+        selection = -1;
+        bracketCount = 0;
+        clearInput = false;
+      }
       array = utils.addItem(array, [input], selection);
       selection++;
       bracketCount++;
@@ -91,17 +105,38 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
   } else if (input == ".") {
     // Disallow 2 decimals in one number
     if (allowDecimal) {
+      if(clearInput) {
+        array = [];
+        selection = -1;
+        bracketCount = 0;
+        clearInput = false;
+      }
+
       array = utils.addItem(array, [input], selection);
       selection++;
       allowDecimal = false;
     }
   } else if (math.complexOps.includes(input)) {
     // Imaginary number stuff
+    if(clearInput) {
+      array = [];
+      selection = -1;
+      bracketCount = 0;
+      clearInput = false;
+    }
+
     array = utils.addItem(array, [input], selection);
     selection++;
     allowDecimal = true;
   } else if (math.trigonometric.includes(input)) {
     // trigonometric
+    if(clearInput) {
+      array = [];
+      selection = -1;
+      bracketCount = 0;
+      clearInput = false;
+    }
+
     array = utils.addItem(array, [input, "("], selection);
     selection+=2;
     bracketCount++;
@@ -119,17 +154,37 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
     }
   } else if(input == "ANS") {
     if(answer != null) {
+      if(clearInput) {
+        array = [];
+        selection = -1;
+        bracketCount = 0;
+        clearInput = false;
+      }
+
       array = utils.addItem(array, [input], selection);
       selection++;
     }
   } else {
+    if(clearInput) {
+      array = [];
+      selection = -1;
+      bracketCount = 0;
+      clearInput = false;
+    }
+    
     array = utils.addItem(array, [input], selection);
     selection++;
+    clearInput = false;
   }
 
   selection = utils.snapSelectionToText(array,selection);
 
-  return [array, answer, allowDecimal, bracketCount, {start:selection,end:selection}];
+  options.allowDecimal = allowDecimal;
+  options.bracketCount = bracketCount;
+  options.selection = {start:selection,end:selection};
+  options.clearInput = clearInput;
+
+  return [array, answer, options];
 }
 
 export class Button extends React.Component {

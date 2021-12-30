@@ -14,6 +14,8 @@ export const constantVals = [mathjs.pi, mathjs.e];
 
 // Validate a mathematical expression by essentially simulating an answer
 export function validateExpression(inputs) {
+  if(inputs.length==0) return false;
+
   var expression = createExpression(inputs, "2", "deg");
   var postfix = generatePostfix(expression);
   var answer = [];
