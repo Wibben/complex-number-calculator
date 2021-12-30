@@ -3,9 +3,10 @@ import * as utils from "./utils";
 import * as mathjs from "mathjs";
 
 // Handles all the math...
-export const operands = ["+", "−", "×", "÷", "(", ")", "ₓ₁₀", "^", "₊"]; // ₊ is a "shadow" plus sign used to skirt around precedence issues
+export const operands = ["+", "−", "×", "÷", "(", ")", "ₓ₁₀", "^", "₊", "ₓ"]; // ₊ is a "shadow" plus sign used to skirt around precedence issues
 export const specialOps = ["(", ")", "-"];
 export const conversion = ["polar", "exp", "cart"];
+export const angleConversion = ["deg", "rad", "grad"];
 export const trigonometric = ["sin", "cos", "tan", "asin", "acos", "atan"];
 export const complexOps = ["j", "∠", "eʲ"];
 export const constants = ["π", "e"];
@@ -13,7 +14,7 @@ export const constantVals = [mathjs.pi, mathjs.e];
 
 // Validate a mathematical expression by essentially simulating an answer
 export function validateExpression(inputs) {
-  var expression = createExpression(inputs, "2");
+  var expression = createExpression(inputs, "2", "deg");
   var postfix = generatePostfix(expression);
   var answer = [];
 
@@ -38,7 +39,7 @@ export function validateExpression(inputs) {
 }
 
 // Piece together an expression from an array of just singular variables
-function createExpression(inputs, prevAnswer) {
+function createExpression(inputs, prevAnswer, mode) {
   var expression = [];
 
   // Piece together expression, separating operands from operators
@@ -65,23 +66,19 @@ function createExpression(inputs, prevAnswer) {
     } else if (complexOps.includes(inputs[i])) {
       // Parsing for complex entries - specifically j
       if(inputs[i] == "j") {
-        if(!operands.includes(lastElement)) expression.push("₊");
+        if(!operands.includes(lastElement) || specialOps.includes(lastElement)) {
+          if([0,1,2,3,4,5,6,7,8,9,...constants,...specialOps].includes(inputs[i+1])) expression.push("₊");
+          else expression.push("×");
+        } 
 
         if (inputs[i + 1] == "(")
-          expression.push(`${inputs[i]}${"1"}`, "×", inputs[i]);
+          expression.push(`${inputs[i]}${"1"}`, "ₓ");
         else expression.push(inputs[i]);
         
       } else expression[expression.length - 1] = `${lastElement}${inputs[i]}`
     } else if(inputs[i] == "ANS") {
       // Performing substitution for the ANS operator
       expression.push(prevAnswer);
-    } else if (operands.includes(lastElement) || operands.includes(inputs[i])) {
-      // Parsing for operands
-      if(inputs[i]=="(" && (![...operands,...trigonometric,...complexOps,...specialOps].includes(lastElement) || lastElement==")")) {
-        expression.push("×",inputs[i]);
-      } else if(lastElement==")" && ![...operands,...trigonometric,...complexOps,...specialOps].includes(inputs[i])) {
-        expression.push("×",inputs[i]);
-      } else expression.push(inputs[i]);
     } else if (constants.includes(inputs[i])) {
       // Parsing for constants
       // Parse constants as a multiplication if there were values before it
@@ -92,13 +89,21 @@ function createExpression(inputs, prevAnswer) {
         expression = utils.removeLastItem(expression);
         expression.push("(", lastElement, "×", complexVal, ")");
       } else expression.push(complexVal); // Convert constants into values
+    } else if (operands.includes(lastElement) || operands.includes(inputs[i])) {
+      // Parsing for operands
+      if((inputs[i]=="(" && ![...operands,...trigonometric,...complexOps,...specialOps].includes(lastElement)) || 
+          (inputs[i]=="(" && lastElement==")") ||
+          (lastElement==")" && ![...operands,...trigonometric,...complexOps,...specialOps].includes(inputs[i]))
+        ) {
+        expression.push("×",inputs[i]);
+      } else expression.push(inputs[i]);
     } else expression[expression.length - 1] = `${lastElement}${inputs[i]}`; // Parsing for values
   }
 
   // From the expression, generate the complex numbers
   for (let i = 0; i < expression.length; i++) {
     if (![...operands, ...trigonometric].includes(expression[i]) && !(expression[i] instanceof complex))
-      expression[i] = new complex({ str: `${""}${expression[i]}` });
+      expression[i] = new complex({ str: `${""}${expression[i]}`, angleMode: mode.angleMode });
   }
 
   return expression;
@@ -114,6 +119,8 @@ function getPrecedence(operator) {
   else if (["ₓ₁₀", "-"].includes(operator)) return 4;
   //Precedence of ₓ₁₀ or - is 3
   else if (["₊"].includes(operator)) return 100;
+  // ₊ is used to concatenate (expr)j without losing precedence
+  else if (["ₓ"].includes(operator)) return 101;
   // ₊ is used to concatenate (expr)j without losing precedence
   else return 0;
 }
@@ -158,8 +165,8 @@ function generatePostfix(expression) {
   return postfix;
 }
 
-export function doMath(inputs, prevAnswer, form) {
-  var expression = createExpression(inputs, prevAnswer);
+export function doMath(inputs, prevAnswer, mode) {
+  var expression = createExpression(inputs, prevAnswer, mode);
   var postfix = generatePostfix(expression);
   var answer = [];
 
@@ -173,10 +180,9 @@ export function doMath(inputs, prevAnswer, form) {
       var b = answer.pop();
       var a = answer.pop();
 
-      if (element == "×") a.mult(b);
+      if (element == "×" || element == "ₓ") a.mult(b);
       else if (element == "÷") a.div(b);
-      else if (element == "+") a.add(b);
-      else if (element == "₊") a.add(b);
+      else if (element == "+" || element == "₊") a.add(b);
       else if (element == "−") a.sub(b);
       else if (element == "^") a.exp(b);
       else if (element == "ₓ₁₀")
@@ -203,7 +209,7 @@ export function doMath(inputs, prevAnswer, form) {
   // alert(a.re);
   // alert(a.im);
   // Conversion step
-  answer[0].convert(form);
+  answer[0].convert(mode.outputMode);
 
   return answer[0];
 }

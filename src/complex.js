@@ -1,7 +1,10 @@
 import * as mathjs from "mathjs";
+import { convertRadians, convertToRadians } from "./utils";
 
 export default class complex {
   constructor(opts) {
+    this.angleMode = (opts["angleMode"]) ? opts["angleMode"] : "deg";
+
     if (opts instanceof complex) {
       this.val = opts.val.clone();
       this.form = opts.form;
@@ -15,24 +18,42 @@ export default class complex {
         // Exponential
         var idx = str.indexOf("eʲ");
         this.val = mathjs.complex({
-          phi: (str.substr(idx + 2) == "") ? 1:str.substr(idx + 2),
-          r: (idx==0) ? 1:str.substr(0, idx),
+          phi: (str.substr(idx + 2) == "") ? "1":str.substr(idx + 2), // Always entered as radians
+          r: (idx==0) ? "1":str.substr(0, idx),
         });
         this.form = "exp";
       } else if (str.includes("j")) {
         // Cartesian
         var idx = str.indexOf("j");
-        this.val = mathjs.complex({
-          re: (idx==0) ? 0:str.substr(0, idx),
-          im: (str.substr(idx+1)=="") ? 1:parseFloat(str.substr(idx + 1)),
-        });
+        if(str=="j") { // Only j
+          this.val = mathjs.complex({
+            re: 0,
+            im: 1,
+          });
+        } else if(idx==0) { // jY
+          this.val = mathjs.complex({
+            re: 0,
+            im: parseFloat(str.substr(idx + 1)),
+          });
+        } else if(str.substr(idx+1)=="") { // Xj
+          this.val = mathjs.complex({
+            re: 0,
+            im: parseFloat(str.substr(0, idx)),
+          });
+        } else { // XjY
+          this.val = mathjs.complex({
+            re: str.substr(0, idx),
+            im: parseFloat(str.substr(idx + 1)),
+          });
+        }
         this.form = "cart";
       } else if (str.includes("∠")) {
         // Polar
         var idx = str.indexOf("∠");
+        var angle = (str.substr(idx+1)=="") ? "":convertToRadians(str.substr(idx + 1), this.angleMode);
         this.val = mathjs.complex({
-          phi: (str.substr(idx+1)=="") ? 0:str.substr(idx + 1),
-          r: (idx==0) ? 1:str.substr(0, idx),
+          phi: angle,
+          r: (idx==0) ? 1:Number(str.substr(0, idx)),
         });
         this.form = "polar";
       } else {
@@ -64,30 +85,30 @@ export default class complex {
   }
 
   conj() {
-    return new complex({ re: this.val.re, im: -1 * this.val.im }).convert(
-      this.form
-    );
+    return new complex({ re: this.val.re, im: -1 * this.val.im })
+      .convert(this.form)
+      .convertAngle(this.angleMode);
   }
 
   trig(fn) {
     switch (fn) {
       case "sin":
-        this.val = mathjs.sin(this.val);
+        this.val = mathjs.sin(mathjs.unit(this.val, this.angleMode));
         break;
       case "cos":
-        this.val = mathjs.cos(this.val);
+        this.val = mathjs.cos(mathjs.unit(this.val, this.angleMode));
         break;
       case "tan":
-        this.val = mathjs.tan(this.val);
+        this.val = mathjs.tan(mathjs.unit(this.val, this.angleMode));
         break;
       case "asin":
-        this.val = mathjs.asin(this.val);
+        this.val = convertRadians(mathjs.asin(this.val), this.angleMode);
         break;
       case "acos":
-        this.val = mathjs.acos(this.val);
+        this.val = convertRadians(mathjs.acos(this.val), this.angleMode);
         break;
       case "atan":
-        this.val = mathjs.atan(this.val);
+        this.val = convertRadians(mathjs.atan(this.val), this.angleMode);
         break;
       default:
         break;
@@ -99,21 +120,32 @@ export default class complex {
     if (form != "default") this.form = form;
   }
 
+  convertAngle(angleMode) {
+    this.angleMode = angleMode;
+  }
+
   toOutput() {
     var output, args;
 
     if (this.form == "cart") {
       args = this.val.toVector();
-      output = [mathjs.round(args[0], 2), "j", mathjs.round(args[1], 2)];
-      // output = [args[0], "j", args[1]];
+      var re = mathjs.round(args[0], 2);
+      var im = mathjs.round(args[1], 2);
+      if(im==0) output = [re];
+      else if(re==0) output = ["j", im];
+      else output = [re, "j", im];
     } else if (this.form == "polar") {
       args = this.val.toPolar();
-      output = [mathjs.round(args.r, 2), "∠", mathjs.round(args.phi, 2)];
-      // output = [args.r, "∠", args.ph];
+      var re = mathjs.round(args.r, 2);
+      var phi = mathjs.round(convertRadians(args.phi, this.angleMode), 2);
+      if (phi == 0) output = [re];
+      else output = [re, "∠", phi];
     } else if (this.form == "exp") {
       args = this.val.toPolar();
-      output = [mathjs.round(args.r, 2), "eʲ", mathjs.round(args.phi, 2)];
-      // output = [args.r, "∠", args.phi];
+      var re = mathjs.round(args.r, 2);
+      var phi = mathjs.round(args.phi, 2); // Always radians
+      if (phi == 0) output = [re];
+      else output = [re, "eʲ", phi];
     }
 
     return output;

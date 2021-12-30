@@ -16,6 +16,7 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
   if (input == "AC") {
     array = [];
     selection = -1;
+    bracketCount = 0;
     answer = null;
     allowDecimal = true;
   } else if (input == "DEL") {
@@ -24,10 +25,17 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
     else if (lastElement == ")") bracketCount++;
     array = utils.removeSelectedItem(array,selection);
     selection--;
+
+    // Certain functions, such as trig, are accompanied by brackets, and thus should
+    // also delete the corresponding trig function
+    if(math.trigonometric.includes(utils.lastSelected(array,selection))) {
+      array = utils.removeSelectedItem(array,selection);
+      selection--;
+    }
   } else if (input == "=") {
     // Disallow compute right after an operand
     if (math.validateExpression(array)) {
-      answer = math.doMath(array, answer, mode.outputMode);
+      answer = math.doMath(array, answer, mode);
       allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
     }
   } else if (
@@ -51,7 +59,7 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
   } else if (input == "( - )") {
     // The negative sign should only be allowed in certain situations
     if (
-      array.length == 0 ||
+      selection == -1 ||
       ([...math.operands, ...math.complexOps].includes(lastElement) &&
         !["-"].includes(lastElement))
     ) {
@@ -61,7 +69,7 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
   } else if (input == "(") {
     // The left bracket should come after a operand
     if (
-      array.length == 0 ||
+      selection == -1 ||
       math.operands.includes(lastElement) ||
       [...math.complexOps, "-", 0,1,2,3,4,5,6,7,8,9].includes(lastElement)
     ) {
@@ -104,6 +112,10 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
     if (answer != null) {
       answer.convert(input);
       allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
+    }
+  } else if (math.angleConversion.includes(input)) {
+    if (answer != null) {
+      answer.convertAngle(input);
     }
   } else if(input == "ANS") {
     if(answer != null) {
