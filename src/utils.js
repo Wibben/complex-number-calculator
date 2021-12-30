@@ -1,3 +1,5 @@
+import * as math from "./math";
+
 export function snapSelectionToInput(array, selection) {
   // Due to the fact that certain inputs consist of multiple characters, we need to snap the selection to the end of the input
   // to better modify them and to nost cause events like "co2pis("
@@ -5,7 +7,12 @@ export function snapSelectionToInput(array, selection) {
 
   for(let i=0; i<array.length; i++) {
     selection -= array[i].toString().length;
-    if(selection<=0) return i;
+    if(selection<=0) {
+      // Certain inputs are meant to have brackets accompanied with then, such as the trig functions
+      // in which case the snap should be for after the brackets
+      if(math.trigonometric.includes(array[i])) return (i+1<array.length) ? i+1:i;
+      else return i;
+    }
   }
 }
 
