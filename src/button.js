@@ -141,6 +141,12 @@ export function parseButtonInput(input, array, answer, options, mode) {
     selection+=2;
     bracketCount++;
     allowDecimal = true;
+  } else if (math.logarithmic.includes(input)) {
+    // logarithmic
+    array = utils.addItem(array, [input, "("], selection);
+    selection+=2;
+    bracketCount++;
+    allowDecimal = true;
   } else if (math.conversion.includes(input)) {
     // Disallow conversion right after an operand
     // Conversion will only apply to the answer

@@ -115,6 +115,18 @@ export default class complex {
     }
   }
 
+  log(fn) {
+    switch(fn) {
+      case "log":
+        this.val = mathjs.log10(this.val);
+        break;
+      case "ln":
+        this.val = mathjs.log(this.val, Math.E);
+      default:
+        break;
+    }
+  }
+
   convert(form) {
     // "default" is for keeping the form the same as initial input
     if (form != "default") this.form = form;
