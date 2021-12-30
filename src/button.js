@@ -34,7 +34,7 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
   } else if (input == "=") {
     // Disallow compute right after an operand
     if (math.validateExpression(array)) {
-      answer = math.doMath(array, answer, mode.outputMode);
+      answer = math.doMath(array, answer, mode);
       allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
     }
   } else if (
@@ -111,6 +111,10 @@ export function parseButtonInput(input, array, answer, allowDecimal, bracketCoun
     if (answer != null) {
       answer.convert(input);
       allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
+    }
+  } else if (math.angleConversion.includes(input)) {
+    if (answer != null) {
+      answer.convertAngle(input);
     }
   } else if(input == "ANS") {
     if(answer != null) {

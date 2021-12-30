@@ -1,3 +1,4 @@
+import { multiply } from "mathjs";
 import * as math from "./math";
 
 export function snapSelectionToInput(array, selection) {
@@ -45,4 +46,36 @@ export function addItem(array,input,n) {
   if(n==array.length-1) return [...array,...input];
   else if(n==-1) return [...input,...array];
   else return [...array.slice(0,n+1), ...input, ...array.slice(n+1)];
+}
+
+export function convertRadians(angle, mode) {
+  var result;
+  switch(mode) {
+    case "deg":
+      result = multiply(angle, 360 / (2 * Math.PI));
+      break;
+    case "grad":
+      result = multiply(angle, 400 / (2 * Math.PI));
+      break;
+    default:
+      result = angle;
+      break;
+  }
+  return result;
+}
+
+export function convertToRadians(angle, mode) {
+  var result;
+  switch(mode) {
+    case "deg":
+      result = multiply(angle, (2 * Math.PI) / 360);
+      break;
+    case "grad":
+      result = multiply(angle, (2 * Math.PI) / 400);
+      break;
+    default:
+      result = angle;
+      break;
+  }
+  return result;
 }
