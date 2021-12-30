@@ -3,7 +3,7 @@ import * as utils from "./utils";
 import * as mathjs from "mathjs";
 
 // Handles all the math...
-export const operands = ["+", "−", "×", "÷", "(", ")", "ₓ₁₀", "^", "₊"]; // ₊ is a "shadow" plus sign used to skirt around precedence issues
+export const operands = ["+", "−", "×", "÷", "(", ")", "ₓ₁₀", "^", "₊", "ₓ"]; // ₊ is a "shadow" plus sign used to skirt around precedence issues
 export const specialOps = ["(", ")", "-"];
 export const conversion = ["polar", "exp", "cart"];
 export const trigonometric = ["sin", "cos", "tan", "asin", "acos", "atan"];
@@ -65,10 +65,13 @@ function createExpression(inputs, prevAnswer) {
     } else if (complexOps.includes(inputs[i])) {
       // Parsing for complex entries - specifically j
       if(inputs[i] == "j") {
-        if(!operands.includes(lastElement)) expression.push("₊");
+        if(!operands.includes(lastElement) || specialOps.includes(lastElement)) {
+          if([0,1,2,3,4,5,6,7,8,9,...constants,...specialOps].includes(inputs[i+1])) expression.push("₊");
+          else expression.push("×");
+        } 
 
         if (inputs[i + 1] == "(")
-          expression.push(`${inputs[i]}${"1"}`, "×", inputs[i]);
+          expression.push(`${inputs[i]}${"1"}`, "ₓ");
         else expression.push(inputs[i]);
         
       } else expression[expression.length - 1] = `${lastElement}${inputs[i]}`
@@ -77,9 +80,10 @@ function createExpression(inputs, prevAnswer) {
       expression.push(prevAnswer);
     } else if (operands.includes(lastElement) || operands.includes(inputs[i])) {
       // Parsing for operands
-      if(inputs[i]=="(" && (![...operands,...trigonometric,...complexOps,...specialOps].includes(lastElement) || lastElement==")")) {
-        expression.push("×",inputs[i]);
-      } else if(lastElement==")" && ![...operands,...trigonometric,...complexOps,...specialOps].includes(inputs[i])) {
+      if((inputs[i]=="(" && ![...operands,...trigonometric,...complexOps,...specialOps].includes(lastElement)) || 
+          (inputs[i]=="(" && lastElement==")") ||
+          (lastElement==")" && ![...operands,...trigonometric,...complexOps,...specialOps].includes(inputs[i]))
+        ) {
         expression.push("×",inputs[i]);
       } else expression.push(inputs[i]);
     } else if (constants.includes(inputs[i])) {
@@ -114,6 +118,8 @@ function getPrecedence(operator) {
   else if (["ₓ₁₀", "-"].includes(operator)) return 4;
   //Precedence of ₓ₁₀ or - is 3
   else if (["₊"].includes(operator)) return 100;
+  // ₊ is used to concatenate (expr)j without losing precedence
+  else if (["ₓ"].includes(operator)) return 101;
   // ₊ is used to concatenate (expr)j without losing precedence
   else return 0;
 }
@@ -173,10 +179,9 @@ export function doMath(inputs, prevAnswer, form) {
       var b = answer.pop();
       var a = answer.pop();
 
-      if (element == "×") a.mult(b);
+      if (element == "×" || element == "ₓ") a.mult(b);
       else if (element == "÷") a.div(b);
-      else if (element == "+") a.add(b);
-      else if (element == "₊") a.add(b);
+      else if (element == "+" || element == "₊") a.add(b);
       else if (element == "−") a.sub(b);
       else if (element == "^") a.exp(b);
       else if (element == "ₓ₁₀")

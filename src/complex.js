@@ -22,10 +22,28 @@ export default class complex {
       } else if (str.includes("j")) {
         // Cartesian
         var idx = str.indexOf("j");
-        this.val = mathjs.complex({
-          re: (idx==0) ? 0:str.substr(0, idx),
-          im: (str.substr(idx+1)=="") ? 1:parseFloat(str.substr(idx + 1)),
-        });
+        if(str=="j") { // Only j
+          this.val = mathjs.complex({
+            re: 0,
+            im: 1,
+          });
+        } else if(idx==0) { // jY
+          this.val = mathjs.complex({
+            re: 0,
+            im: parseFloat(str.substr(idx + 1)),
+          });
+        } else if(str.substr(idx+1)=="") { // Xj
+          console.log("HERE!");
+          this.val = mathjs.complex({
+            re: 0,
+            im: parseFloat(str.substr(0, idx)),
+          });
+        } else { // XjY
+          this.val = mathjs.complex({
+            re: str.substr(0, idx),
+            im: parseFloat(str.substr(idx + 1)),
+          });
+        }
         this.form = "cart";
       } else if (str.includes("∠")) {
         // Polar
@@ -104,7 +122,11 @@ export default class complex {
 
     if (this.form == "cart") {
       args = this.val.toVector();
-      output = [mathjs.round(args[0], 2), "j", mathjs.round(args[1], 2)];
+      var re = mathjs.round(args[0], 2);
+      var im = mathjs.round(args[1], 2);
+      if(im==0) output = [re];
+      else if(re==0) output = ["j", im];
+      else output = [re, "j", im];
       // output = [args[0], "j", args[1]];
     } else if (this.form == "polar") {
       args = this.val.toPolar();
