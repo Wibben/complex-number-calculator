@@ -36,7 +36,6 @@ export default class complex {
             im: parseFloat(str.substr(idx + 1)),
           });
         } else if(str.substr(idx+1)=="") { // Xj
-          console.log("HERE!");
           this.val = mathjs.complex({
             re: 0,
             im: parseFloat(str.substr(0, idx)),
