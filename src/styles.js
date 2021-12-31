@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#8DBDD8',
-    marginTop: 5,
     padding: 2,
   },
 
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
   },
 
   mainButtonContainer: {
-    flex: (width>height ? 1 : 4),
+    flex: (width>height ? 1 : 2),
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',

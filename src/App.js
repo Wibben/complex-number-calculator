@@ -156,13 +156,13 @@ class ComplexNumberCalculator extends React.Component {
 
       // The ANS toggle will also trigger a form switch in the output
       this.handleButtonInput(this.modeInput["ANS"][mode]);
-    } else if(source == "Angle") {
-      this.setState({angleMode: mode});
+    } else if (source == "Angle") {
+      this.setState({ angleMode: mode });
 
       // The Angle toggle will also trigger a form switch in the output
       this.handleButtonInput(this.modeInput["Angle"][mode]);
-    }    
-  }
+    }
+  };
 
   handleButtonInput = (input) => {
     this.setState({ count: this.state.count + 1 });
@@ -173,15 +173,30 @@ class ComplexNumberCalculator extends React.Component {
     var bracketCount = this.state.bracketCount;
     var selection = this.state.selection.start;
     var mode = {
-        inputMode: this.modeInput["Input"][this.state.inputMode],
-        outputMode: this.modeInput["ANS"][this.state.outputMode],
-        angleMode: this.modeInput["Angle"][this.state.angleMode]
+      inputMode: this.modeInput["Input"][this.state.inputMode],
+      outputMode: this.modeInput["ANS"][this.state.outputMode],
+      angleMode: this.modeInput["Angle"][this.state.angleMode],
     };
 
-    [array, answer, allowDecimal, bracketCount, selection] = button.parseButtonInput(input, array, answer, allowDecimal, bracketCount, selection, mode);
-    
-    this.setState({inputs: array, outputs: answer, allowDecimal: allowDecimal, bracketCount: bracketCount, selection: selection});
-  }
+    [array, answer, allowDecimal, bracketCount, selection] =
+      button.parseButtonInput(
+        input,
+        array,
+        answer,
+        allowDecimal,
+        bracketCount,
+        selection,
+        mode
+      );
+
+    this.setState({
+      inputs: array,
+      outputs: answer,
+      allowDecimal: allowDecimal,
+      bracketCount: bracketCount,
+      selection: selection,
+    });
+  };
 
   handleSelectionChange = ({ nativeEvent: { selection } }) => {
     this.setState({ selection: selection });
@@ -303,13 +318,7 @@ class ComplexNumberCalculator extends React.Component {
         {buttonRows}
       </View>
     );
-
-    return (
-      <View key="tabButtons" style={styles.tabContainer}>
-        {/* {tabContainer} */}
-        <TabPanel />
-      </View>
-    );
+    return <TabPanel panelOne={buttonRows}></TabPanel>;
   };
 
   renderMainButtons = () => {
@@ -354,7 +363,6 @@ class ComplexNumberCalculator extends React.Component {
         {/* <TestFunction key="test1" in="Hello World!" />
         <Text>You've pressed the buttons {this.state.count} times</Text>
         <TestFunction key="test2" in="This is done with a function call" /> */}
-
         <View key="io" style={{ flex: 1, alignSelf: "stretch" }}>
           <TextInput
             key="input"
@@ -377,10 +385,9 @@ class ComplexNumberCalculator extends React.Component {
             {output}{" "}
           </Text>
         </View>
-        <View>
-        </View>
+
         <View key="buttonArea" style={{ flex: 4, flexDirection: flexDir }}>
-          <TabPanel> </TabPanel>
+          {/* <TabPanel buttonRows={this.getFunctionButtons()}> </TabPanel> */}
           {this.renderTabButtons()}
           {this.renderMainButtons()}
         </View>
