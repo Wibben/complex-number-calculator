@@ -122,7 +122,13 @@ export default class complex {
         break;
       case "ln":
         this.val = mathjs.log(this.val, Math.E);
+        break;
       default:
+        // log of base n
+        var base = Number(fn.replace("log", ""));
+        if (base) {
+          this.val = mathjs.log(this.val, base);
+        }
         break;
     }
   }

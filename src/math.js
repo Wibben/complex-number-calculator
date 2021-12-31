@@ -17,7 +17,6 @@ export const constantVals = [mathjs.pi, mathjs.e];
 // Validate a mathematical expression by essentially simulating an answer
 export function validateExpression(inputs) {
   if(inputs.length==0) return false;
-
   var expression = createExpression(inputs, "2", "deg");
   var postfix = generatePostfix(expression);
   var answer = [];
@@ -26,12 +25,12 @@ export function validateExpression(inputs) {
   // values for the operands, it is an invalid expression
   for (let i = 0; i < postfix.length; i++) {
     var element = postfix[i];
-
     if (operands.includes(element)) {
       // Normal operands pop 2 elements and push 1 element, so just pop 1 in sim
       if(answer.length<2) return false;
       answer.pop();
-    } else if (trigonometric.includes(element) || logarithmic.includes(element)) {
+    } else if (trigonometric.includes(element) || logarithmic.includes(element) ||
+                (typeof element === "string" && element.includes("log"))) {
       // Trig functions pop 1 elements and push 1 element, no change in sim
       if(answer.length<1) return false;
     } else answer.push(element);
@@ -95,9 +94,13 @@ function createExpression(inputs, prevAnswer, mode) {
       } else expression.push(complexVal); // Convert constants into values
     } else if (operands.includes(lastElement) || operands.includes(inputs[i])) {
       // Parsing for operands
-      if((inputs[i]=="(" && ![...operands,...trigonometric,...logarithmic,...complexOps,...specialOps].includes(lastElement)) || 
+      if((inputs[i]=="(" &&
+          ![...operands,...trigonometric,...logarithmic,...complexOps,...specialOps].includes(lastElement) &&
+          !lastElement.toString().includes("log")) || 
           (inputs[i]=="(" && lastElement==")") ||
-          (lastElement==")" && ![...operands,...trigonometric,...logarithmic,...complexOps,...specialOps].includes(inputs[i]))
+          (lastElement==")" &&
+          ![...operands,...trigonometric,...logarithmic,...complexOps,...specialOps].includes(inputs[i]) &&
+          !inputs[i].toString().includes("log"))
         ) {
         expression.push("×",inputs[i]);
       } else expression.push(inputs[i]);
@@ -106,7 +109,9 @@ function createExpression(inputs, prevAnswer, mode) {
 
   // From the expression, generate the complex numbers
   for (let i = 0; i < expression.length; i++) {
-    if (![...operands, ...trigonometric,...logarithmic].includes(expression[i]) && !(expression[i] instanceof complex))
+    if (![...operands, ...trigonometric,...logarithmic].includes(expression[i]) &&
+        !expression[i].toString().includes("log") &&
+        !(expression[i] instanceof complex))
       expression[i] = new complex({ str: `${""}${expression[i]}`, angleMode: mode.angleMode });
   }
 
@@ -204,7 +209,8 @@ export function doMath(inputs, prevAnswer, mode) {
 
       a.trig(element);
       answer.push(a);
-    } else if (logarithmic.includes(element)) {
+    } else if (logarithmic.includes(element) ||
+                (typeof element === "string" && element.includes("log"))) {
       // Compute the log functions
       var a = answer.pop();
 
