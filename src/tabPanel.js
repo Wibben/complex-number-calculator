@@ -36,9 +36,9 @@ export default function TabViewExample({ panelOne, panelTwo, panelThree }) {
     <TabView
       renderTabBar={(props) => (
         <TabBar
-          style={{ height: 2, marginHorizontal: 50, marginBottom: 5 }}
-          tabStyle={{ margin: 2 }}
-          activeColor={'green'}
+          style={{ height: 2, marginHorizontal: 50, marginBottom: 5}}
+          indicatorStyle={{backgroundColor: 'lightblue', height: 5, borderRadius: 20}}
+          indicatorContainerStyle={{backgroundColor: 'grey', height: 5, borderRadius: 20}}
           {...props}
           renderLabel={() => null}
         />

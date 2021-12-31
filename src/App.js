@@ -237,7 +237,7 @@ class ComplexNumberCalculator extends React.Component {
   generateTabContent = (inputs) => {
     var tabs = Object.keys(inputs);
     var buttons = [];
-
+    console.log('gothere')
     // Generate the content for the tabs
     for (let i = 0; i < inputs[tabs[0]].length; i++) {
       buttons.push([]);
@@ -313,6 +313,7 @@ class ComplexNumberCalculator extends React.Component {
         </View>
       );
     }
+    console.log(this.state.tabContent.length, "tabContent length")
     tabContainer.push(
       <View key={"renderButtonTabsContent"} style={styles.tabContent}>
         {buttonRows}
