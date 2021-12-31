@@ -3,12 +3,13 @@ import * as utils from "./utils";
 import * as mathjs from "mathjs";
 
 // Handles all the math...
+export const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 export const operands = ["+", "−", "×", "÷", "(", ")", "ₓ₁₀", "^", "₊", "ₓ"]; // ₊ is a "shadow" plus sign used to skirt around precedence issues
 export const specialOps = ["(", ")", "-"];
 export const conversion = ["polar", "exp", "cart"];
 export const angleConversion = ["deg", "rad", "grad"];
 export const trigonometric = ["sin", "cos", "tan", "asin", "acos", "atan"];
-export const logarithmic = ["log", "ln"];
+export const logarithmic = ["log", "ln", "logₙ"];
 export const complexOps = ["j", "∠", "eʲ"];
 export const constants = ["π", "e"];
 export const constantVals = [mathjs.pi, mathjs.e];

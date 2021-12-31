@@ -6,6 +6,7 @@ import {
 import styles from "./styles";
 import * as math from "./math";
 import * as utils from "./utils";
+import { string } from "mathjs";
 
 export function parseButtonInput(input, array, answer, options, mode) {
   var allowDecimal = options.allowDecimal;
@@ -141,6 +142,26 @@ export function parseButtonInput(input, array, answer, options, mode) {
     selection+=2;
     bracketCount++;
     allowDecimal = true;
+  } else if (input == "logₙ") {
+    // get number entered before which will be the custom base
+    var startingPos = array.length-1;
+    while (startingPos >= 0 && array[startingPos] in math.digits) startingPos -= 1;
+
+    // if digits are from decimal part or negative, don't take it as the log's base
+    if (startingPos >= 0 && (array[startingPos] == "." || array[startingPos] == "-"))
+      startingPos = array.length-1;
+
+    // remove the base from entered digits list
+    var prevNum = array.slice(startingPos+1, array.length);
+    if (prevNum.length > 0) {
+      array.splice(startingPos+1, prevNum.length);
+      selection -= prevNum.length;
+    }
+
+    var base = (prevNum.length == 0) ? "10" : prevNum.join("");
+    array = utils.addItem(array, ["log" + base, "("], selection);
+    selection += 2;
+    bracketCount++;
   } else if (math.logarithmic.includes(input)) {
     // logarithmic
     array = utils.addItem(array, [input, "("], selection);
