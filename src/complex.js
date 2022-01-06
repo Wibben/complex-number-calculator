@@ -115,6 +115,24 @@ export default class complex {
     }
   }
 
+  log(fn) {
+    switch(fn) {
+      case "log":
+        this.val = mathjs.log10(this.val);
+        break;
+      case "ln":
+        this.val = mathjs.log(this.val, Math.E);
+        break;
+      default:
+        // log of base n
+        var base = Number(fn.replace("log", ""));
+        if (base) {
+          this.val = mathjs.log(this.val, base);
+        }
+        break;
+    }
+  }
+
   convert(form) {
     // "default" is for keeping the form the same as initial input
     if (form != "default") this.form = form;
@@ -134,16 +152,18 @@ export default class complex {
       if(im==0) output = [re];
       else if(re==0) output = ["j", im];
       else output = [re, "j", im];
-      // output = [args[0], "j", args[1]];
     } else if (this.form == "polar") {
       args = this.val.toPolar();
-      var angle = convertRadians(args.phi, this.angleMode);
-      output = [mathjs.round(args.r, 2), "∠", mathjs.round(angle, 2)];
-      // output = [args.r, "∠", args.ph];
+      var re = mathjs.round(args.r, 2);
+      var phi = mathjs.round(convertRadians(args.phi, this.angleMode), 2);
+      if (phi == 0) output = [re];
+      else output = [re, "∠", phi];
     } else if (this.form == "exp") {
       args = this.val.toPolar();
-      output = [mathjs.round(args.r, 2), "eʲ", mathjs.round(args.phi, 2)]; // Always radians
-      // output = [args.r, "∠", args.phi];
+      var re = mathjs.round(args.r, 2);
+      var phi = mathjs.round(args.phi, 2); // Always radians
+      if (phi == 0) output = [re];
+      else output = [re, "eʲ", phi];
     }
 
     return output;
