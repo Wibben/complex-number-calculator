@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform, Text, View, SafeAreaView, StatusBar, Keyboard } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import styles from './styles';
+import darkMode from './darkMode';
 import * as button from './button';
 
 const TestFunction = (props) => {
@@ -19,15 +20,15 @@ class ComplexNumberCalculator extends React.Component
     [0, ".", "+j", "-j", "="],
   ];
   mobileInputs = [
-    ["( - )", "(" , ")", "^", "j" ],
+    ["^", "(" , ")", "π", "j" ],
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
     [1, 2, 3, "+", "−"],
-    [0, ".", "ₓ₁₀", "ANS", "="],
+    [".", 0, "( - )", "ANS", "="],
   ];
   tabInputs = {
     "STD": [
-      ["π","e", ""],
+      ["x10","e", ""],
       ["","", ""],
       ["","",""],
       ["Angle Mode: deg","ANS Mode: cart","Input Mode: cart"],
