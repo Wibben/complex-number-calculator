@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#8DBDD8',
+    backgroundColor: '#DEE4E7',
     marginTop: 5,
     padding: 2,
   },
@@ -80,11 +80,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#D8E9F3',
+    backgroundColor: '#DDDDFF',
     color: '#FF0000',
     margin: 2,
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: "#8DBDD8",
   },
 
@@ -105,6 +105,27 @@ const styles = StyleSheet.create({
     // justifyContent: 'space-between',
     // alignItems: 'center',
   },
+
+  firstFunctionRow: {
+    flex: 1,
+    flexDirection: "row",
+    width: width > height ? width / 2 : width,
+    justifyContent: "center",
+    backgroundColor: '#FFFFFF',
+    // justifyContent: 'space-between',
+    // alignItems: 'center',
+  },
+
+  tabRow: {
+    backgroundColor: "#FFFFFF",
+    flex: 1,
+    flexDirection: "row",
+    width: width > height ? width / 2 : width,
+    justifyContent: "center",
+    // justifyContent: 'space-between',
+    // alignItems: 'center',
+  },
+
 
   button: {
     flex: 1,
