@@ -10,12 +10,12 @@ export default function TabViewExample({ panelOne, panelTwo, panelThree }) {
   );
 
   const SecondRoute = () => (
-    <View style={{ flex: 1, backgroundColor: "#673ab7" }} />
+    <View style={{ flex: 1, backgroundColor: "#673ab7" }}>{panelTwo}</View>
   );
 
   const ThirdRoute = () => (
     <View style={{ flex: 1, backgroundColor: "orange" }} />
-  )
+  );
 
   const renderScene = SceneMap({
     first: FirstRoute,
@@ -36,9 +36,17 @@ export default function TabViewExample({ panelOne, panelTwo, panelThree }) {
     <TabView
       renderTabBar={(props) => (
         <TabBar
-          style={{ height: 2, marginHorizontal: 50, marginBottom: 5}}
-          indicatorStyle={{backgroundColor: 'lightblue', height: 5, borderRadius: 20}}
-          indicatorContainerStyle={{backgroundColor: 'grey', height: 5, borderRadius: 20}}
+          style={{ height: 2, marginHorizontal: 50, marginBottom: 5 }}
+          indicatorStyle={{
+            backgroundColor: "lightblue",
+            height: 5,
+            borderRadius: 20,
+          }}
+          indicatorContainerStyle={{
+            backgroundColor: "grey",
+            height: 5,
+            borderRadius: 20,
+          }}
           {...props}
           renderLabel={() => null}
         />

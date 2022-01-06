@@ -76,6 +76,7 @@ class ComplexNumberCalculator extends React.Component {
       angleMode: 0,
       tabButtons: this.generateTabButtons(this.tabInputs),
       tabContent: this.generateTabContent(this.tabInputs),
+      tabTwoContent: this.generateTabTwoContent(this.tabInputs),
       mainButtons: this.generateMainButtons(inputs),
     };
   }
@@ -129,19 +130,19 @@ class ComplexNumberCalculator extends React.Component {
     // Set states
     if (source == "Input") {
       this.setState({ inputMode: mode });
-      console.log('changed input mode')
+      console.log("changed input mode");
       // Input toggle will also toggle the j, ∠, eʲ button on the main panel
       this.mainElement[0][4].current.setState({
         content: this.modeInput["Symbol"][mode],
       });
     } else if (source == "ANS") {
-      console.log('changed ans mode')
+      console.log("changed ans mode");
       this.setState({ outputMode: mode });
 
       // The ANS toggle will also trigger a form switch in the output
       this.handleButtonInput(this.modeInput["ANS"][mode]);
     } else if (source == "Angle") {
-      console.log('changed angle mode')
+      console.log("changed angle mode");
       this.setState({ angleMode: mode });
 
       // The Angle toggle will also trigger a form switch in the output
@@ -224,7 +225,7 @@ class ComplexNumberCalculator extends React.Component {
     var tabs = Object.keys(inputs);
     var buttons = [];
     // Generate the content for the tabs
-    console.log(inputs[tabs[1]], 'helo');
+    console.log(inputs[tabs[1]], "helo");
     for (let i = 0; i < inputs[tabs[0]].length; i++) {
       buttons.push([]);
       this.tabContentElement.push([]);
@@ -254,7 +255,31 @@ class ComplexNumberCalculator extends React.Component {
           );
       }
     }
+    return buttons;
+  };
 
+  generateTabTwoContent = (inputs) => {
+    var tabs = Object.keys(inputs);
+    var buttons = [];
+    // Generate the content for the tabs
+    console.log(inputs[tabs[1]], "helo2");
+    for (let i = 0; i < inputs[tabs[1]].length; i++) {
+      buttons.push([]);
+      this.tabContentElement.push([]);
+      for (let j = 0; j < inputs[tabs[1]][i].length; j++) {
+        this.tabContentElement[i].push(React.createRef());
+
+        buttons[i].push(
+          <button.Button
+            ref={this.tabContentElement[i][j]}
+            key={"tab_" + i.toString() + "_" + j.toString()}
+            content={inputs[tabs[1]][i][j]}
+            onPress={this.handleButtonInput}
+            style={styles.tabContentButton}
+          />
+        );
+      }
+    }
     return buttons;
   };
 
@@ -282,6 +307,7 @@ class ComplexNumberCalculator extends React.Component {
 
   renderTabButtons = () => {
     var buttonRows = [];
+    const buttonRowsTwo = [];
     var tabContainer = [];
 
     // Generate the tabs
@@ -299,13 +325,20 @@ class ComplexNumberCalculator extends React.Component {
         </View>
       );
     }
+    for (let i = 0; i < this.state.tabTwoContent.length; i++) {
+      buttonRowsTwo.push(
+        <View key={"renderButtonTabs_" + i.toString()} style={styles.buttonRow}>
+          {this.state.tabTwoContent[i]}
+        </View>
+      );
+    }
     console.log(this.state.tabContent.length, "tabContent length");
     tabContainer.push(
       <View key={"renderButtonTabsContent"} style={styles.tabContent}>
         {buttonRows}
       </View>
     );
-    return <TabPanel panelOne={buttonRows}></TabPanel>;
+    return <TabPanel panelOne={buttonRows} panelTwo={buttonRowsTwo}></TabPanel>;
   };
 
   renderMainButtons = () => {
