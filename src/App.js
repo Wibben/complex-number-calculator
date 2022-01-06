@@ -31,17 +31,17 @@ class ComplexNumberCalculator extends React.Component {
     [0, ".", "ₓ₁₀", "ANS", "="],
   ];
   tabInputs = {
-    "STD": [
-      ["π","e", ""],
-      ["log","ln","logₙ"],
-      ["","",""],
-      ["Angle Mode: deg","ANS Mode: cart","Input Mode: cart"],
-    ], 
-    "TRIG": [
-      ["sin","cos","tan"],
-      ["asin","acos","atan"],
-      ["","",""],
-      ["","",""],
+    STD: [
+      ["π", "e", ""],
+      ["log", "ln", "logₙ"],
+      ["", "", ""],
+      ["Angle Mode: deg", "ANS Mode: cart", "Input Mode: cart"],
+    ],
+    TRIG: [
+      ["sin", "cos", "tan"],
+      ["asin", "acos", "atan"],
+      ["", "", ""],
+      ["", "", ""],
     ],
   };
   modeInput = {
@@ -129,17 +129,19 @@ class ComplexNumberCalculator extends React.Component {
     // Set states
     if (source == "Input") {
       this.setState({ inputMode: mode });
-
+      console.log('changed input mode')
       // Input toggle will also toggle the j, ∠, eʲ button on the main panel
       this.mainElement[0][4].current.setState({
         content: this.modeInput["Symbol"][mode],
       });
     } else if (source == "ANS") {
+      console.log('changed ans mode')
       this.setState({ outputMode: mode });
 
       // The ANS toggle will also trigger a form switch in the output
       this.handleButtonInput(this.modeInput["ANS"][mode]);
     } else if (source == "Angle") {
+      console.log('changed angle mode')
       this.setState({ angleMode: mode });
 
       // The Angle toggle will also trigger a form switch in the output
@@ -157,27 +159,39 @@ class ComplexNumberCalculator extends React.Component {
       allowDecimal: this.state.allowDecimal,
       bracketCount: this.state.bracketCount,
       selection: this.state.selection.start,
-    }
+    };
     var mode = {
       inputMode: this.modeInput["Input"][this.state.inputMode],
       outputMode: this.modeInput["ANS"][this.state.outputMode],
       angleMode: this.modeInput["Angle"][this.state.angleMode],
     };
 
-    [array, answer, options] = button.parseButtonInput(input, array, answer, options, mode);
-    
-    this.setState({inputs: array, outputs: answer, allowDecimal: options.allowDecimal, bracketCount: options.bracketCount, selection: options.selection, clearInput: options.clearInput});
-  }
+    [array, answer, options] = button.parseButtonInput(
+      input,
+      array,
+      answer,
+      options,
+      mode
+    );
 
-  handleSelectionChange = ({nativeEvent: {selection}}) => {
+    this.setState({
+      inputs: array,
+      outputs: answer,
+      allowDecimal: options.allowDecimal,
+      bracketCount: options.bracketCount,
+      selection: options.selection,
+      clearInput: options.clearInput,
+    });
+  };
+
+  handleSelectionChange = ({ nativeEvent: { selection } }) => {
     // Change cursor position as well as make sure to not clear input on next button press
-    this.setState({selection: selection, clearInput: false});
-  }
+    this.setState({ selection: selection, clearInput: false });
+  };
 
   generateTabButtons = (inputs) => {
     var tabs = Object.keys(inputs);
     var buttons = [];
-
     // Generate the tabs
     for (let i = 0; i < tabs.length; i++) {
       this.tabElement.push(React.createRef());
@@ -209,8 +223,8 @@ class ComplexNumberCalculator extends React.Component {
   generateTabContent = (inputs) => {
     var tabs = Object.keys(inputs);
     var buttons = [];
-    console.log('gothere')
     // Generate the content for the tabs
+    console.log(inputs[tabs[1]], 'helo');
     for (let i = 0; i < inputs[tabs[0]].length; i++) {
       buttons.push([]);
       this.tabContentElement.push([]);
@@ -285,7 +299,7 @@ class ComplexNumberCalculator extends React.Component {
         </View>
       );
     }
-    console.log(this.state.tabContent.length, "tabContent length")
+    console.log(this.state.tabContent.length, "tabContent length");
     tabContainer.push(
       <View key={"renderButtonTabsContent"} style={styles.tabContent}>
         {buttonRows}
