@@ -31,35 +31,17 @@ class ComplexNumberCalculator extends React.Component {
     [0, ".", "ₓ₁₀", "ANS", "="],
   ];
   tabInputs = {
-    STD: [
-      ["π", "e", ""],
-      ["", "", ""],
-      ["", "", ""],
-      ["Angle Mode: deg", "ANS Mode: cart", "Input Mode: cart"],
-    ],
-    TRIG: [
-      ["sin", "cos", "tan"],
-      ["asin", "acos", "atan"],
-      ["", "", ""],
-      ["", "", ""],
-    ],
-    temp1: [
-      ["", "", ""],
-      ["temp1", "", ""],
-      ["", "", ""],
-      ["", "", ""],
-    ],
-    temp2: [
-      ["", "", ""],
-      ["", "", ""],
-      ["", "", "temp2"],
-      ["", "", ""],
-    ],
-    temp3: [
-      ["", "temp3", ""],
-      ["", "", ""],
-      ["", "", ""],
-      ["", "", ""],
+    "STD": [
+      ["π","e", ""],
+      ["log","ln","logₙ"],
+      ["","",""],
+      ["Angle Mode: deg","ANS Mode: cart","Input Mode: cart"],
+    ], 
+    "TRIG": [
+      ["sin","cos","tan"],
+      ["asin","acos","atan"],
+      ["","",""],
+      ["","",""],
     ],
   };
   modeInput = {
@@ -85,6 +67,7 @@ class ComplexNumberCalculator extends React.Component {
       selection: { start: 0, end: 0 },
       outputs: null,
       count: 0,
+      clearInput: false,
       allowDecimal: true,
       bracketCount: 0,
       tab: "STD",
@@ -169,38 +152,27 @@ class ComplexNumberCalculator extends React.Component {
 
     var array = [...this.state.inputs];
     var answer = this.state.outputs;
-    var allowDecimal = this.state.allowDecimal;
-    var bracketCount = this.state.bracketCount;
-    var selection = this.state.selection.start;
+    var options = {
+      clearInput: this.state.clearInput,
+      allowDecimal: this.state.allowDecimal,
+      bracketCount: this.state.bracketCount,
+      selection: this.state.selection.start,
+    }
     var mode = {
       inputMode: this.modeInput["Input"][this.state.inputMode],
       outputMode: this.modeInput["ANS"][this.state.outputMode],
       angleMode: this.modeInput["Angle"][this.state.angleMode],
     };
 
-    [array, answer, allowDecimal, bracketCount, selection] =
-      button.parseButtonInput(
-        input,
-        array,
-        answer,
-        allowDecimal,
-        bracketCount,
-        selection,
-        mode
-      );
+    [array, answer, options] = button.parseButtonInput(input, array, answer, options, mode);
+    
+    this.setState({inputs: array, outputs: answer, allowDecimal: options.allowDecimal, bracketCount: options.bracketCount, selection: options.selection, clearInput: options.clearInput});
+  }
 
-    this.setState({
-      inputs: array,
-      outputs: answer,
-      allowDecimal: allowDecimal,
-      bracketCount: bracketCount,
-      selection: selection,
-    });
-  };
-
-  handleSelectionChange = ({ nativeEvent: { selection } }) => {
-    this.setState({ selection: selection });
-  };
+  handleSelectionChange = ({nativeEvent: {selection}}) => {
+    // Change cursor position as well as make sure to not clear input on next button press
+    this.setState({selection: selection, clearInput: false});
+  }
 
   generateTabButtons = (inputs) => {
     var tabs = Object.keys(inputs);
