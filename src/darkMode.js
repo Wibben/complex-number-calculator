@@ -2,32 +2,30 @@ import { StyleSheet, Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window"); //full width and height
 
-const styles = StyleSheet.create({
+const darkMode = StyleSheet.create({
   center: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#343434",
   },
 
   inputField: {
     flex: 4,
+    color: 'white',
     textAlign: "right",
     alignSelf: "stretch",
-    borderWidth: 1,
-    borderColor: "white",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#343434",
     fontSize: 30,
     margin: 5,
-    color: 'white'
   },
 
   answerField: {
     flex: 6,
+    color: 'white',
     textAlign: "right",
     alignSelf: "stretch",
-    borderWidth: 1,
-    borderColor: "white",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#343434",
     fontSize: 40,
   },
 
@@ -95,7 +93,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     padding: 5,
-    backgroundColor: '#DEE4E7',
+    backgroundColor: '#36454F',
   },
 
   buttonRow: {
@@ -111,10 +109,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#28282B',
     padding: 0,
     borderWidth: 1,
-    borderColor: "white",
+    borderColor: "black",
     borderRadius: 20,
     margin: 4,
     shadowColor: '#171717',
@@ -140,22 +138,23 @@ const styles = StyleSheet.create({
 
   acStyle:{
     fontSize: 25,
-    color: "#FF6766",
+    color: "#C41E3A",
   },
 
   operatorStyle: {
     fontSize: 25,
-    color: "#EC9706",
+    color: "#1D8D84",
   },
 
   ansStyle: {
     fontSize: 25,
-    color: "#3CB043",
+    color: "#9F2B68",
   },
 
   textStyle: {
+    color: 'white',
     fontSize: 25
   }
 });
 
-export default styles;
+export default darkMode;

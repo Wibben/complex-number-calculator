@@ -4,6 +4,7 @@ import {
   Text,
 } from "react-native";
 import styles from "./styles";
+import darkMode from "./darkMode";
 import * as math from "./math";
 import * as utils from "./utils";
 import { string } from "mathjs";
@@ -235,18 +236,64 @@ export class Button extends React.Component {
     // Do a literal string check for === to make sure
     disabled = this.state.content === "";
 
+    digits = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0]
+
+    specialButtons = {
+      "AC": styles.acStyle,
+      "DEL": styles.acStyle,
+      "−": styles.operatorStyle,
+      "+": styles.operatorStyle,
+      "×": styles.operatorStyle,
+      "÷": styles.operatorStyle,
+      "=": styles.ansStyle,
+      "ANS": styles.ansStyle,
+      "^": styles.textStyle,
+      "(": styles.textStyle, 
+      ")": styles.textStyle, 
+      "π": styles.textStyle, 
+      "j": styles.textStyle,
+      ".": styles.textStyle,
+      "( - )": styles.textStyle
+    }
+
     if (disabled) style = styles.nonExistentButton;
     else style = this.state.style;
 
-    return (
-      <TouchableOpacity
+    if(this.state.content in specialButtons){
+      var specificStyle = specialButtons[this.state.content];
+      return (
+        <TouchableOpacity
         style={style}
         onPress={this.callBack}
         disabled={disabled}
       >
-        <Text> {this.state.content} </Text>
+        <Text style={specificStyle}> {this.state.content} </Text>
       </TouchableOpacity>
-    );
+      );
+    }
+    else if (this.state.content in digits){
+      return (
+        <TouchableOpacity
+          style={style}
+          onPress={this.callBack}
+          disabled={disabled}
+        >
+          <Text style={styles.textStyle}> {this.state.content} </Text>
+        </TouchableOpacity>
+      );
+    }
+    else{
+      return (
+        <TouchableOpacity
+          style={style}
+          onPress={this.callBack}
+          disabled={disabled}
+        >
+          <Text> {this.state.content} </Text>
+        </TouchableOpacity>
+      );
+    }
+   
   }
 }
 
