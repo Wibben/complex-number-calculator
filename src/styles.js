@@ -39,9 +39,9 @@ const styles = StyleSheet.create({
 
   tabButton: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#D8E9F3',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#D8E9F3",
     marginLeft: 2,
     marginRight: 2,
     borderTopWidth: 1,
@@ -53,9 +53,9 @@ const styles = StyleSheet.create({
 
   seletedTabButton: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#8DBDD8',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#8DBDD8",
     padding: 0,
     marginLeft: 2,
     marginRight: 2,
@@ -68,20 +68,20 @@ const styles = StyleSheet.create({
 
   tabContent: {
     flex: 6,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    backgroundColor: '#DEE4E7',
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: "#DEE4E7",
     marginTop: 5,
     padding: 2,
   },
 
   tabContentButton: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#DDDDFF',
-    color: '#FF0000',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#DDDDFF",
+    color: "#FF0000",
     margin: 2,
     borderWidth: 1,
     borderRadius: 10,
@@ -89,12 +89,12 @@ const styles = StyleSheet.create({
   },
 
   mainButtonContainer: {
-    flex: (width>height ? 1 : 4),
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    flex: width > height ? 1 : 4,
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
     padding: 5,
-    backgroundColor: '#DEE4E7',
+    backgroundColor: "#DEE4E7",
   },
 
   buttonRow: {
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: width > height ? width / 2 : width,
     justifyContent: "center",
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     // justifyContent: 'space-between',
     // alignItems: 'center',
   },
@@ -126,19 +126,18 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
 
-
   button: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFFFFF",
     padding: 0,
     borderWidth: 1,
     borderColor: "white",
     borderRadius: 20,
     margin: 4,
-    shadowColor: '#171717',
-    shadowOffset: {width: 0, height: 4},
+    shadowColor: "#171717",
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     //filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))
@@ -148,17 +147,17 @@ const styles = StyleSheet.create({
 
   nonExistentButton: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#8DBDD8',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#8DBDD8",
     padding: 0,
     borderWidth: 1,
-    borderColor: '#8DBDD8',
+    borderColor: "#8DBDD8",
     borderRadius: 5,
     margin: 2,
   },
 
-  acStyle:{
+  acStyle: {
     fontSize: 25,
     color: "#FF6766",
   },
@@ -174,8 +173,21 @@ const styles = StyleSheet.create({
   },
 
   textStyle: {
-    fontSize: 25
-  }
+    fontSize: 25,
+  },
+
+  ioTogglesContainer: {
+    flex: 2,
+    flexDirection: "row",
+  },
+
+  ioToggles: {
+    paddingEnd: 10,
+  },
+
+  ioTogglesText: {
+    fontSize: 17,
+  },
 });
 
 export default styles;

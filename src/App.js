@@ -11,6 +11,7 @@ import { TextInput } from "react-native-gesture-handler";
 import styles from "./styles";
 import darkMode from "./darkMode";
 import * as button from "./button";
+import ModeButton from "./ModeButton";
 
 const TestFunction = (props) => {
   return <Text>{props.in}</Text>;
@@ -42,7 +43,7 @@ class ComplexNumberCalculator extends React.Component {
       ["asin", "acos", "atan"],
       ["", "", ""],
       ["", "", ""],
-    ]
+    ],
   };
   modeInput = {
     Input: ["cart", "polar", "exp"],
@@ -107,6 +108,45 @@ class ComplexNumberCalculator extends React.Component {
         this.tabContentElement[i][j].current.setState({ content: content });
       }
     }
+  };
+
+  handleAngleModeChange = () => {
+    let currMode = this.state.angleMode;
+    currMode = (currMode + 1) % 3;
+    this.setState({ angleMode: currMode });
+    // The Angle toggle will also trigger a form switch in the output
+    this.handleButtonInput(this.modeInput["Angle"][currMode]);
+
+    // Change button text
+    const content = "Angle Mode: " + this.modeInput["Angle"][currMode];
+    this.tabContentElement[3][0].current.setState({ content: content });
+  };
+
+  handleInputModeChange = () => {
+    let currMode = this.state.inputMode;
+    currMode = (currMode + 1) % 3;
+    this.setState({ inputMode: currMode });
+    // The Input toggle will also trigger a form switch in the output
+    this.handleButtonInput(this.modeInput["ANS"][currMode]);
+
+    // Change button text
+    const content = "Input Mode: " + this.modeInput["Input"][currMode];
+    this.tabContentElement[3][2].current.setState({ content: content });
+    this.mainElement[0][4].current.setState({
+      content: this.modeInput["Symbol"][currMode],
+    });
+  };
+
+  handleAnsModeChange = () => {
+    let currMode = this.state.outputMode;
+    currMode = (currMode + 1) % 3;
+    this.setState({ outputMode: currMode });
+    // The ANS toggle will also trigger a form switch in the output
+    this.handleButtonInput(this.modeInput["ANS"][currMode]);
+
+    // Change button text
+    const content = "ANS Mode: " + this.modeInput["ANS"][currMode];
+    this.tabContentElement[3][1].current.setState({ content: content });
   };
 
   handleToggleInput = (input) => {
@@ -355,6 +395,27 @@ class ComplexNumberCalculator extends React.Component {
         <TestFunction key="test2" in="This is done with a function call" /> */}
 
         <View key="io" style={{ flex: 1, alignSelf: "stretch" }}>
+          <View style={styles.ioTogglesContainer}>
+            <ModeButton
+              isAngle={true}
+              isAns={false}
+              mode={this.state.angleMode}
+              handleOnPress={this.handleAngleModeChange}
+            />
+            <ModeButton
+              isAngle={false}
+              isAns={false}
+              mode={this.state.inputMode}
+              handleOnPress={this.handleInputModeChange}
+            />
+            <ModeButton
+              isAngle={false}
+              isAns={true}
+              mode={this.state.outputMode}
+              handleOnPress={this.handleAnsModeChange}
+            />
+          </View>
+
           <TextInput
             key="input"
             showSoftInputOnFocus={false}
