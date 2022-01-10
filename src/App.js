@@ -42,25 +42,7 @@ class ComplexNumberCalculator extends React.Component {
       ["asin", "acos", "atan"],
       ["", "", ""],
       ["", "", ""],
-    ],
-    temp1: [
-      ["", "", ""],
-      ["temp1", "", ""],
-      ["", "", ""],
-      ["", "", ""],
-    ],
-    temp2: [
-      ["", "", ""],
-      ["", "", ""],
-      ["", "", "temp2"],
-      ["", "", ""],
-    ],
-    temp3: [
-      ["", "temp3", ""],
-      ["", "", ""],
-      ["", "", ""],
-      ["", "", ""],
-    ],
+    ]
   };
   modeInput = {
     Input: ["cart", "polar", "exp"],
