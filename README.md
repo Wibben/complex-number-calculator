@@ -60,3 +60,11 @@ Ensure your node modules are up to date with `npm i`.
 All test suites can be run with `npm run test`.
 To create a new test, name any file with the `{filename}.test.js` extension and jest should pick
 up these tests by default.
+
+### Building and submitting on iOS
+`eas build:ios` - assume everything is already logged in
+`eas submit --platform ios` - submits to app store
+
+### Building and submitting on android
+`expo build:android`
+`eas submit --platform android`
