@@ -5,7 +5,7 @@
   "submit": {
     "production": {
       "android": {
-        "serviceAccountKeyPath": "../path/to/api-xxx-yyy-zzz.json",
+        "serviceAccountKeyPath": "/Users/tobiaskurniawan/Desktop/pc-api-5165040211464623608-670-b4bdb74d2a5c.json",
         "track": "internal"
       },
       "ios": {
@@ -14,5 +14,15 @@
         "appleTeamId": "CK69244FFY"
       }
     }
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {}
   }
 }
