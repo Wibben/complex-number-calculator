@@ -417,6 +417,7 @@ class ComplexNumberCalculator extends React.Component {
           </View>
 
           <TextInput
+            autoCorrect={false}
             key="input"
             showSoftInputOnFocus={false}
             numberOfLines={1}
