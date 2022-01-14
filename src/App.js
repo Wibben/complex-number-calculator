@@ -211,7 +211,7 @@ class ComplexNumberCalculator extends React.Component {
       options,
       mode
     );
-
+    
     this.setState({
       inputs: array,
       outputs: answer,
