@@ -2,7 +2,7 @@
   "expo": {
     "name": "complex-number-calc",
     "slug": "complex-number-calc",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
@@ -11,8 +11,8 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.thinktankcorp.complexcalc",
-      "buildNumber": "1.0.4"
+      "bundleIdentifier": "com.thinktankcorp.complexnumbercalc",
+      "buildNumber": "1.0.5"
     },
     "android": {
       "adaptiveIcon": {
@@ -20,7 +20,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.thinktankcorp.complexcalc",
-      "versionCode": 4
+      "versionCode": 5
     },
     "web": {
       "favicon": "./assets/favicon.png"
