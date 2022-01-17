@@ -183,10 +183,14 @@ const styles = StyleSheet.create({
 
   ioToggles: {
     paddingEnd: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   ioTogglesText: {
     fontSize: 17,
+    fontWeight: "bold",
+    color: "#444444",
   },
 });
 

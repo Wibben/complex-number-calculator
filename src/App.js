@@ -13,10 +13,6 @@ import darkMode from "./darkMode";
 import * as button from "./button";
 import ModeButton from "./ModeButton";
 
-const TestFunction = (props) => {
-  return <Text>{props.in}</Text>;
-};
-
 class ComplexNumberCalculator extends React.Component {
   webInputs = [
     [7, 8, 9, "DEL", "AC"],
@@ -36,7 +32,7 @@ class ComplexNumberCalculator extends React.Component {
       ["x10", "e", ""],
       ["log", "ln", "logₙ"],
       ["", "", ""],
-      ["Angle Mode: deg", "ANS Mode: cart", "Input Mode: cart"],
+      ["", "", ""],
     ],
     TRIG: [
       ["sin", "cos", "tan"],
@@ -67,7 +63,6 @@ class ComplexNumberCalculator extends React.Component {
       inputs: [],
       selection: { start: 0, end: 0 },
       outputs: null,
-      count: 0,
       clearInput: false,
       allowDecimal: true,
       bracketCount: 0,
@@ -94,18 +89,7 @@ class ComplexNumberCalculator extends React.Component {
     // Change the tab button content based on the toggle
     for (let i = 0; i < this.state.tabContent.length; i++) {
       for (let j = 0; j < this.state.tabContent[i].length; j++) {
-        var content;
-        if (this.tabInputs[input][i][j].includes("Input Mode"))
-          content =
-            "Input Mode: " + this.modeInput["Input"][this.state.inputMode];
-        else if (this.tabInputs[input][i][j].includes("ANS Mode"))
-          content = "ANS Mode: " + this.modeInput["ANS"][this.state.outputMode];
-        else if (this.tabInputs[input][i][j].includes("Angle Mode"))
-          content =
-            "Angle Mode: " + this.modeInput["Angle"][this.state.angleMode];
-        else content = this.tabInputs[input][i][j];
-
-        this.tabContentElement[i][j].current.setState({ content: content });
+        this.tabContentElement[i][j].current.setState({ content: this.tabInputs[input][i][j] });
       }
     }
   };
@@ -119,19 +103,15 @@ class ComplexNumberCalculator extends React.Component {
 
     // Change button text
     const content = "Angle Mode: " + this.modeInput["Angle"][currMode];
-    this.tabContentElement[3][0].current.setState({ content: content });
   };
 
   handleInputModeChange = () => {
     let currMode = this.state.inputMode;
     currMode = (currMode + 1) % 3;
     this.setState({ inputMode: currMode });
-    // The Input toggle will also trigger a form switch in the output
-    this.handleButtonInput(this.modeInput["ANS"][currMode]);
 
     // Change button text
     const content = "Input Mode: " + this.modeInput["Input"][currMode];
-    this.tabContentElement[3][2].current.setState({ content: content });
     this.mainElement[0][4].current.setState({
       content: this.modeInput["Symbol"][currMode],
     });
@@ -146,50 +126,9 @@ class ComplexNumberCalculator extends React.Component {
 
     // Change button text
     const content = "ANS Mode: " + this.modeInput["ANS"][currMode];
-    this.tabContentElement[3][1].current.setState({ content: content });
-  };
-
-  handleToggleInput = (input) => {
-    var config = {
-      Input: { mode: this.state.inputMode, buttonCol: 2 },
-      ANS: { mode: this.state.outputMode, buttonCol: 1 },
-      Angle: { mode: this.state.angleMode, buttonCol: 0 },
-    };
-
-    var source = input.substr(0, input.indexOf("Mode") - 1);
-    var mode = config[source].mode;
-    var buttonCol = config[source].buttonCol;
-
-    // Move onto next mode
-    mode = (mode + 1) % 3;
-    this.tabContentElement[3][buttonCol].current.setState({
-      content: source + " Mode: " + this.modeInput[source][mode],
-    });
-
-    // Set states
-    if (source == "Input") {
-      this.setState({ inputMode: mode });
-
-      // Input toggle will also toggle the j, ∠, eʲ button on the main panel
-      this.mainElement[0][4].current.setState({
-        content: this.modeInput["Symbol"][mode],
-      });
-    } else if (source == "ANS") {
-      this.setState({ outputMode: mode });
-
-      // The ANS toggle will also trigger a form switch in the output
-      this.handleButtonInput(this.modeInput["ANS"][mode]);
-    } else if (source == "Angle") {
-      this.setState({ angleMode: mode });
-
-      // The Angle toggle will also trigger a form switch in the output
-      this.handleButtonInput(this.modeInput["Angle"][mode]);
-    }
   };
 
   handleButtonInput = (input) => {
-    this.setState({ count: this.state.count + 1 });
-
     var array = [...this.state.inputs];
     var answer = this.state.outputs;
     var options = {
@@ -270,27 +209,15 @@ class ComplexNumberCalculator extends React.Component {
       for (let j = 0; j < inputs[tabs[0]][i].length; j++) {
         this.tabContentElement[i].push(React.createRef());
 
-        // Use a difference callback for toggle buttons for code clarity
-        if (inputs[tabs[0]][i][j].includes("Mode"))
-          buttons[i].push(
-            <button.Button
-              ref={this.tabContentElement[i][j]}
-              key={"tab_" + i.toString() + "_" + j.toString()}
-              content={inputs[tabs[0]][i][j]}
-              onPress={this.handleToggleInput}
-              style={styles.tabContentButton}
-            />
-          );
-        else
-          buttons[i].push(
-            <button.Button
-              ref={this.tabContentElement[i][j]}
-              key={"tab_" + i.toString() + "_" + j.toString()}
-              content={inputs[tabs[0]][i][j]}
-              onPress={this.handleButtonInput}
-              style={styles.tabContentButton}
-            />
-          );
+        buttons[i].push(
+          <button.Button
+            ref={this.tabContentElement[i][j]}
+            key={"tab_" + i.toString() + "_" + j.toString()}
+            content={inputs[tabs[0]][i][j]}
+            onPress={this.handleButtonInput}
+            style={styles.tabContentButton}
+          />
+        );
       }
     }
 
@@ -390,9 +317,6 @@ class ComplexNumberCalculator extends React.Component {
     return (
       <SafeAreaView key="mainView" style={styles.center}>
         {header}
-        {/* <TestFunction key="test1" in="Hello World!" />
-        <Text>You've pressed the buttons {this.state.count} times</Text>
-        <TestFunction key="test2" in="This is done with a function call" /> */}
 
         <View key="io" style={{ flex: 1, alignSelf: "stretch" }}>
           <View style={styles.ioTogglesContainer}>
