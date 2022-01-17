@@ -81,7 +81,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
     if (
       selection == -1 ||
       math.operands.includes(lastElement) ||
-      [...math.complexOps, "-", 0,1,2,3,4,5,6,7,8,9].includes(lastElement)
+      [...math.complexOps, "-", ...math.digits].includes(lastElement)
     ) {
       if(clearInput) {
         array = [];
@@ -160,8 +160,8 @@ export function parseButtonInput(input, array, answer, options, mode) {
     }
 
     var base = (prevNum.length == 0) ? "10" : prevNum.join("");
-    array = utils.addItem(array, ["log" + base, "("], selection);
-    selection += 2;
+    array = utils.addItem(array, ["log", base, "("], selection);
+    selection += 3;
     bracketCount++;
   } else if (math.logarithmic.includes(input)) {
     // logarithmic
