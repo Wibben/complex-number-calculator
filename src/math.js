@@ -5,7 +5,7 @@ import { Alert } from "react-native";
 
 // Handles all the math...
 export const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-export const operands = ["+", "−", "×", "÷", "(", ")", "ₓ₁₀", "^", "₊", "ₓ"]; // ₊ is a "shadow" plus sign used to skirt around precedence issues
+export const operands = ["+", "−", "×", "÷", "(", ")", "ₓ₁₀", "^", "₊", "ₓ", "%", "!"]; // ₊ is a "shadow" plus sign used to skirt around precedence issues
 export const specialOps = ["(", ")", "-"];
 export const conversion = ["polar", "exp", "cart"];
 export const angleConversion = ["deg", "rad", "grad"];
@@ -28,11 +28,14 @@ export function validateExpression(inputs) {
     // values for the operands, it is an invalid expression
     for (let i = 0; i < postfix.length && isValid; i++) {
       var element = postfix[i];
-      if (operands.includes(element)) {
+      if (["%","!"].includes(element)) {
+        // % and ! are operands, but they only take in 1 element
+        if(answer.length<1) isValid = false;
+      } else if (operands.includes(element)) {
         // Normal operands pop 2 elements and push 1 element, so just pop 1 in sim
         if(answer.length<2) isValid = false;
         answer.pop();
-      } else if (trigonometric.includes(element) || logarithmic.includes(element) ||
+      } else if ([...trigonometric,...logarithmic,"%","!"].includes(element) ||
                   (typeof element === "string" && element.includes("log"))) {
         // Trig functions pop 1 elements and push 1 element, no change in sim
         if(answer.length<1) isValid = false;
@@ -136,8 +139,8 @@ function getPrecedence(operator) {
   //Precedence of * or / is 2
   else if ([...trigonometric, ...logarithmic, "^"].includes(operator)) return 3;
   //Precedence of ^ is 3
-  else if (["ₓ₁₀", "-"].includes(operator)) return 4;
-  //Precedence of ₓ₁₀ or - is 3
+  else if (["ₓ₁₀", "-", "%", "!"].includes(operator)) return 4;
+  //Precedence of ₓ₁₀ or - is 4
   else if (["₊"].includes(operator)) return 100;
   // ₊ is used to concatenate (expr)j without losing precedence
   else if (["ₓ"].includes(operator)) return 101;
@@ -196,7 +199,16 @@ export function doMath(inputs, prevAnswer, mode) {
   for (let i = 0; i < postfix.length; i++) {
     var element = postfix[i];
 
-    if (operands.includes(element)) {
+    // Single input operands
+    if (["%","!"].includes(element)) {
+      var a = answer.pop();
+
+      if (element == "%") a.div(new complex({ re: 100, im: 0 }));
+      else if (element == "!") a.fact();
+
+      // Push computed value back into answer
+      answer.push(a);
+    } else if (operands.includes(element)) {
       var b = answer.pop();
       var a = answer.pop();
 
@@ -205,7 +217,7 @@ export function doMath(inputs, prevAnswer, mode) {
       else if (element == "+" || element == "₊") a.add(b);
       else if (element == "−") a.sub(b);
       else if (element == "^") a.exp(b);
-      else if (element == "ₓ₁₀")
+      else if (element == "ₓ₁₀") 
         a.mult(new complex({ re: Math.pow(10, b.val.re), im: 0 }));
 
       // Push computed value back into answer

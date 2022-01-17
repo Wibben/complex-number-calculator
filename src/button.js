@@ -51,7 +51,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
       // Disallow having first input be an operator
       if (
         math.operands.includes(lastElement) &&
-        !math.specialOps.includes(lastElement)
+        ![...math.specialOps,"%","!"].includes(lastElement)
       )
         array[selection] = input; // Disallow 2 consecutive ops
       else {
@@ -99,16 +99,6 @@ export function parseButtonInput(input, array, answer, options, mode) {
       selection++;
       bracketCount--;
     }
-  } else if (input == ".") {
-    if(clearInput) {
-      array = [];
-      selection = -1;
-      bracketCount = 0;
-      clearInput = false;
-    }
-
-    array = utils.addItem(array, [input], selection);
-    selection++;
   } else if (math.complexOps.includes(input)) {
     // Imaginary number stuff
     if(clearInput) {

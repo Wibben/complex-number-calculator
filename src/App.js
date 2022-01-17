@@ -29,9 +29,9 @@ class ComplexNumberCalculator extends React.Component {
   ];
   tabInputs = {
     STD: [
-      ["x10", "e", ""],
+      ["", "e", ""],
       ["log", "ln", "logₙ"],
-      ["", "", ""],
+      ["ₓ₁₀", "%", "!"],
       ["", "", ""],
     ],
     TRIG: [
@@ -347,6 +347,7 @@ class ComplexNumberCalculator extends React.Component {
             {" "}
             {output}{" "}
           </Text>
+          {horizontalBar}
         </View>
 
         <View style={styles.ioTogglesContainer}>

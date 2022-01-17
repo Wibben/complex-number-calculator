@@ -84,6 +84,15 @@ export default class complex {
     this.val = mathjs.pow(this.val, num.val);
   }
 
+  fact() {
+    // The factorial function relies on the gamma function
+    // where n! = gamma(n+1), this is because the factorial function
+    // only takes in integers as an input as opposed to the gamma fn
+    this.add(new complex({ re: 1, im: 0 }));
+    // The gamma function may return a pure int if it's a real integer, need to case back to complex
+    this.val = mathjs.complex(mathjs.gamma(this.val)); 
+  }
+
   conj() {
     return new complex({ re: this.val.re, im: -1 * this.val.im })
       .convert(this.form)
