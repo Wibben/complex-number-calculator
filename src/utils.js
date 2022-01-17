@@ -11,7 +11,7 @@ export function snapSelectionToInput(array, selection) {
     if(selection<=0) {
       // Certain inputs are meant to have brackets accompanied with then, such as the trig functions
       // in which case the snap should be for after the brackets
-      if(trigonometric.includes(array[i]))
+      if([...trigonometric, "ln"].includes(array[i]))
         return (i+1<array.length) ? i+1:i;
       else return i;
     }

@@ -64,7 +64,6 @@ class ComplexNumberCalculator extends React.Component {
       selection: { start: 0, end: 0 },
       outputs: null,
       clearInput: false,
-      allowDecimal: true,
       bracketCount: 0,
       tab: "STD",
       inputMode: 0,
@@ -133,7 +132,6 @@ class ComplexNumberCalculator extends React.Component {
     var answer = this.state.outputs;
     var options = {
       clearInput: this.state.clearInput,
-      allowDecimal: this.state.allowDecimal,
       bracketCount: this.state.bracketCount,
       selection: this.state.selection.start,
     };
@@ -154,7 +152,6 @@ class ComplexNumberCalculator extends React.Component {
     this.setState({
       inputs: array,
       outputs: answer,
-      allowDecimal: options.allowDecimal,
       bracketCount: options.bracketCount,
       selection: options.selection,
       clearInput: options.clearInput,

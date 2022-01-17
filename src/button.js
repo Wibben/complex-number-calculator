@@ -10,7 +10,6 @@ import * as utils from "./utils";
 import { string } from "mathjs";
 
 export function parseButtonInput(input, array, answer, options, mode) {
-  var allowDecimal = options.allowDecimal;
   var bracketCount = options.bracketCount;
   var selection = options.selection;
   var clearInput = options.clearInput;
@@ -23,18 +22,16 @@ export function parseButtonInput(input, array, answer, options, mode) {
     selection = -1;
     bracketCount = 0;
     answer = null;
-    allowDecimal = true;
     clearInput = false;
   } else if (input == "DEL") {
-    if (lastElement == ".") allowDecimal = true;
-    else if (lastElement == "(") bracketCount--;
+    if (lastElement == "(") bracketCount--;
     else if (lastElement == ")") bracketCount++;
     array = utils.removeSelectedItem(array,selection);
     selection--;
 
     // Certain functions, such as trig, are accompanied by brackets, and thus should
     // also delete the corresponding trig function
-    if(math.trigonometric.includes(utils.lastSelected(array,selection))) {
+    if([...math.trigonometric,"ln"].includes(utils.lastSelected(array,selection))) {
       array = utils.removeSelectedItem(array,selection);
       selection--;
     }
@@ -42,7 +39,6 @@ export function parseButtonInput(input, array, answer, options, mode) {
     // Disallow compute right after an operand
     if (math.validateExpression(array)) {
       answer = math.doMath(array, answer, mode);
-      allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
       // After a valid calculations, the next button press will clear the input field
       clearInput = true;
     }
@@ -62,7 +58,6 @@ export function parseButtonInput(input, array, answer, options, mode) {
         array = utils.addItem(array, [input], selection);
         selection++;
       }
-      allowDecimal = true;
       clearInput = false;
     }
   } else if (input == "( - )") {
@@ -105,19 +100,15 @@ export function parseButtonInput(input, array, answer, options, mode) {
       bracketCount--;
     }
   } else if (input == ".") {
-    // Disallow 2 decimals in one number
-    if (allowDecimal) {
-      if(clearInput) {
-        array = [];
-        selection = -1;
-        bracketCount = 0;
-        clearInput = false;
-      }
-
-      array = utils.addItem(array, [input], selection);
-      selection++;
-      allowDecimal = false;
+    if(clearInput) {
+      array = [];
+      selection = -1;
+      bracketCount = 0;
+      clearInput = false;
     }
+
+    array = utils.addItem(array, [input], selection);
+    selection++;
   } else if (math.complexOps.includes(input)) {
     // Imaginary number stuff
     if(clearInput) {
@@ -129,7 +120,6 @@ export function parseButtonInput(input, array, answer, options, mode) {
 
     array = utils.addItem(array, [input], selection);
     selection++;
-    allowDecimal = true;
   } else if (math.trigonometric.includes(input)) {
     // trigonometric
     if(clearInput) {
@@ -142,7 +132,6 @@ export function parseButtonInput(input, array, answer, options, mode) {
     array = utils.addItem(array, [input, "("], selection);
     selection+=2;
     bracketCount++;
-    allowDecimal = true;
   } else if (input == "logₙ") {
     // get number entered before which will be the custom base
     var startingPos = array.length-1;
@@ -168,18 +157,12 @@ export function parseButtonInput(input, array, answer, options, mode) {
     array = utils.addItem(array, [input, "("], selection);
     selection+=2;
     bracketCount++;
-    allowDecimal = true;
   } else if (math.conversion.includes(input)) {
     // Disallow conversion right after an operand
     // Conversion will only apply to the answer
-    if (answer != null) {
-      answer.convert(input);
-      allowDecimal = !utils.last(answer.toOutput()).toString().includes(".");
-    }
+    if (answer != null) answer.convert(input);
   } else if (math.angleConversion.includes(input)) {
-    if (answer != null) {
-      answer.convertAngle(input);
-    }
+    if (answer != null) answer.convertAngle(input);
   } else if(input == "ANS") {
     if(answer != null) {
       if(clearInput) {
@@ -207,7 +190,6 @@ export function parseButtonInput(input, array, answer, options, mode) {
 
   selection = utils.snapSelectionToText(array,selection);
 
-  options.allowDecimal = allowDecimal;
   options.bracketCount = bracketCount;
   options.selection = {start:selection,end:selection};
   options.clearInput = clearInput;

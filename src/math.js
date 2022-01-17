@@ -1,6 +1,7 @@
 import complex from "./complex";
 import * as utils from "./utils";
 import * as mathjs from "mathjs";
+import { Alert } from "react-native";
 
 // Handles all the math...
 export const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -16,29 +17,34 @@ export const constantVals = [mathjs.pi, mathjs.e];
 
 // Validate a mathematical expression by essentially simulating an answer
 export function validateExpression(inputs) {
-  if(inputs.length==0) return false;
-  var expression = createExpression(inputs, "2", "deg");
-  var postfix = generatePostfix(expression);
-  var answer = [];
+  try {
+    if(inputs.length==0) return false;
+    var expression = createExpression(inputs, "2", "deg");
+    var postfix = generatePostfix(expression);
+    var answer = [];
 
-  // Go through and pretend to compute the expression, if the answer array does not have enough
-  // values for the operands, it is an invalid expression
-  for (let i = 0; i < postfix.length; i++) {
-    var element = postfix[i];
-    if (operands.includes(element)) {
-      // Normal operands pop 2 elements and push 1 element, so just pop 1 in sim
-      if(answer.length<2) return false;
-      answer.pop();
-    } else if (trigonometric.includes(element) || logarithmic.includes(element) ||
-                (typeof element === "string" && element.includes("log"))) {
-      // Trig functions pop 1 elements and push 1 element, no change in sim
-      if(answer.length<1) return false;
-    } else answer.push(element);
+    // Go through and pretend to compute the expression, if the answer array does not have enough
+    // values for the operands, it is an invalid expression
+    for (let i = 0; i < postfix.length; i++) {
+      var element = postfix[i];
+      if (operands.includes(element)) {
+        // Normal operands pop 2 elements and push 1 element, so just pop 1 in sim
+        if(answer.length<2) return false;
+        answer.pop();
+      } else if (trigonometric.includes(element) || logarithmic.includes(element) ||
+                  (typeof element === "string" && element.includes("log"))) {
+        // Trig functions pop 1 elements and push 1 element, no change in sim
+        if(answer.length<1) return false;
+      } else answer.push(element);
+    }
+
+    // If there are multiple values left in answer, expression is invalid
+    if(answer.length>1) return false;
+    else return true;
+  } catch {
+    Alert.alert("Error", "There is a syntax error in the input, please check it over before hitting =");
+    return false;
   }
-
-  // If there are multiple values left in answer, expression is invalid
-  if(answer.length>1) return false;
-  else return true;
 }
 
 // Piece together an expression from an array of just singular variables
