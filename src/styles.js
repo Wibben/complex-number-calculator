@@ -42,28 +42,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#D8E9F3",
-    marginLeft: 2,
-    marginRight: 2,
+    // marginLeft: 2,
+    // marginRight: 2,
     borderTopWidth: 1,
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
     borderColor: "white",
-    borderRadius: 20,
+    // borderRadius: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 
   seletedTabButton: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#8DBDD8",
+    backgroundColor: "#DEE4E7",
     padding: 0,
-    marginLeft: 2,
-    marginRight: 2,
+    // marginLeft: 2,
+    // marginRight: 2,
     borderTopWidth: 1,
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
     borderColor: "white",
-    borderRadius: 20,
+    // borderRadius: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 
   tabContent: {
@@ -177,8 +181,10 @@ const styles = StyleSheet.create({
   },
 
   ioTogglesContainer: {
-    flex: 2,
+    flex: 0.3,
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   ioToggles: {

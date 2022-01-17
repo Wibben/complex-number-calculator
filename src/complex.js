@@ -110,6 +110,24 @@ export default class complex {
       case "atan":
         this.val = convertRadians(mathjs.atan(this.val), this.angleMode);
         break;
+      case "sinh":
+        this.val = mathjs.sinh(mathjs.unit(this.val, this.angleMode));
+        break;
+      case "cosh":
+        this.val = mathjs.cosh(mathjs.unit(this.val, this.angleMode));
+        break;
+      case "tanh":
+        this.val = mathjs.tanh(mathjs.unit(this.val, this.angleMode));
+        break;
+      case "asinh":
+        this.val = convertRadians(mathjs.asinh(this.val), this.angleMode);
+        break;
+      case "acosh":
+        this.val = convertRadians(mathjs.acosh(this.val), this.angleMode);
+        break;
+      case "atanh":
+        this.val = convertRadians(mathjs.atanh(this.val), this.angleMode);
+        break;
       default:
         break;
     }

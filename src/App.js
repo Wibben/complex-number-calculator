@@ -37,8 +37,8 @@ class ComplexNumberCalculator extends React.Component {
     TRIG: [
       ["sin", "cos", "tan"],
       ["asin", "acos", "atan"],
-      ["", "", ""],
-      ["", "", ""],
+      ["sinh", "cosh", "tanh"],
+      ["asinh", "acosh", "atanh"],
     ],
   };
   modeInput = {
@@ -314,32 +314,21 @@ class ComplexNumberCalculator extends React.Component {
       input = `${input}${this.state.inputs[i]}`;
     }
 
+    let horizontalBar = <View
+                          style={{
+                            borderBottomColor: "#CACACA",
+                            borderBottomWidth: 2,
+                            borderRadius: 5,
+                            marginTop: 5,
+                            marginHorizontal: 40,
+                          }}
+                        />;
+
     return (
       <SafeAreaView key="mainView" style={styles.center}>
         {header}
 
         <View key="io" style={{ flex: 1, alignSelf: "stretch" }}>
-          <View style={styles.ioTogglesContainer}>
-            <ModeButton
-              isAngle={true}
-              isAns={false}
-              mode={this.state.angleMode}
-              handleOnPress={this.handleAngleModeChange}
-            />
-            <ModeButton
-              isAngle={false}
-              isAns={false}
-              mode={this.state.inputMode}
-              handleOnPress={this.handleInputModeChange}
-            />
-            <ModeButton
-              isAngle={false}
-              isAns={true}
-              mode={this.state.outputMode}
-              handleOnPress={this.handleAnsModeChange}
-            />
-          </View>
-
           <TextInput
             autoCorrect={false}
             key="input"
@@ -363,6 +352,27 @@ class ComplexNumberCalculator extends React.Component {
           </Text>
         </View>
 
+        <View style={styles.ioTogglesContainer}>
+          <ModeButton
+            isAngle={true}
+            isAns={false}
+            mode={this.state.angleMode}
+            handleOnPress={this.handleAngleModeChange}
+          />
+          <ModeButton
+            isAngle={false}
+            isAns={false}
+            mode={this.state.inputMode}
+            handleOnPress={this.handleInputModeChange}
+          />
+          <ModeButton
+            isAngle={false}
+            isAns={true}
+            mode={this.state.outputMode}
+            handleOnPress={this.handleAnsModeChange}
+          />
+        </View>
+
         <View
           key="buttonArea"
           style={{
@@ -372,15 +382,7 @@ class ComplexNumberCalculator extends React.Component {
           }}
         >
           {this.renderTabButtons()}
-          <View
-            style={{
-              borderBottomColor: "#CACACA",
-              borderBottomWidth: 2,
-              borderRadius: 5,
-              marginTop: 5,
-              marginHorizontal: 40,
-            }}
-          />
+          {horizontalBar}
           {this.renderMainButtons()}
         </View>
       </SafeAreaView>
