@@ -174,8 +174,7 @@ export default class complex {
       args = this.val.toPolar();
       var re = mathjs.round(args.r, 2);
       var phi = mathjs.round(convertRadians(args.phi, this.angleMode), 2);
-      if (phi == 0) output = [re];
-      else output = [re, "∠", phi];
+      output = [re, "∠", phi];
     } else if (this.form == "exp") {
       args = this.val.toPolar();
       var re = mathjs.round(args.r, 2);
