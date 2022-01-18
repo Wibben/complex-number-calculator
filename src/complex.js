@@ -99,7 +99,7 @@ export default class complex {
       .convertAngle(this.angleMode);
   }
 
-  trig(fn) {
+  func(fn) {
     switch (fn) {
       case "sin":
         this.val = mathjs.sin(mathjs.unit(this.val, this.angleMode));
@@ -137,13 +137,6 @@ export default class complex {
       case "atanh":
         this.val = convertRadians(mathjs.atanh(this.val), this.angleMode);
         break;
-      default:
-        break;
-    }
-  }
-
-  log(fn) {
-    switch(fn) {
       case "log":
         this.val = mathjs.log10(this.val);
         break;
@@ -151,12 +144,17 @@ export default class complex {
         this.val = mathjs.log(this.val, Math.E);
         break;
       default:
-        // log of base n
-        var base = Number(fn.replace("log", ""));
-        if (base) {
-          this.val = mathjs.log(this.val, base);
-        }
         break;
+    }
+  }
+
+  specialFunc(fn) {
+    if (fn.includes("log")) {
+      // log of base n
+      var base = Number(fn.replace("log", ""));
+      if (base) {
+        this.val = mathjs.log(this.val, base);
+      }
     }
   }
 

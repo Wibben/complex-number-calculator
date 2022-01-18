@@ -31,7 +31,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
 
     // Certain functions, such as trig, are accompanied by brackets, and thus should
     // also delete the corresponding trig function
-    if([...math.trigonometric,"ln"].includes(utils.lastSelected(array,selection))) {
+    if([...math.functions].includes(utils.lastSelected(array,selection)) && lastElement == "(") {
       array = utils.removeSelectedItem(array,selection);
       selection--;
     }
@@ -110,8 +110,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
 
     array = utils.addItem(array, [input], selection);
     selection++;
-  } else if (math.trigonometric.includes(input)) {
-    // trigonometric
+  } else if (math.functions.includes(input)) {
     if(clearInput) {
       array = [];
       selection = -1;
@@ -141,11 +140,6 @@ export function parseButtonInput(input, array, answer, options, mode) {
     var base = (prevNum.length == 0) ? "10" : prevNum.join("");
     array = utils.addItem(array, ["log", base, "("], selection);
     selection += 3;
-    bracketCount++;
-  } else if (math.logarithmic.includes(input)) {
-    // logarithmic
-    array = utils.addItem(array, [input, "("], selection);
-    selection+=2;
     bracketCount++;
   } else if (math.conversion.includes(input)) {
     // Disallow conversion right after an operand
