@@ -9,8 +9,8 @@ export const operands = ["+", "−", "×", "÷", "(", ")", "ₓ₁₀", "^", "�
 export const specialOps = ["(", ")", "-"];
 export const conversion = ["polar", "exp", "cart"];
 export const angleConversion = ["deg", "rad", "grad"];
-export const trigonometric = ["sin", "cos", "tan", "asin", "acos", "atan", "sinh", "cosh", "tanh", "asinh", "acosh", "atanh"];
-export const logarithmic = ["log", "ln", "logₙ"];
+export const functions = ["sin", "cos", "tan", "asin", "acos", "atan", "sinh", "cosh", "tanh", "asinh", "acosh", "atanh", "log", "ln", "√"];
+export const specialFunctions = ["logₙ", "ⁿ√"];
 export const complexOps = ["j", "∠", "eʲ"];
 export const constants = ["π", "e"];
 export const constantVals = [mathjs.pi, mathjs.e];
@@ -35,7 +35,7 @@ export function validateExpression(inputs) {
         // Normal operands pop 2 elements and push 1 element, so just pop 1 in sim
         if(answer.length<2) isValid = false;
         answer.pop();
-      } else if ([...trigonometric,...logarithmic,"%","!"].includes(element) ||
+      } else if ([...functions,...specialFunctions,"%","!"].includes(element) ||
                   (typeof element === "string" && element.includes("log"))) {
         // Trig functions pop 1 elements and push 1 element, no change in sim
         if(answer.length<1) isValid = false;
@@ -109,11 +109,11 @@ function createExpression(inputs, prevAnswer, mode) {
     } else if (operands.includes(lastElement) || operands.includes(inputs[i])) {
       // Parsing for operands
       if((inputs[i]=="(" &&
-          ![...operands,...trigonometric,...logarithmic,...complexOps,...specialOps].includes(lastElement) &&
+          ![...operands,...functions,...specialFunctions,...complexOps,...specialOps].includes(lastElement) &&
           !lastElement.toString().includes("log")) || 
           (inputs[i]=="(" && lastElement==")") ||
           (lastElement==")" &&
-          ![...operands,...trigonometric,...logarithmic,...complexOps,...specialOps].includes(inputs[i]) &&
+          ![...operands,...functions,...specialFunctions,...complexOps,...specialOps].includes(inputs[i]) &&
           !inputs[i].toString().includes("log"))
         ) {
         expression.push("×",inputs[i]);
@@ -123,7 +123,7 @@ function createExpression(inputs, prevAnswer, mode) {
 
   // From the expression, generate the complex numbers
   for (let i = 0; i < expression.length; i++) {
-    if (![...operands, ...trigonometric,...logarithmic].includes(expression[i]) &&
+    if (![...operands, ...functions,...specialFunctions].includes(expression[i]) &&
         !expression[i].toString().includes("log") &&
         !(expression[i] instanceof complex))
       expression[i] = new complex({ str: `${""}${expression[i]}`, angleMode: mode.angleMode });
@@ -137,7 +137,7 @@ function getPrecedence(operator) {
   //Precedence of + or - is 1
   else if (["×", "÷"].includes(operator)) return 2;
   //Precedence of * or / is 2
-  else if ([...trigonometric, ...logarithmic, "^"].includes(operator)) return 3;
+  else if ([...functions, ...specialFunctions, "^"].includes(operator)) return 3;
   //Precedence of ^ is 3
   else if (["ₓ₁₀", "-", "%", "!"].includes(operator)) return 4;
   //Precedence of ₓ₁₀ or - is 4
@@ -226,18 +226,18 @@ export function doMath(inputs, prevAnswer, mode) {
       //   b.mult(new complex({"re": -1, "im": 0}));
       //   answer.push(b);
       // }
-    } else if (trigonometric.includes(element)) {
-      // Compute the trig functions
+    } else if (functions.includes(element)) {
+      // Compute generic functions
       var a = answer.pop();
 
-      a.trig(element);
+      a.func(element);
       answer.push(a);
-    } else if (logarithmic.includes(element) ||
+    } else if (specialFunctions.includes(element) ||
                 (typeof element === "string" && element.includes("log"))) {
-      // Compute the log functions
+      // Compute special functions
       var a = answer.pop();
 
-      a.log(element);
+      a.specialFunc(element);
       answer.push(a);
     } else answer.push(element);
   }
