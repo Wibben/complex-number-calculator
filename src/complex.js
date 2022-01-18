@@ -143,6 +143,8 @@ export default class complex {
       case "ln":
         this.val = mathjs.log(this.val, Math.E);
         break;
+      case "√":
+        this.val = mathjs.sqrt(this.val);
       default:
         break;
     }
