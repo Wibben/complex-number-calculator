@@ -13,6 +13,7 @@ export const functions = ["sin", "cos", "tan", "asin", "acos", "atan", "sinh", "
 export const specialFunctions = ["logₙ", "ⁿ√"];
 export const complexOps = ["j", "∠", "eʲ"];
 export const constants = ["π", "e"];
+export const shortcuts = ["^2", "^-1"];
 export const constantVals = [mathjs.pi, mathjs.e];
 
 // Validate a mathematical expression by essentially simulating an answer

@@ -32,7 +32,7 @@ class ComplexNumberCalculator extends React.Component {
       ["e", "√", ""],
       ["log", "ln", "logₙ"],
       ["ₓ₁₀", "%", "!"],
-      ["", "", ""],
+      ["", "^2", "^-1"],
     ],
     TRIG: [
       ["sin", "cos", "tan"],

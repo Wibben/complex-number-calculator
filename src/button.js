@@ -141,6 +141,14 @@ export function parseButtonInput(input, array, answer, options, mode) {
     array = utils.addItem(array, ["log", base, "("], selection);
     selection += 3;
     bracketCount++;
+  } else if (math.shortcuts.includes(input)) {
+    if (input == "^2") {
+      array = utils.addItem(array, ["^", 2], selection);
+      selection += 2;
+    } else if (input == "^-1") {
+      array = utils.addItem(array, ["^", "-", 1], selection);
+      selection += 3;
+    }
   } else if (math.conversion.includes(input)) {
     // Disallow conversion right after an operand
     // Conversion will only apply to the answer
