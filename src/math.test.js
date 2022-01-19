@@ -354,14 +354,78 @@ describe("Calculator tests", () => {
   });
   //Tests complex numbers
   describe("Complex Numbers", () => {
-    test("Should be able to add two complex numbers", () => {
-      const result = doMath([4,"j",3,"+",5,"−","j",4], null, "cart")
+    test("Should be able to add two complex numbers using the form xjy", () => {
+      const result = doMath([4,"j",3,"+",5,"−","j",4], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
       const real_part = result["val"]["re"]
       const imag_part = result["val"]["im"]
       const form = result["form"]
-      expect(real_part).toBe(9);
+      expect(real_part).toBe(9)
       expect(imag_part).toBe(-1)
       expect(form).toBe("cart")
     });
+    test("Should be able to add two complex numbers using the form (x+jy)", () => {
+      const result = doMath(["(",4,"+","j",3,")","+","(",5,"−","j",4,")"], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      const real_part = result["val"]["re"]
+      const imag_part = result["val"]["im"]
+      const form = result["form"]
+      expect(real_part).toBe(9)
+      expect(imag_part).toBe(-1)
+      expect(form).toBe("cart")
+    });
+    test("Should be able to add the result of a previous operation by a another complex number", () => {
+      const result = doMath(["(",4,"+","j",3,")","+","(",5,"−","j",4,")"], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      const prev_answer = result["val"]
+      const answer = doMath(["ANS","+","(",3,"+","j",")"], prev_answer, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      expect(answer["val"]["re"]).toBe(12);
+    });
+    test("Should be able to subtract two complex numbers", () => {
+      const result = doMath(["(",6,"+","j",4,")","−","(",-7,"+","j",5,")"], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      const real_part = result["val"]["re"]
+      const imag_part = result["val"]["im"]
+      const form = result["form"]
+      expect(real_part).toBe(13)
+      expect(imag_part).toBe(-1)
+      expect(form).toBe("cart")
+    });
+    test("Should be able to subtract the result of a previous operation by a another complex number", () => {
+      const result = doMath(["(",6,"+","j",4,")","−","(",-7,"+","j",5,")"], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      const answer = doMath(["ANS","−","(",3,"+","j",")"], result, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      expect(answer['val']['re']).toBe(10);
+      expect(answer['val']['im']).toBe(-2);
+    });
+    test("Should be able to multiply two complex numbers", () => {
+      const result = doMath(["(",3,"+","j",2,")","×","(",1,"+","j",4,")"], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      const real_part = result["val"]["re"]
+      const imag_part = result["val"]["im"]
+      const form = result["form"]
+      expect(real_part).toBe(-5)
+      expect(imag_part).toBe(14)
+      expect(form).toBe("cart")
+    });
+    test("Should be able to multiply the result of a previous operation by a another complex number", () => {
+      const result = doMath(["(",6,"+","j",4,")","×","(",-7,"+","j",5,")"], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      const answer = doMath(["ANS","×","(",3,"+","j",")"], result, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      expect(answer['val']['re']).toBe(-188);
+      expect(answer['val']['im']).toBe(-56);
+    });
+    test("Should be able to divide two complex numbers", () => {
+      const result = doMath(["(",4,"+","j",3,")","÷","(",5,"−","j",4,")"], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      const real_part = result["val"]["re"]
+      const imag_part = result["val"]["im"]
+      const form = result["form"]
+      expect(real_part).toBe(0.19512195121951217);
+      expect(imag_part).toBe(0.7560975609756099)
+      expect(form).toBe("cart")
+    });
+    test("Should be able to divide the result of a previous operation by a another complex number", () => {
+      const result = doMath(["(",6,"+","j",4,")","÷","(",-7,"+","j",5,")"], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      const answer = doMath(["ANS","÷","(",3,"+","j",")"], result, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      expect(answer['val']['re']).toBe(-0.16756756756756755);
+      expect(answer['val']['im']).toBe(-0.20540540540540536);
+    });
   });
 });
+//(4+j3)+(5-j3)
+//ANS + (3+j)
+//(6 + 4i) - (-7 + 5i)
+//(3 + 2i)(1 + 4i)
