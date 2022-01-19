@@ -5,6 +5,7 @@ import {
   View,
   SafeAreaView,
   StatusBar,
+  ScrollView,
   Keyboard,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
@@ -338,15 +339,17 @@ class ComplexNumberCalculator extends React.Component {
             selection={this.state.selection}
             onSelectionChange={this.handleSelectionChange}
           />
-          <Text
-            key="output"
-            numberOfLines={1}
-            adjustsFontSizeToFit
-            style={styles.answerField}
-          >
-            {" "}
-            {output}{" "}
-          </Text>
+          <ScrollView horizontal={true}>
+            <Text
+              key="output"
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              style={styles.answerField}
+            >
+              {" "}
+              {output}{" "}
+            </Text>
+          </ScrollView>
           {horizontalBar}
         </View>
 
