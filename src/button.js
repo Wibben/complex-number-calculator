@@ -36,7 +36,8 @@ export function parseButtonInput(input, array, answer, options, mode) {
 
     // Certain functions, such as trig, are accompanied by brackets, and thus should
     // also delete the corresponding trig function
-    if([...math.functions].includes(utils.lastSelected(array,selection)) && lastElement == "(") {
+    let lastSelected = utils.lastSelected(array,selection);
+    if(([...math.functions].includes(lastSelected) || lastSelected.includes("√")) && lastElement == "(") {
       array = utils.removeSelectedItem(array,selection);
       selection--;
     }
@@ -126,7 +127,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
     array = utils.addItem(array, [input, "("], selection);
     selection+=2;
     bracketCount++;
-  } else if (input == "logₙ") {
+  } else if (input == "logₙ" || input == "ⁿ√") {
     // get number entered before which will be the custom base
     var startingPos = array.length-1;
     while (startingPos >= 0 && array[startingPos] in math.digits) startingPos -= 1;
@@ -142,10 +143,18 @@ export function parseButtonInput(input, array, answer, options, mode) {
       selection -= prevNum.length;
     }
 
-    var base = (prevNum.length == 0) ? "10" : prevNum.join("");
-    array = utils.addItem(array, ["log", base, "("], selection);
-    selection += 3;
-    bracketCount++;
+    if (input == "logₙ") {
+      var base = (prevNum.length == 0) ? "10" : prevNum.join("");
+      array = utils.addItem(array, ["log", base, "("], selection);
+      selection += 3;
+      bracketCount++;
+    } else if (input == "ⁿ√") {
+      var n = (prevNum.length == 0) ? "2" : prevNum.join("");
+      var sup = utils.digitToSuperscript(n);
+      array = utils.addItem(array, [sup + "√", "("], selection);
+      selection += 2;
+      bracketCount++;
+    }
   } else if (math.shortcuts.includes(input)) {
     if (input == "^2") {
       array = utils.addItem(array, ["^", 2], selection);

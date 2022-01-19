@@ -1,5 +1,5 @@
 import * as mathjs from "mathjs";
-import { convertRadians, convertToRadians } from "./utils";
+import { convertRadians, convertToRadians, superscriptToDigit } from "./utils";
 
 export default class complex {
   constructor(opts) {
@@ -160,6 +160,15 @@ export default class complex {
       var base = Number(fn.replace("log", ""));
       if (base) {
         this.val = mathjs.log(this.val, base);
+      }
+    } else if (fn.includes("√")) {
+      // compute the nth root
+      var n = Number(superscriptToDigit(fn.replace("√", "")));
+      if (n) {
+        var solutions = mathjs.nthRoots(this.val, n);
+        if (solutions.length > 0) {
+          this.val = solutions[0];
+        }
       }
     }
   }

@@ -37,7 +37,8 @@ export function validateExpression(inputs) {
         if(answer.length<2) isValid = false;
         answer.pop();
       } else if ([...functions,...specialFunctions,"%","!"].includes(element) ||
-                  (typeof element === "string" && element.includes("log"))) {
+                  (typeof element === "string" && element.includes("log")) ||
+                  (typeof element === "string" && element.includes("√"))) {
         // Trig functions pop 1 elements and push 1 element, no change in sim
         if(answer.length<1) isValid = false;
       } else answer.push(element);
@@ -119,11 +120,11 @@ function createExpression(inputs, prevAnswer, mode) {
       // Parsing for operands
       if((inputs[i]=="(" &&
           ![...operands,...functions,...specialFunctions,...complexOps,...specialOps].includes(lastElement) &&
-          !lastElement.toString().includes("log")) || 
+          !lastElement.toString().includes("log") && !lastElement.toString().includes("√")) || 
           (inputs[i]=="(" && lastElement==")") ||
           (lastElement==")" &&
           ![...operands,...functions,...specialFunctions,...complexOps,...specialOps].includes(inputs[i]) &&
-          !inputs[i].toString().includes("log"))
+          !inputs[i].toString().includes("log") && !inputs[i].toString().includes("√"))
         ) {
         expression.push("×",inputs[i]);
       } else expression.push(inputs[i]);
@@ -134,6 +135,7 @@ function createExpression(inputs, prevAnswer, mode) {
   for (let i = 0; i < expression.length; i++) {
     if (![...operands, ...functions,...specialFunctions].includes(expression[i]) &&
         !expression[i].toString().includes("log") &&
+        !expression[i].toString().includes("√") &&
         !(expression[i] instanceof complex))
       expression[i] = new complex({ str: `${""}${expression[i]}`, angleMode: mode.angleMode });
   }
@@ -242,7 +244,8 @@ export function doMath(inputs, prevAnswer, mode) {
       a.func(element);
       answer.push(a);
     } else if (specialFunctions.includes(element) ||
-                (typeof element === "string" && element.includes("log"))) {
+                (typeof element === "string" && element.includes("log")) ||
+                (typeof element === "string" && element.includes("√"))) {
       // Compute special functions
       var a = answer.pop();
 

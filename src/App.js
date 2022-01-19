@@ -29,7 +29,7 @@ class ComplexNumberCalculator extends React.Component {
   ];
   tabInputs = {
     STD: [
-      ["e", "√", ""],
+      ["e", "√", "ⁿ√"],
       ["log", "ln", "logₙ"],
       ["ₓ₁₀", "%", "!"],
       ["|x|", "^2", "^-1"],
