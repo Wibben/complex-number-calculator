@@ -17,6 +17,11 @@ export function parseButtonInput(input, array, answer, options, mode) {
   var selection = utils.snapSelectionToInput(array,selection);
   var lastElement = utils.lastSelected(array,selection);
 
+  // absolute values shown as abs(x)
+  if (input == "|x|") {
+    input = "abs";
+  }
+
   if (input == "AC") {
     array = [];
     selection = -1;
