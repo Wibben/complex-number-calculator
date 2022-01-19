@@ -84,9 +84,17 @@ function createExpression(inputs, prevAnswer, mode) {
     } else if (complexOps.includes(inputs[i])) {
       // Parsing for complex entries - specifically j
       if(inputs[i] == "j") {
-        if(!operands.includes(lastElement) || specialOps.includes(lastElement)) {
-          if([0,1,2,3,4,5,6,7,8,9,...constants,...specialOps].includes(inputs[i+1])) expression.push("₊");
-          else expression.push("×");
+        // Checking for compound statements
+        if(!operands.includes(lastElement) || [")"].includes(lastElement)) { 
+          if([...digits,...constants,...specialOps].includes(inputs[i+1])) {
+            if(![...digits,...constants,"(","-"].includes(inputs[i+1])) {
+              if(["-"].includes(lastElement)) expression[expression.length - 1] = `${lastElement}${"1"}` // -j
+              expression.push("×");
+            } else expression.push("₊");
+          } else {
+            if (["-"].includes(lastElement)) expression[expression.length - 1] = `${lastElement}${"1"}` // -j
+            expression.push("×");
+          }
         } 
 
         if (inputs[i + 1] == "(")
