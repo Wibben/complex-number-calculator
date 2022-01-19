@@ -117,7 +117,7 @@ export function roundOutput(output, precision) {
   }
 
   // Piecing together an output string based on certain conditions
-  if(multiple == 0) roundedOutput = round(output, precision);
+  if(multiple == 0 || multiple > 10000) roundedOutput = round(output, precision);
   else if(multiple == 1) roundedOutput = `${constant}`;
   else if(multiple == -1) roundedOutput = `-${constant}`
   else roundedOutput = `${multiple}${constant}`
