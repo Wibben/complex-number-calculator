@@ -145,6 +145,10 @@ export default class complex {
         break;
       case "√":
         this.val = mathjs.sqrt(this.val);
+        break;
+      case "abs":
+        this.val = new mathjs.complex({ re: mathjs.abs(this.val), im: 0 });
+        break;
       default:
         break;
     }
