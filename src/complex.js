@@ -1,5 +1,5 @@
 import * as mathjs from "mathjs";
-import { convertRadians, convertToRadians, superscriptToDigit } from "./utils";
+import { convertRadians, convertToRadians, superscriptToDigit, roundOutput } from "./utils";
 
 export default class complex {
   constructor(opts) {
@@ -19,7 +19,7 @@ export default class complex {
         var idx = str.indexOf("eʲ");
         this.val = mathjs.complex({
           phi: (str.substr(idx + 2) == "") ? "1":str.substr(idx + 2), // Always entered as radians
-          r: (idx==0) ? "1":str.substr(0, idx),
+          r: (idx==0) ? "1":(str.substr(0, idx)=="-" ? "-1":str.substr(0, idx)),
         });
         this.form = "exp";
       } else if (str.includes("j")) {
@@ -38,7 +38,7 @@ export default class complex {
         } else if(str.substr(idx+1)=="") { // Xj
           this.val = mathjs.complex({
             re: 0,
-            im: parseFloat(str.substr(0, idx)),
+            im: str.substr(0, idx)=="-" ? -1:parseFloat(str.substr(0, idx)),
           });
         } else { // XjY
           this.val = mathjs.complex({
@@ -183,24 +183,24 @@ export default class complex {
   }
 
   toOutput() {
-    var output, args;
+    let output, args;
 
     if (this.form == "cart") {
       args = this.val.toVector();
-      var re = mathjs.round(args[0], 2);
-      var im = mathjs.round(args[1], 2);
+      let re = roundOutput(args[0],2);
+      let im = roundOutput(args[1],2);
       if(im==0) output = [re];
-      else if(re==0) output = ["j", im];
-      else output = [re, "j", im];
+      else if(re==0) output = [im, "j"];
+      else output = [re, "+", im, "j"];
     } else if (this.form == "polar") {
       args = this.val.toPolar();
-      var re = mathjs.round(args.r, 2);
-      var phi = mathjs.round(convertRadians(args.phi, this.angleMode), 2);
+      let re = roundOutput(args.r, 2);
+      let phi = roundOutput(convertRadians(args.phi, this.angleMode), 2);
       output = [re, "∠", phi];
     } else if (this.form == "exp") {
       args = this.val.toPolar();
-      var re = mathjs.round(args.r, 2);
-      var phi = mathjs.round(args.phi, 2); // Always radians
+      let re = roundOutput(args.r, 2);
+      let phi = roundOutput(args.phi, 2); // Always radians
       if (phi == 0) output = [re];
       else output = [re, "eʲ", phi];
     }

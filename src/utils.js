@@ -1,5 +1,5 @@
-import { multiply, range } from "mathjs";
-import { functions, specialFunctions } from "./math";
+import { multiply, range, round } from "mathjs";
+import { functions, specialFunctions, constantVals, constants } from "./math";
 
 export function snapSelectionToInput(array, selection) {
   // Due to the fact that certain inputs consist of multiple characters, we need to snap the selection to the end of the input
@@ -97,4 +97,30 @@ export function superscriptToDigit(n) {
     result.push(supers[n[i]]);
   }
   return result.join("");
+}
+
+// Will take in an output and round it to a specific precision
+// At the same time, it will also check if the output is close
+// to a whole multiple of a constant
+export function roundOutput(output, precision) {
+  if (output==0) return 0; // No need to do anything if it's just 0
+
+  // Check if output is a multiple of a constant and which constant it is
+  let multiple,constant, roundedOutput;
+  multiple = 0;
+
+  for(let i=0; i<constantVals.length && multiple==0; i++) {
+    if(round(output/constantVals[i],10) % 1 == 0) {
+      multiple = round(output/constantVals[i]);
+      constant = constants[i];
+    }
+  }
+
+  // Piecing together an output string based on certain conditions
+  if(multiple == 0) roundedOutput = round(output, precision);
+  else if(multiple == 1) roundedOutput = `${constant}`;
+  else if(multiple == -1) roundedOutput = `-${constant}`
+  else roundedOutput = `${multiple}${constant}`
+
+  return roundedOutput;
 }
