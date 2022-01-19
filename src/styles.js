@@ -1,3 +1,4 @@
+import { column } from "mathjs";
 import { StyleSheet, Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window"); //full width and height
@@ -20,8 +21,14 @@ const styles = StyleSheet.create({
     margin: 5,
   },
 
+  scrollField: {
+    flexDirection: "column",
+    // borderWidth: 1,
+    // borderColor: "white",
+  },
+
   answerField: {
-    flex: 6,
+    flex: 1,
     textAlign: "right",
     alignSelf: "stretch",
     borderWidth: 1,

@@ -339,7 +339,11 @@ class ComplexNumberCalculator extends React.Component {
             selection={this.state.selection}
             onSelectionChange={this.handleSelectionChange}
           />
-          <ScrollView horizontal={true}>
+          <ScrollView 
+            key="scroll"
+            horizontal={true}
+            style={styles.scrollField}
+          >
             <Text
               key="output"
               numberOfLines={1}
