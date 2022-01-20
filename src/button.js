@@ -37,7 +37,8 @@ export function parseButtonInput(input, array, answer, options, mode) {
     // Certain functions, such as trig, are accompanied by brackets, and thus should
     // also delete the corresponding trig function
     let lastSelected = utils.lastSelected(array,selection);
-    if(([...math.functions].includes(lastSelected) || lastSelected.includes("√")) && lastElement == "(") {
+    if(([...math.functions].includes(lastSelected) || (typeof lastSelected === "string" && lastSelected.includes("√")))
+        && lastElement == "(") {
       array = utils.removeSelectedItem(array,selection);
       selection--;
     }
