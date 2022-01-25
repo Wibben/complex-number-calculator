@@ -32,7 +32,7 @@ export const ModeButton = (props) => {
       : inputConstants[mode]
   );
   const onModeChange = () => {
-    const newMode = (currMode + 1) % 3;
+    const newMode = (currMode + 1) % 2;
     setCurrMode(newMode);
     handleOnPress();
     setCurrText(

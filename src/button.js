@@ -58,8 +58,15 @@ export function parseButtonInput(input, array, answer, options, mode) {
     math.operands.includes(input) &&
     !math.specialOps.includes(input)
   ) {
+    if(clearInput) {
+      array = ["LAST"];
+      selection = 0;
+      bracketCount = 0;
+      clearInput = false;
+    }
+
     // Put a filter on the operators
-    if (array.length > 0 && !clearInput) {
+    if (array.length > 0) {
       // Disallow having first input be an operator
       if (
         math.operands.includes(lastElement) &&
@@ -70,7 +77,6 @@ export function parseButtonInput(input, array, answer, options, mode) {
         array = utils.addItem(array, [input], selection);
         selection++;
       }
-      clearInput = false;
     }
   } else if (input == "( - )") {
     // The negative sign should only be allowed in certain situations
@@ -124,16 +130,23 @@ export function parseButtonInput(input, array, answer, options, mode) {
     selection++;
   } else if (math.functions.includes(input)) {
     if(clearInput) {
+      array = ["LAST"];
+      selection = -1;
+      bracketCount = 0;
+    }
+
+    array = utils.addItem(array, [input, "("], selection);
+    if(clearInput) selection+=3;
+    else selection+=2;
+    bracketCount++;
+  } else if (input == "logₙ" || input == "ⁿ√") {
+    if(clearInput) {
       array = [];
       selection = -1;
       bracketCount = 0;
       clearInput = false;
     }
 
-    array = utils.addItem(array, [input, "("], selection);
-    selection+=2;
-    bracketCount++;
-  } else if (input == "logₙ" || input == "ⁿ√") {
     // get number entered before which will be the custom base
     var startingPos = array.length-1;
     while (startingPos >= 0 && array[startingPos] in math.digits) startingPos -= 1;
@@ -162,6 +175,13 @@ export function parseButtonInput(input, array, answer, options, mode) {
       bracketCount++;
     }
   } else if (math.shortcuts.includes(input)) {
+    if(clearInput) {
+      array = ["LAST"];
+      selection = 0;
+      bracketCount = 0;
+      clearInput = false;
+    }
+
     if (input == "^2") {
       array = utils.addItem(array, ["^", 2], selection);
       selection += 2;
@@ -175,7 +195,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
     if (answer != null) answer.convert(input);
   } else if (math.angleConversion.includes(input)) {
     if (answer != null) answer.convertAngle(input);
-  } else if(input == "ANS") {
+  } else if(input == "LAST") {
     if(answer != null) {
       if(clearInput) {
         array = [];
@@ -241,7 +261,7 @@ export class Button extends React.Component {
       "×": styles.operatorStyle,
       "÷": styles.operatorStyle,
       "=": styles.ansStyle,
-      "ANS": styles.ansStyle,
+      "LAST": styles.ansStyle,
       "^": styles.textStyle,
       "(": styles.textStyle, 
       ")": styles.textStyle, 
