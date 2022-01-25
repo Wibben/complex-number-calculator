@@ -13,6 +13,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
   var bracketCount = options.bracketCount;
   var selection = options.selection;
   var clearInput = options.clearInput;
+  var showAnswer = options.showAnswer;
 
   var selection = utils.snapSelectionToInput(array,selection);
   var lastElement = utils.lastSelected(array,selection);
@@ -20,13 +21,16 @@ export function parseButtonInput(input, array, answer, options, mode) {
   // absolute values shown as abs(x)
   if (input == "|x|") {
     input = "abs";
+  } else if(input =="×10ˣ") {
+    input = "ₓ₁₀";
   }
 
   if (input == "AC") {
     array = [];
     selection = -1;
     bracketCount = 0;
-    answer = null;
+    // answer = null;
+    showAnswer = false;
     clearInput = false;
   } else if (input == "DEL") {
     if (lastElement == "(") bracketCount--;
@@ -46,6 +50,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
     // Disallow compute right after an operand
     if (math.validateExpression(array)) {
       answer = math.doMath(array, answer, mode);
+      showAnswer = true;
       // After a valid calculations, the next button press will clear the input field
       clearInput = true;
     }
@@ -200,6 +205,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
   options.bracketCount = bracketCount;
   options.selection = {start:selection,end:selection};
   options.clearInput = clearInput;
+  options.showAnswer = showAnswer;
 
   return [array, answer, options];
 }

@@ -66,7 +66,7 @@ function createExpression(inputs, prevAnswer, mode) {
     expression.push(
       `${""}${constantVals[constants.findIndex((item) => item === inputs[0])]}`
     );
-  else if(inputs[0] == "ANS") expression.push(prevAnswer);
+  else if(inputs[0] == "LAST") expression.push(prevAnswer);
   // Convert constants into values
   else expression.push(inputs[0]);
 
@@ -103,8 +103,8 @@ function createExpression(inputs, prevAnswer, mode) {
         else expression.push(inputs[i]);
         
       } else expression[expression.length - 1] = `${lastElement}${inputs[i]}`
-    } else if(inputs[i] == "ANS") {
-      // Performing substitution for the ANS operator
+    } else if(inputs[i] == "LAST") {
+      // Performing substitution for the LAST operator
       expression.push(prevAnswer);
     } else if (constants.includes(inputs[i])) {
       // Parsing for constants

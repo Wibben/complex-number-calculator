@@ -9,13 +9,13 @@ const angleConstants = {
 };
 
 const inputConstants = {
-  0: "IN: CART",
+  0: "IN: RECT",
   1: "IN: POLAR",
   2: "IN: EXP",
 };
 
 const outputConstants = {
-  0: "ANS: CART",
+  0: "ANS: RECT",
   1: "ANS: POLAR",
   2: "ANS: EXP",
 };
