@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import styles from "./styles";
+import {lightTheme, darkTheme} from "./styles";
 
 const angleConstants = {
   0: "DEG",
@@ -55,9 +55,9 @@ export const ModeButton = (props) => {
   }, [mode]);
 
   return (
-    <View style={styles.ioToggles}>
+    <View style={lightTheme.ioToggles}>
       <TouchableOpacity onPress={onModeChange}>
-        <Text style={styles.ioTogglesText}>{currText}</Text>
+        <Text style={lightTheme.ioTogglesText}>{currText}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -9,10 +9,10 @@ import {
   Keyboard,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import styles from "./styles";
-import darkMode from "./darkMode";
+import {lightTheme, darkTheme} from "./styles";
 import * as button from "./button";
 import ModeButton from "./ModeButton";
+import ThemeMode from "./ThemeMode";
 
 class ComplexNumberCalculator extends React.Component {
   webInputs = [
@@ -49,6 +49,10 @@ class ComplexNumberCalculator extends React.Component {
     Angle: ["deg", "rad", "grad"],
   };
 
+  themeInput = {
+    theme: ["light", "dark"]
+  }
+
   constructor(props) {
     super(props);
 
@@ -67,6 +71,7 @@ class ComplexNumberCalculator extends React.Component {
       clearInput: false,
       bracketCount: 0,
       tab: "STD",
+      themeMode: 0,
       inputMode: 0,
       outputMode: 0,
       angleMode: 0,
@@ -78,12 +83,16 @@ class ComplexNumberCalculator extends React.Component {
 
   handleTabSwitching = (input) => {
     this.setState({ tab: input });
+    var theme = lightTheme;
 
+    if(this.state.themeMode === 0){
+      theme = darkTheme;
+    }
     // Change the toggle on the tab
     for (let i = 0; i < this.state.tabButtons.length; i++) {
       if (this.state.tabButtons[i].props.content == input)
-        this.tabElement[i].current.setState({ style: styles.seletedTabButton });
-      else this.tabElement[i].current.setState({ style: styles.tabButton });
+        this.tabElement[i].current.setState({ style: theme.seletedTabButton });
+      else this.tabElement[i].current.setState({ style: theme.tabButton });
     }
 
     // Change the tab button content based on the toggle
@@ -93,6 +102,15 @@ class ComplexNumberCalculator extends React.Component {
       }
     }
   };
+
+  handleThemeModeChange = () => {
+    let currMode = this.state.themeMode;
+    currMode = (currMode + 1) % 2;
+    this.setState({ themeMode: currMode });
+
+     // Change button text
+     const content = "Theme Mode: " + this.themeInput["theme"][currMode];
+  }
 
   handleAngleModeChange = () => {
     let currMode = this.state.angleMode;
@@ -178,7 +196,7 @@ class ComplexNumberCalculator extends React.Component {
             key={"tab_" + i.toString()}
             content={tabs[i]}
             onPress={this.handleTabSwitching}
-            style={styles.seletedTabButton}
+            style={lightTheme.seletedTabButton}
           />
         );
       else
@@ -188,7 +206,7 @@ class ComplexNumberCalculator extends React.Component {
             key={"tab_" + i.toString()}
             content={tabs[i]}
             onPress={this.handleTabSwitching}
-            style={styles.tabButton}
+            style={lightTheme.tabButton}
           />
         );
     }
@@ -213,7 +231,7 @@ class ComplexNumberCalculator extends React.Component {
             key={"tab_" + i.toString() + "_" + j.toString()}
             content={inputs[tabs[0]][i][j]}
             onPress={this.handleButtonInput}
-            style={styles.tabContentButton}
+            style={lightTheme.tabContentButton}
           />
         );
       }
@@ -247,10 +265,15 @@ class ComplexNumberCalculator extends React.Component {
   renderTabButtons = () => {
     var buttonRows = [];
     var tabContainer = [];
+    var theme = lightTheme;
+    
+    if(this.state.themeMode === 0){
+      theme = darkTheme;
+    }
 
     // Generate the tabs
     tabContainer.push(
-      <View key={"renderButtonTabs"} style={styles.tabRow}>
+      <View key={"renderButtonTabs"} style={theme.tabRow}>
         {this.state.tabButtons}
       </View>
     );
@@ -258,19 +281,19 @@ class ComplexNumberCalculator extends React.Component {
     // Generate the content for the tabs
     for (let i = 0; i < this.state.tabContent.length; i++) {
       buttonRows.push(
-        <View key={"renderButtonTabs_" + i.toString()} style={styles.buttonRow}>
+        <View key={"renderButtonTabs_" + i.toString()} style={theme.buttonRow}>
           {this.state.tabContent[i]}
         </View>
       );
     }
     tabContainer.push(
-      <View key={"renderButtonTabsContent"} style={styles.tabContent}>
+      <View key={"renderButtonTabsContent"} style={theme.tabContent}>
         {buttonRows}
       </View>
     );
 
     return (
-      <View key="tabButtons" style={styles.tabContainer}>
+      <View key="tabButtons" style={theme.tabContainer}>
         {tabContainer}
       </View>
     );
@@ -278,17 +301,21 @@ class ComplexNumberCalculator extends React.Component {
 
   renderMainButtons = () => {
     var buttonRows = [];
+    var theme = lightTheme;
+    
+    if(this.state.themeMode === 0){
+      theme = darkTheme;
+    }
 
     for (let i = 0; i < this.state.mainButtons.length; i++) {
-      buttonRows.push(
-        <View key={"renderButtonView_" + i.toString()} style={styles.buttonRow}>
+      buttonRows.push( 
+        <View key={"renderButtonView_" + i.toString()} style={theme.buttonRow}>
           {this.state.mainButtons[i]}
         </View>
       );
     }
-
     return (
-      <View key="renderButtons" style={styles.mainButtonContainer}>
+      <View key="renderButtons" style={theme.mainButtonContainer}>
         {buttonRows}
       </View>
     );
@@ -296,6 +323,7 @@ class ComplexNumberCalculator extends React.Component {
 
   render = () => {
     var flexDir, header;
+    var theme = lightTheme;
     if (Platform.OS == "web") flexDir = "row";
     else flexDir = "column";
 
@@ -312,6 +340,10 @@ class ComplexNumberCalculator extends React.Component {
       input = `${input}${this.state.inputs[i]}`;
     }
 
+    if(this.state.themeMode === 0){
+      theme = darkTheme;
+    }
+
     let horizontalBar = <View
                           style={{
                             borderBottomColor: "#CACACA",
@@ -321,10 +353,16 @@ class ComplexNumberCalculator extends React.Component {
                             marginHorizontal: 40,
                           }}
                         />;
-
+    
     return (
-      <SafeAreaView key="mainView" style={styles.center}>
+      <SafeAreaView key="mainView" style={theme.center}>
         {header}
+        <View style={lightTheme.ioTogglesContainer}>
+          <ThemeMode
+            mode={this.state.themeMode}
+            handleOnPress={this.handleThemeModeChange}
+          />
+        </View>
 
         <View key="io" style={{ flex: 1, alignSelf: "stretch" }}>
           <TextInput
@@ -334,7 +372,7 @@ class ComplexNumberCalculator extends React.Component {
             numberOfLines={1}
             autoFocus={true}
             adjustsFontSizeToFit
-            style={styles.inputField}
+            style={theme.inputField}
             value={input}
             selection={this.state.selection}
             onSelectionChange={this.handleSelectionChange}
@@ -342,22 +380,21 @@ class ComplexNumberCalculator extends React.Component {
           <ScrollView 
             key="scroll"
             horizontal={true}
-            style={styles.scrollField}
+            style={theme.scrollField}
           >
             <Text
               key="output"
               numberOfLines={1}
               adjustsFontSizeToFit
-              style={styles.answerField}
+              style={theme.answerField}
             >
               {" "}
               {output}{" "}
             </Text>
           </ScrollView>
-          {horizontalBar}
         </View>
 
-        <View style={styles.ioTogglesContainer}>
+        <View style={theme.ioTogglesContainer}>
           <ModeButton
             isAngle={true}
             isAns={false}

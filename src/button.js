@@ -3,8 +3,7 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import styles from "./styles";
-import darkMode from "./darkMode";
+import {lightTheme, darkTheme} from "./styles";
 import * as math from "./math";
 import * as utils from "./utils";
 import { string } from "mathjs";
@@ -210,7 +209,7 @@ export class Button extends React.Component {
     this.state = {
       content: props.content,
       onPress: props.onPress,
-      style: props.style == null ? styles.button : props.style,
+      style: props.style == null ? lightTheme.button : props.style,
     };
   }
 
@@ -228,24 +227,24 @@ export class Button extends React.Component {
     digits = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0]
 
     specialButtons = {
-      "AC": styles.acStyle,
-      "DEL": styles.acStyle,
-      "−": styles.operatorStyle,
-      "+": styles.operatorStyle,
-      "×": styles.operatorStyle,
-      "÷": styles.operatorStyle,
-      "=": styles.ansStyle,
-      "ANS": styles.ansStyle,
-      "^": styles.textStyle,
-      "(": styles.textStyle, 
-      ")": styles.textStyle, 
-      "π": styles.textStyle, 
-      "j": styles.textStyle,
-      ".": styles.textStyle,
-      "( - )": styles.textStyle
+      "AC": lightTheme.acStyle,
+      "DEL": lightTheme.acStyle,
+      "−": lightTheme.operatorStyle,
+      "+": lightTheme.operatorStyle,
+      "×": lightTheme.operatorStyle,
+      "÷": lightTheme.operatorStyle,
+      "=": lightTheme.ansStyle,
+      "ANS": lightTheme.ansStyle,
+      "^": lightTheme.textStyle,
+      "(": lightTheme.textStyle, 
+      ")": lightTheme.textStyle, 
+      "π": lightTheme.textStyle, 
+      "j": lightTheme.textStyle,
+      ".": lightTheme.textStyle,
+      "( - )": lightTheme.textStyle
     }
 
-    if (disabled) style = styles.nonExistentButton;
+    if (disabled) style = lightTheme.nonExistentButton;
     else style = this.state.style;
 
     if(this.state.content in specialButtons){
@@ -267,7 +266,7 @@ export class Button extends React.Component {
           onPress={this.callBack}
           disabled={disabled}
         >
-          <Text style={styles.textStyle}> {this.state.content} </Text>
+          <Text style={lightTheme.textStyle}> {this.state.content} </Text>
         </TouchableOpacity>
       );
     }
