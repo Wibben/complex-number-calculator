@@ -3,8 +3,7 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import styles from "./styles";
-import darkMode from "./darkMode";
+import {lightTheme, darkTheme} from "./styles";
 import * as math from "./math";
 import * as utils from "./utils";
 import { string } from "mathjs";
@@ -233,11 +232,27 @@ export function parseButtonInput(input, array, answer, options, mode) {
 export class Button extends React.Component {
   constructor(props) {
     super(props);
+    
+    let themeMode = lightTheme;
+    if(props.theme == 0) {
+      themeMode = darkTheme;
+    }
+
     this.state = {
       content: props.content,
       onPress: props.onPress,
-      style: props.style == null ? styles.button : props.style,
+      baseSyle: props.style == null ? "button":props.style,
+      style: props.style == null ? themeMode.button : themeMode[props.style],
+      theme: props.theme == null ? 0:props.theme,
     };
+  }
+
+  updateTheme = (theme) => {
+    let themeMode = lightTheme;
+    if(theme == 0) {
+      themeMode = darkTheme;
+    }
+    this.setState({style: themeMode[this.state.baseSyle], theme: theme})
   }
 
   callBack = () => {
@@ -253,22 +268,27 @@ export class Button extends React.Component {
 
     digits = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0]
 
+    let themeMode = lightTheme;
+    if(this.state.theme == 0) {
+      themeMode = darkTheme;
+    }
+
     specialButtons = {
-      "AC": styles.acStyle,
-      "DEL": styles.acStyle,
-      "−": styles.operatorStyle,
-      "+": styles.operatorStyle,
-      "×": styles.operatorStyle,
-      "÷": styles.operatorStyle,
-      "=": styles.ansStyle,
-      "LAST": styles.ansStyle,
-      "^": styles.textStyle,
-      "(": styles.textStyle, 
-      ")": styles.textStyle, 
-      "π": styles.textStyle, 
-      "j": styles.textStyle,
-      ".": styles.textStyle,
-      "( - )": styles.textStyle
+      "AC": themeMode.acStyle,
+      "DEL": themeMode.acStyle,
+      "−": themeMode.operatorStyle,
+      "+": themeMode.operatorStyle,
+      "×": themeMode.operatorStyle,
+      "÷": themeMode.operatorStyle,
+      "=": themeMode.ansStyle,
+      "ANS": themeMode.ansStyle,
+      "^": themeMode.textStyle,
+      "(": themeMode.textStyle, 
+      ")": themeMode.textStyle, 
+      "π": themeMode.textStyle, 
+      "j": themeMode.textStyle,
+      ".": themeMode.textStyle,
+      "( - )": themeMode.textStyle
     }
 
     if (disabled) style = styles.nonExistentButton;
@@ -293,7 +313,7 @@ export class Button extends React.Component {
           onPress={this.callBack}
           disabled={disabled}
         >
-          <Text style={styles.textStyle}> {this.state.content} </Text>
+          <Text style={themeMode.textStyle}> {this.state.content} </Text>
         </TouchableOpacity>
       );
     }
@@ -304,7 +324,7 @@ export class Button extends React.Component {
           onPress={this.callBack}
           disabled={disabled}
         >
-          <Text> {this.state.content} </Text>
+          <Text style={themeMode.tabTextStyle}> {this.state.content} </Text>
         </TouchableOpacity>
       );
     }
