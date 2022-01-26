@@ -14,10 +14,10 @@ class MainContainer extends React.Component {
     constructor(props) {
         super(props);    
         this.state = {
-          themeMode: 0,
+          themeMode: 1,
         };
 
-        global.theme = 0;
+        global.theme = 1;
     }
 
     handleThemeModeChange = () => {
