@@ -1,6 +1,4 @@
-import { column } from "mathjs";
 import { StyleSheet, Dimensions } from "react-native";
-import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
 const { width, height } = Dimensions.get("window"); //full width and height
 
@@ -124,15 +122,7 @@ const lightTheme = StyleSheet.create({
     // alignItems: 'center',
   },
 
-  firstFunctionRow: {
-    flex: 1,
-    flexDirection: "row",
-    width: width > height ? width / 2 : width,
-    justifyContent: "center",
-    backgroundColor: "#FFFFFF",
-    // justifyContent: 'space-between',
-    // alignItems: 'center',
-  },
+
 
   tabRow: {
     backgroundColor: "#D7E5F0",
@@ -192,6 +182,11 @@ const lightTheme = StyleSheet.create({
 
   textStyle: {
     fontSize: 25,
+    color: "black",
+  },
+
+  tabTextStyle: {
+    color: 'black',
   },
 
   ioTogglesContainer: {
@@ -218,6 +213,20 @@ const lightTheme = StyleSheet.create({
     fontSize: 17,
     fontWeight: "bold",
     color: "#444444",
+  },
+
+  buttonArea:  {
+    flex: 4,
+    flexDirection: "column",
+    backgroundColor: "#DEE4E7",
+  },
+
+  horizontalBar: {
+    borderBottomColor: "#CACACA",
+    borderBottomWidth: 2,
+    borderRadius: 5,
+    marginTop: 5,
+    marginHorizontal: 40,
   },
 });
 
@@ -265,7 +274,7 @@ const darkTheme = StyleSheet.create({
     borderTopWidth: 1,
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
-    borderColor: "#C7CDCF",
+    borderColor: "#718C9E",
     // borderRadius: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -275,14 +284,14 @@ const darkTheme = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#445663",
+    backgroundColor: "#36454F",
     padding: 0,
     // marginLeft: 2,
     // marginRight: 2,
     borderTopWidth: 1,
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
-    borderColor: "#DEE4E7",
+    borderColor: "#36454F",
     shadowColor: "#171717",
     shadowOffset: { width: 4, height: 0 },
     shadowOpacity: 0.10,
@@ -297,7 +306,7 @@ const darkTheme = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "#DEE4E7",
+    backgroundColor: "#36454F",
     marginTop: 5,
     padding: 2,
   },
@@ -306,7 +315,7 @@ const darkTheme = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#F0F0F0",
+    backgroundColor: "#718C9E",
     color: "#FF0000",
     margin: 2,
     borderRadius: 10,
@@ -353,18 +362,8 @@ const darkTheme = StyleSheet.create({
     // aspectRatio: 3/2,
   },
 
-  firstFunctionRow: {
-    flex: 1,
-    flexDirection: "row",
-    width: width > height ? width / 2 : width,
-    justifyContent: "center",
-    backgroundColor: "#FFFFFF",
-    // justifyContent: 'space-between',
-    // alignItems: 'center',
-  },
-
   tabRow: {
-    backgroundColor: "#718C9E",
+    backgroundColor: "#5B7586",
     flex: 1,
     flexDirection: "row",
     width: width > height ? width / 2 : width,
@@ -405,6 +404,10 @@ const darkTheme = StyleSheet.create({
     fontSize: 25
   },
 
+  tabTextStyle: {
+    color: 'white',
+  },
+
   ioTogglesContainer: {
     flex: 0.3,
     flexDirection: "row",
@@ -428,7 +431,21 @@ const darkTheme = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
     fontWeight: "bold",
-    color: "#444444",
+    color: "white",
+  },
+
+  buttonArea:  {
+    flex: 4,
+    flexDirection: "column",
+    backgroundColor: "#36454F",
+  },
+
+  horizontalBar: {
+    borderBottomColor: "black",
+    borderBottomWidth: 2,
+    borderRadius: 5,
+    marginTop: 5,
+    marginHorizontal: 40,
   },
 });
 

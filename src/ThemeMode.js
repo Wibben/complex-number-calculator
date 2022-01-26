@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import {lightTheme, darkTheme} from "./styles";
+import { View, Text, TouchableOpacity, Image } from "react-native";
+import light from "../icons/sun.svg";
+import dark from "../icons/moon.svg";
 
 const modeSwitch = {
   0: "LIGHT",
@@ -8,7 +9,7 @@ const modeSwitch = {
 };
 
 export const ThemeMode = (props) => {
-  const { mode, handleOnPress } = props;
+  const { mode, handleOnPress, tabs, tabContent, main, style } = props;
 
   const [currMode, setCurrMode] = useState(mode);
   const [currText, setCurrText] = useState(
@@ -21,6 +22,20 @@ export const ThemeMode = (props) => {
     setCurrText(
       modeSwitch[mode]
     );
+
+    for(let i=0; i<tabs.length; i++) {
+      tabs[i].ref.current.updateTheme(newMode);
+    }
+    for(let i=0; i<tabContent.length; i++) {
+      for(let j=0; j<tabContent[0].length; j++) {
+        tabContent[i][j].ref.current.updateTheme(newMode);
+      }
+    }
+    for(let i=0; i<main.length; i++) {
+      for(let j=0; j<main[0].length; j++) {
+        main[i][j].ref.current.updateTheme(newMode);
+      }
+    }
   };
 
   useEffect(() => {
@@ -29,10 +44,18 @@ export const ThemeMode = (props) => {
     );
   }, [mode]);
 
+  var icon;
+  
+  if(currText === "LIGHT"){
+    icon = dark;//'../icons/sun.svg';
+  }else{
+    icon = light;//'../icons/moon.svg';
+  }
+  
   return (
-    <View style={lightTheme.ioToggles}>
+    <View style={style.ioToggles}>
       <TouchableOpacity onPress={onModeChange}>
-        <Text style={lightTheme.ioTogglesText}>{currText}</Text>
+        <Image source = {icon} />
       </TouchableOpacity>
     </View>
   );

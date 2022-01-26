@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import {lightTheme, darkTheme} from "./styles";
 
 const angleConstants = {
   0: "DEG",
@@ -21,7 +20,7 @@ const outputConstants = {
 };
 
 export const ModeButton = (props) => {
-  const { isAngle, isAns, mode, handleOnPress } = props;
+  const { isAngle, isAns, mode, handleOnPress, style } = props;
 
   const [currMode, setCurrMode] = useState(mode);
   const [currText, setCurrText] = useState(
@@ -55,9 +54,9 @@ export const ModeButton = (props) => {
   }, [mode]);
 
   return (
-    <View style={lightTheme.ioToggles}>
+    <View style={style.ioToggles}>
       <TouchableOpacity onPress={onModeChange}>
-        <Text style={lightTheme.ioTogglesText}>{currText}</Text>
+        <Text style={style.ioTogglesText}>{currText}</Text>
       </TouchableOpacity>
     </View>
   );
