@@ -103,6 +103,10 @@ export function superscriptToDigit(n) {
 // At the same time, it will also check if the output is close
 // to a whole multiple of a constant
 export function roundOutput(output, precision) {
+  return round(output, precision);
+
+  // Legacy the rest/come back to it later
+
   if (output==0) return 0; // No need to do anything if it's just 0
 
   // Check if output is a multiple of a constant and which constant it is

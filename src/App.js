@@ -26,13 +26,13 @@ class ComplexNumberCalculator extends React.Component {
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
     [1, 2, 3, "+", "−"],
-    [".", 0, "( - )", "ANS", "="],
+    [".", 0, "( - )", "LAST", "="],
   ];
   tabInputs = {
     STD: [
       ["e", "√", "ⁿ√"],
       ["log", "ln", "logₙ"],
-      ["ₓ₁₀", "%", "!"],
+      ["×10ˣ", "%", "!"],
       ["|x|", "^2", "^-1"],
     ],
     TRIG: [
@@ -44,7 +44,7 @@ class ComplexNumberCalculator extends React.Component {
   };
   modeInput = {
     Input: ["cart", "polar", "exp"],
-    ANS: ["cart", "polar", "exp"],
+    LAST: ["cart", "polar", "exp"],
     Symbol: ["j", "∠", "eʲ"],
     Angle: ["deg", "rad", "grad"],
   };
@@ -68,6 +68,7 @@ class ComplexNumberCalculator extends React.Component {
       inputs: [],
       selection: { start: 0, end: 0 },
       outputs: null,
+      showAnswer: true,
       clearInput: false,
       bracketCount: 0,
       tab: "STD",
@@ -116,22 +117,18 @@ class ComplexNumberCalculator extends React.Component {
 
   handleAngleModeChange = () => {
     let currMode = this.state.angleMode;
-    currMode = (currMode + 1) % 3;
+    currMode = (currMode + 1) % 2;
     this.setState({ angleMode: currMode });
     // The Angle toggle will also trigger a form switch in the output
     this.handleButtonInput(this.modeInput["Angle"][currMode]);
-
-    // Change button text
-    const content = "Angle Mode: " + this.modeInput["Angle"][currMode];
   };
 
   handleInputModeChange = () => {
     let currMode = this.state.inputMode;
-    currMode = (currMode + 1) % 3;
+    currMode = (currMode + 1) % 2;
     this.setState({ inputMode: currMode });
 
     // Change button text
-    const content = "Input Mode: " + this.modeInput["Input"][currMode];
     this.mainElement[0][4].current.setState({
       content: this.modeInput["Symbol"][currMode],
     });
@@ -139,13 +136,10 @@ class ComplexNumberCalculator extends React.Component {
 
   handleAnsModeChange = () => {
     let currMode = this.state.outputMode;
-    currMode = (currMode + 1) % 3;
+    currMode = (currMode + 1) % 2;
     this.setState({ outputMode: currMode });
-    // The ANS toggle will also trigger a form switch in the output
-    this.handleButtonInput(this.modeInput["ANS"][currMode]);
-
-    // Change button text
-    const content = "ANS Mode: " + this.modeInput["ANS"][currMode];
+    // The LAST toggle will also trigger a form switch in the output
+    this.handleButtonInput(this.modeInput["LAST"][currMode]);
   };
 
   handleButtonInput = (input) => {
@@ -155,10 +149,11 @@ class ComplexNumberCalculator extends React.Component {
       clearInput: this.state.clearInput,
       bracketCount: this.state.bracketCount,
       selection: this.state.selection.start,
+      showAnswer: this.state.showAnswer,
     };
     var mode = {
       inputMode: this.modeInput["Input"][this.state.inputMode],
-      outputMode: this.modeInput["ANS"][this.state.outputMode],
+      outputMode: this.modeInput["LAST"][this.state.outputMode],
       angleMode: this.modeInput["Angle"][this.state.angleMode],
     };
 
@@ -173,6 +168,7 @@ class ComplexNumberCalculator extends React.Component {
     this.setState({
       inputs: array,
       outputs: answer,
+      showAnswer: options.showAnswer,
       bracketCount: options.bracketCount,
       selection: options.selection,
       clearInput: options.clearInput,
@@ -353,7 +349,7 @@ class ComplexNumberCalculator extends React.Component {
     else header = <Text style={{ height: StatusBar.currentHeight }}></Text>;
 
     var output;
-    if (this.state.outputs == null) output = "";
+    if (this.state.outputs == null || !this.state.showAnswer) output = "";
     else output = ["= ", ...this.state.outputs.toOutput()];
 
     var input = "";

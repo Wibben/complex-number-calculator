@@ -8,13 +8,13 @@ const angleConstants = {
 };
 
 const inputConstants = {
-  0: "IN: CART",
+  0: "IN: RECT",
   1: "IN: POLAR",
   2: "IN: EXP",
 };
 
 const outputConstants = {
-  0: "ANS: CART",
+  0: "ANS: RECT",
   1: "ANS: POLAR",
   2: "ANS: EXP",
 };
@@ -31,7 +31,7 @@ export const ModeButton = (props) => {
       : inputConstants[mode]
   );
   const onModeChange = () => {
-    const newMode = (currMode + 1) % 3;
+    const newMode = (currMode + 1) % 2;
     setCurrMode(newMode);
     handleOnPress();
     setCurrText(

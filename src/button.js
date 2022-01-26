@@ -12,6 +12,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
   var bracketCount = options.bracketCount;
   var selection = options.selection;
   var clearInput = options.clearInput;
+  var showAnswer = options.showAnswer;
 
   var selection = utils.snapSelectionToInput(array,selection);
   var lastElement = utils.lastSelected(array,selection);
@@ -19,13 +20,16 @@ export function parseButtonInput(input, array, answer, options, mode) {
   // absolute values shown as abs(x)
   if (input == "|x|") {
     input = "abs";
+  } else if(input =="×10ˣ") {
+    input = "ₓ₁₀";
   }
 
   if (input == "AC") {
     array = [];
     selection = -1;
     bracketCount = 0;
-    answer = null;
+    // answer = null;
+    showAnswer = false;
     clearInput = false;
   } else if (input == "DEL") {
     if (lastElement == "(") bracketCount--;
@@ -45,6 +49,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
     // Disallow compute right after an operand
     if (math.validateExpression(array)) {
       answer = math.doMath(array, answer, mode);
+      showAnswer = true;
       // After a valid calculations, the next button press will clear the input field
       clearInput = true;
     }
@@ -52,8 +57,15 @@ export function parseButtonInput(input, array, answer, options, mode) {
     math.operands.includes(input) &&
     !math.specialOps.includes(input)
   ) {
+    if(clearInput) {
+      array = ["LAST"];
+      selection = 0;
+      bracketCount = 0;
+      clearInput = false;
+    }
+
     // Put a filter on the operators
-    if (array.length > 0 && !clearInput) {
+    if (array.length > 0) {
       // Disallow having first input be an operator
       if (
         math.operands.includes(lastElement) &&
@@ -64,7 +76,6 @@ export function parseButtonInput(input, array, answer, options, mode) {
         array = utils.addItem(array, [input], selection);
         selection++;
       }
-      clearInput = false;
     }
   } else if (input == "( - )") {
     // The negative sign should only be allowed in certain situations
@@ -118,16 +129,23 @@ export function parseButtonInput(input, array, answer, options, mode) {
     selection++;
   } else if (math.functions.includes(input)) {
     if(clearInput) {
+      array = ["LAST"];
+      selection = -1;
+      bracketCount = 0;
+    }
+
+    array = utils.addItem(array, [input, "("], selection);
+    if(clearInput) selection+=3;
+    else selection+=2;
+    bracketCount++;
+  } else if (input == "logₙ" || input == "ⁿ√") {
+    if(clearInput) {
       array = [];
       selection = -1;
       bracketCount = 0;
       clearInput = false;
     }
 
-    array = utils.addItem(array, [input, "("], selection);
-    selection+=2;
-    bracketCount++;
-  } else if (input == "logₙ" || input == "ⁿ√") {
     // get number entered before which will be the custom base
     var startingPos = array.length-1;
     while (startingPos >= 0 && array[startingPos] in math.digits) startingPos -= 1;
@@ -156,6 +174,13 @@ export function parseButtonInput(input, array, answer, options, mode) {
       bracketCount++;
     }
   } else if (math.shortcuts.includes(input)) {
+    if(clearInput) {
+      array = ["LAST"];
+      selection = 0;
+      bracketCount = 0;
+      clearInput = false;
+    }
+
     if (input == "^2") {
       array = utils.addItem(array, ["^", 2], selection);
       selection += 2;
@@ -169,7 +194,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
     if (answer != null) answer.convert(input);
   } else if (math.angleConversion.includes(input)) {
     if (answer != null) answer.convertAngle(input);
-  } else if(input == "ANS") {
+  } else if(input == "LAST") {
     if(answer != null) {
       if(clearInput) {
         array = [];
@@ -199,6 +224,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
   options.bracketCount = bracketCount;
   options.selection = {start:selection,end:selection};
   options.clearInput = clearInput;
+  options.showAnswer = showAnswer;
 
   return [array, answer, options];
 }

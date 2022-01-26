@@ -51,25 +51,25 @@ describe("Calculator tests", () => {
     test("Should be able to add a positive integer to the results of a previous operation", () => {
       const result = doMath([1500,"-",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","+",500], prev_answer, "default")
+      const answer = doMath(["LAST","+",500], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(0);
     });
     test("Should be able to add a positive floating point number to the results of a previous operation", () => {
       const result = doMath([1500,"-",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","+",0.25], prev_answer, "default")
+      const answer = doMath(["LAST","+",0.25], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-499.75);
     });
     test("Should be able to add a floating point number with many decimal places to a previous result", () => {
       const result = doMath([1500,"-",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","+",1,".",23456789], prev_answer, "")
+      const answer = doMath(["LAST","+",1,".",23456789], prev_answer, "")
       expect(answer["val"]["re"]).toBe(-498.76543211);
     });
     test("Should be able to add a positive floating point number to the results of a previous operation", () => {
       const result = doMath([1500,"-",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","+",123456789], prev_answer, "")
+      const answer = doMath(["LAST","+",123456789], prev_answer, "")
       expect(answer["val"]["re"]).toBe(123456289);
     });
   });
@@ -98,7 +98,7 @@ describe("Calculator tests", () => {
     test("Should be able to subtract a positive number from the results of a previous operation", () => {
       const result = doMath([1500,"−",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","-",500], prev_answer, "default")
+      const answer = doMath(["LAST","-",500], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-1000);
     });
     test("Should be able to subtract an integer from a floating point number", () => {
@@ -144,7 +144,7 @@ describe("Calculator tests", () => {
     test("Should be able to subtract a floating point number from the result of a previous operation", () => {
       const result = doMath([1500,"−",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","-",33,".",12], prev_answer, "default")
+      const answer = doMath(["LAST","-",33,".",12], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-533.12);
     });
     test("Should be able to subtract an integer from a negative floating point number", () => {
@@ -165,13 +165,13 @@ describe("Calculator tests", () => {
     test("Should be able to subtract a large decimal number from the results of a previous result", () => {
       const result = doMath([1500,"−",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","-",12,".",3456789], prev_answer, "default")
+      const answer = doMath(["LAST","-",12,".",3456789], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-512.3456789);
     });
     test("Should be able to subtract a large integer from the results of a previous result", () => {
       const result = doMath([1500,"−",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","-",123456789], prev_answer, "default")
+      const answer = doMath(["LAST","-",123456789], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-123457289);
     });
   });
@@ -220,13 +220,13 @@ describe("Calculator tests", () => {
     test("Should be able to multiply the result of a previous operation by a positive floating point number", () => {
       const result = doMath([1500,"−",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","×",1,".",23], prev_answer, "default")
+      const answer = doMath(["LAST","×",1,".",23], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-615);
     });
     test("Should be able to multiply the result of a previous operation by a positive integer", () => {
       const result = doMath([1500,"−",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","×",123], prev_answer, "default")
+      const answer = doMath(["LAST","×",123], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-61500);
     });
     test("Should be able to multiply two many digit floating point numbers", () => {
@@ -242,13 +242,13 @@ describe("Calculator tests", () => {
     test("Should be able to multiply the result of a previous operation by large integer", () => {
       const result = doMath([1500,"−",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","×",123456789], prev_answer, "default")
+      const answer = doMath(["LAST","×",123456789], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-6.17283945e+10);
     });
     test("Should be able to multiply the result of a previous operation by a many digit floating point number", () => {
       const result = doMath([1500,"-",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","×",123,".",456789], prev_answer, "default")
+      const answer = doMath(["LAST","×",123,".",456789], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-61728.3945);
     });
     test("SShould be able to result of a previous operation when the previous result is zero", () => {
@@ -297,13 +297,13 @@ describe("Calculator tests", () => {
     test("Should be able to divide the result of a previous operation by a positive floating point number", () => {
       const result = doMath([1500,"−",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","÷",3,".",12], prev_answer, "default")
+      const answer = doMath(["LAST","÷",3,".",12], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-160.25641025641025);
     });
     test("Should be able to divide the result of a previous operation by a positive integer", () => {
       const result = doMath([1500,"−",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","÷",312], prev_answer, "default")
+      const answer = doMath(["LAST","÷",312], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-1.6025641025641026);
     });
     test("Should report error for division by 0", () => {
@@ -319,13 +319,13 @@ describe("Calculator tests", () => {
     test("Should be able to divide the result of a previous operation by a many digit floating point number", () => {
       const result = doMath([1500,"−",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","÷",1234,".",56789], prev_answer, "default")
+      const answer = doMath(["LAST","÷",1234,".",56789], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-0.40500000368550004);
     });
     test("Should be able to divide the result of a previous operation by a large integer", () => {
       const result = doMath([1500,"−",2000], null, "default")
       const prev_answer = result["val"]["re"]
-      const answer = doMath(["ANS","÷",123456789], prev_answer, "default")
+      const answer = doMath(["LAST","÷",123456789], prev_answer, "default")
       expect(answer["val"]["re"]).toBe(-0.0000040500000368550004);
     });
   });
@@ -375,7 +375,7 @@ describe("Calculator tests", () => {
     test("Should be able to add the result of a previous operation by a another complex number", () => {
       const result = doMath(["(",4,"+","j",3,")","+","(",5,"−","j",4,")"], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
       const prev_answer = result["val"]
-      const answer = doMath(["ANS","+","(",3,"+","j",")"], prev_answer, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      const answer = doMath(["LAST","+","(",3,"+","j",")"], prev_answer, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
       expect(answer["val"]["re"]).toBe(12);
     });
     test("Should be able to subtract two complex numbers", () => {
@@ -389,7 +389,7 @@ describe("Calculator tests", () => {
     });
     test("Should be able to subtract the result of a previous operation by a another complex number", () => {
       const result = doMath(["(",6,"+","j",4,")","−","(",-7,"+","j",5,")"], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
-      const answer = doMath(["ANS","−","(",3,"+","j",")"], result, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      const answer = doMath(["LAST","−","(",3,"+","j",")"], result, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
       expect(answer['val']['re']).toBe(10);
       expect(answer['val']['im']).toBe(-2);
     });
@@ -404,7 +404,7 @@ describe("Calculator tests", () => {
     });
     test("Should be able to multiply the result of a previous operation by a another complex number", () => {
       const result = doMath(["(",6,"+","j",4,")","×","(",-7,"+","j",5,")"], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
-      const answer = doMath(["ANS","×","(",3,"+","j",")"], result, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      const answer = doMath(["LAST","×","(",3,"+","j",")"], result, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
       expect(answer['val']['re']).toBe(-188);
       expect(answer['val']['im']).toBe(-56);
     });
@@ -419,13 +419,13 @@ describe("Calculator tests", () => {
     });
     test("Should be able to divide the result of a previous operation by a another complex number", () => {
       const result = doMath(["(",6,"+","j",4,")","÷","(",-7,"+","j",5,")"], null, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
-      const answer = doMath(["ANS","÷","(",3,"+","j",")"], result, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
+      const answer = doMath(["LAST","÷","(",3,"+","j",")"], result, {"angleMode":'deg', "inputMode":'cart', "outputMode": 'cart'})
       expect(answer['val']['re']).toBe(-0.16756756756756755);
       expect(answer['val']['im']).toBe(-0.20540540540540536);
     });
   });
 });
 //(4+j3)+(5-j3)
-//ANS + (3+j)
+//LAST + (3+j)
 //(6 + 4i) - (-7 + 5i)
 //(3 + 2i)(1 + 4i)
