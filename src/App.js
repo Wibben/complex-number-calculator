@@ -336,6 +336,8 @@ class ComplexNumberCalculator extends React.Component {
 
         <View key="io" style={{ flex: 1, alignSelf: "stretch" }}>
           <TextInput
+            // onFocus={() => Clipboard.setString('')} use this for taking iPad screenshots
+            contextMenuHidden={true}
             autoCorrect={false}
             key="input"
             showSoftInputOnFocus={false}
@@ -396,6 +398,7 @@ class ComplexNumberCalculator extends React.Component {
           {horizontalBar}
           {this.renderMainButtons()}
         </View>
+        {Platform.isPad ? <View style={{flex: 0.25}}></View> : null}
       </SafeAreaView>
     );
   };
