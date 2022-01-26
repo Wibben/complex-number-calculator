@@ -267,7 +267,7 @@ export class Button extends React.Component {
       "×": themeMode.operatorStyle,
       "÷": themeMode.operatorStyle,
       "=": themeMode.ansStyle,
-      "ANS": themeMode.ansStyle,
+      "LAST": themeMode.ansStyle,
       "^": themeMode.textStyle,
       "(": themeMode.textStyle, 
       ")": themeMode.textStyle, 
