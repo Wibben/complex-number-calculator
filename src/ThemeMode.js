@@ -24,16 +24,16 @@ export const ThemeMode = (props) => {
     );
 
     for(let i=0; i<tabs.length; i++) {
-      tabs[i].ref.current.updateTheme(newMode);
+      tabs[i].ref.current.updateTheme();
     }
     for(let i=0; i<tabContent.length; i++) {
       for(let j=0; j<tabContent[0].length; j++) {
-        tabContent[i][j].ref.current.updateTheme(newMode);
+        tabContent[i][j].ref.current.updateTheme();
       }
     }
     for(let i=0; i<main.length; i++) {
       for(let j=0; j<main[0].length; j++) {
-        main[i][j].ref.current.updateTheme(newMode);
+        main[i][j].ref.current.updateTheme();
       }
     }
   };

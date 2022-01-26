@@ -232,27 +232,16 @@ export function parseButtonInput(input, array, answer, options, mode) {
 export class Button extends React.Component {
   constructor(props) {
     super(props);
-    
-    let themeMode = lightTheme;
-    if(props.theme == 0) {
-      themeMode = darkTheme;
-    }
 
     this.state = {
       content: props.content,
       onPress: props.onPress,
-      baseSyle: props.style == null ? "button":props.style,
-      style: props.style == null ? themeMode.button : themeMode[props.style],
-      theme: props.theme == null ? 0:props.theme,
+      baseStyle: props.style == null ? "button":props.style,
     };
   }
 
-  updateTheme = (theme) => {
-    let themeMode = lightTheme;
-    if(theme == 0) {
-      themeMode = darkTheme;
-    }
-    this.setState({style: themeMode[this.state.baseSyle], theme: theme})
+  updateTheme = () => {
+    this.setState({});
   }
 
   callBack = () => {
@@ -268,10 +257,7 @@ export class Button extends React.Component {
 
     digits = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0]
 
-    let themeMode = lightTheme;
-    if(this.state.theme == 0) {
-      themeMode = darkTheme;
-    }
+    var themeMode = global.theme ? lightTheme:darkTheme;
 
     specialButtons = {
       "AC": themeMode.acStyle,
@@ -291,8 +277,8 @@ export class Button extends React.Component {
       "( - )": themeMode.textStyle
     }
 
-    if (disabled) style = styles.nonExistentButton;
-    else style = this.state.style;
+    if (disabled) style = themeMode.nonExistentButton;
+    else style = themeMode[this.state.baseStyle];
 
     if(this.state.content in specialButtons){
       var specificStyle = specialButtons[this.state.content];

@@ -11,6 +11,7 @@ const lightTheme = StyleSheet.create({
 
   inputField: {
     flex: 4,
+    color: 'black',
     textAlign: "right",
     alignSelf: "stretch",
     borderWidth: 1,
@@ -28,6 +29,7 @@ const lightTheme = StyleSheet.create({
 
   answerField: {
     flex: 1,
+    color: 'black',
     textAlign: "right",
     alignSelf: "stretch",
     borderWidth: 1,
@@ -246,6 +248,12 @@ const darkTheme = StyleSheet.create({
     backgroundColor: "#343434",
     fontSize: 30,
     margin: 5,
+  },
+
+  scrollField: {
+    flexDirection: "column",
+    // borderWidth: 1,
+    // borderColor: "white",
   },
 
   answerField: {

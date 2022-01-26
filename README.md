@@ -31,6 +31,8 @@ Ensure you have Node 12 LTS installed (at https://nodejs.org/en/download/) so we
 ```
 npm install -g expo-cli       # Install expo for development testing
 npm install mathjs            # Install the math library 
+npm i --save @fortawesome/free-solid-svg-icons  # Install an icon library
+npm i --save @fortawesome/fontawesome-svg-core  # Install a font library
 ```
 
 On your Android (https://play.google.com/store/apps/details?id=host.exp.exponent) or iOS device (https://itunes.com/apps/exponent), install the Expo Go app to be able to run the app on your device through LAN. Alternatively, you can install a iOS or Android emulator to run the app on the computer.
