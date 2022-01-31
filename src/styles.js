@@ -210,6 +210,16 @@ const lightTheme = StyleSheet.create({
     justifyContent: "center",
   },
 
+  modeToggles: {
+    backgroundColor: '#f7edf7',
+    paddingHorizontal: 15,
+    marginVertical: 5,
+    marginEnd: 5,
+    alignContent: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+
   ioTogglesText: {
     textAlign: "center",
     fontSize: 17,
@@ -433,6 +443,16 @@ const darkTheme = StyleSheet.create({
     paddingEnd: 10,
     alignContent: "center",
     justifyContent: "center",
+  },
+
+  modeToggles: {
+    backgroundColor: '#3e0042',
+    paddingHorizontal: 15,
+    marginVertical: 5,
+    marginEnd: 5,
+    alignContent: "center",
+    justifyContent: "center",
+    borderRadius: 10,
   },
 
   ioTogglesText: {

@@ -54,7 +54,7 @@ export const ModeButton = (props) => {
   }, [mode]);
 
   return (
-    <View style={style.ioToggles}>
+    <View style={style.modeToggles}>
       <TouchableOpacity onPress={onModeChange}>
         <Text style={style.ioTogglesText}>{currText}</Text>
       </TouchableOpacity>
