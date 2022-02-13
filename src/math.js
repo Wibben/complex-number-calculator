@@ -61,6 +61,13 @@ export function validateExpression(inputs) {
 function createExpression(inputs, prevAnswer, mode) {
   var expression = [];
 
+  // Count left and right brackets and get number of missing brackets
+  let bracketCount=0;
+  for (let i=0; i < inputs.length; i++) {
+    if(inputs[i] == "(") bracketCount++;
+    else if(inputs[i] == ")") bracketCount--;
+  }
+
   // Piece together expression, separating operands from operators
   if (constants.includes(inputs[0]))
     expression.push(
@@ -129,6 +136,12 @@ function createExpression(inputs, prevAnswer, mode) {
         expression.push("×",inputs[i]);
       } else expression.push(inputs[i]);
     } else expression[expression.length - 1] = `${lastElement}${inputs[i]}`; // Parsing for values
+  }
+
+  // Append Missing brackets
+  while(bracketCount>0) {
+    expression.push(")");
+    bracketCount--;
   }
 
   // From the expression, generate the complex numbers
