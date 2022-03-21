@@ -31,7 +31,8 @@ export const ModeButton = (props) => {
       : inputConstants[mode]
   );
   const onModeChange = () => {
-    const newMode = (currMode + 1) % 2;
+    const listLen = isAngle ? 3:2;
+    const newMode = (currMode + 1) % listLen;
     setCurrMode(newMode);
     handleOnPress();
     setCurrText(

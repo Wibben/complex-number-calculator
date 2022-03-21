@@ -5,7 +5,7 @@ import { Alert } from "react-native";
 
 // Handles all the math...
 export const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-export const operands = ["+", "−", "×", "÷", "(", ")", "ₓ₁₀", "^", "₊", "ₓ", "%", "!"]; // ₊ is a "shadow" plus sign used to skirt around precedence issues
+export const operands = ["+", "−", "×", "÷", "(", ")", "ₓ₁₀", "^", "₊", "ₓ", "↑", "%", "!"]; // ₊ is a "shadow" plus sign used to skirt around precedence issues
 export const specialOps = ["(", ")", "-"];
 export const conversion = ["polar", "exp", "cart"];
 export const angleConversion = ["deg", "rad", "grad"];
@@ -109,6 +109,22 @@ function createExpression(inputs, prevAnswer, mode) {
           expression.push(`${inputs[i]}${"1"}`, "ₓ");
         else expression.push(inputs[i]);
         
+      } else if(inputs[i] == "∠") {
+        // Parsing for complex entries - specifically ∠
+        if(!operands.includes(lastElement) || [")"].includes(lastElement)) { 
+          if([...digits,...constants,...specialOps].includes(inputs[i+1])) {
+            if(![...digits,...constants,"(","-"].includes(inputs[i+1])) {
+              expression.push("×");
+            } else expression.push("ₓ");
+          } else {
+            expression.push("×");
+          }
+        } 
+
+        if (inputs[i + 1] == "(")
+          expression.push(`${inputs[i]}${"0"}`, "ₓ", "1∠1", "↑");
+        else expression.push(inputs[i]);
+
       } else expression[expression.length - 1] = `${lastElement}${inputs[i]}`
     } else if(inputs[i] == "LAST") {
       // Performing substitution for the LAST operator
@@ -121,7 +137,9 @@ function createExpression(inputs, prevAnswer, mode) {
       }`;
       if (!operands.includes(lastElement)) {
         expression = utils.removeLastItem(expression);
-        expression.push("(", lastElement, "×", complexVal, ")");
+        // ∠ needs to be parsed with a multiply instead
+        if(lastElement.toString().includes("∠")) expression.push("(", lastElement, "^", complexVal, ")");
+        else expression.push("(", lastElement, "×", complexVal, ")");
       } else expression.push(complexVal); // Convert constants into values
     } else if (operands.includes(lastElement) || operands.includes(inputs[i])) {
       // Parsing for operands
@@ -169,6 +187,8 @@ function getPrecedence(operator) {
   // ₊ is used to concatenate (expr)j without losing precedence
   else if (["ₓ"].includes(operator)) return 101;
   // ₊ is used to concatenate (expr)j without losing precedence
+  else if (["↑"].includes(operator)) return 102;
+  // ↑ is used to concatenate (expr)∠ without losing precedence
   else return 0;
 }
 
@@ -240,7 +260,7 @@ export function doMath(inputs, prevAnswer, mode) {
       else if (element == "÷") a.div(b);
       else if (element == "+" || element == "₊") a.add(b);
       else if (element == "−") a.sub(b);
-      else if (element == "^") a.exp(b);
+      else if (element == "^" || element == "↑") a.exp(b);
       else if (element == "ₓ₁₀") 
         a.mult(new complex({ re: Math.pow(10, b.val.re), im: 0 }));
 
