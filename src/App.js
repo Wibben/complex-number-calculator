@@ -22,7 +22,7 @@ class ComplexNumberCalculator extends React.Component {
     [0, ".", "+j", "-j", "="],
   ];
   mobileInputs = [
-    ["^", "(", ")", "π", "j"],
+    ["xⁿ", "(", ")", "π", "j"],
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
     [1, 2, 3, "+", "−"],
@@ -32,8 +32,8 @@ class ComplexNumberCalculator extends React.Component {
     STD: [
       ["e", "√", "ⁿ√"],
       ["log", "ln", "logₙ"],
-      ["×10ˣ", "%", "!"],
-      ["|x|", "^2", "^-1"],
+      ["×10ⁿ", "%", "!"],
+      ["|x|", "x²", "¹⁄ₓ"],
     ],
     TRIG: [
       ["sin", "cos", "tan"],

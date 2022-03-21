@@ -6,7 +6,6 @@ import {
 import {lightTheme, darkTheme} from "./styles";
 import * as math from "./math";
 import * as utils from "./utils";
-import { string } from "mathjs";
 
 export function parseButtonInput(input, array, answer, options, mode) {
   var bracketCount = options.bracketCount;
@@ -20,8 +19,14 @@ export function parseButtonInput(input, array, answer, options, mode) {
   // absolute values shown as abs(x)
   if (input == "|x|") {
     input = "abs";
-  } else if(input =="×10ˣ") {
+  } else if(input == "×10ⁿ") {
     input = "ₓ₁₀";
+  } else if(input == "xⁿ") {
+    input = "^";
+  } else if(input == "x²") {
+    input = "^2"
+  } else if(input == "¹⁄ₓ") {
+    input = "^-1";
   }
 
   if (input == "AC") {
@@ -73,8 +78,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
       )
         array[selection] = input; // Disallow 2 consecutive ops
       else {
-        array = utils.addItem(array, [input], selection);
-        selection++;
+        [array, selection] = utils.addItem(array, [input], selection);
       }
     }
   } else if (input == "( - )") {
@@ -84,8 +88,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
       ([...math.operands, ...math.complexOps].includes(lastElement) &&
         !["-"].includes(lastElement))
     ) {
-      array = utils.addItem(array, ["-"], selection);
-      selection++;
+      [array, selection] = utils.addItem(array, ["-"], selection);
       clearInput = false;
     }
   } else if (input == "(") {
@@ -101,8 +104,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
         bracketCount = 0;
         clearInput = false;
       }
-      array = utils.addItem(array, [input], selection);
-      selection++;
+      [array, selection] = utils.addItem(array, [input], selection);
       bracketCount++;
     }
   } else if (input == ")") {
@@ -112,8 +114,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
       (!math.operands.includes(lastElement) || lastElement == ")") &&
       !["-"].includes(lastElement)
     ) {
-      array = utils.addItem(array, [input], selection);
-      selection++;
+      [array, selection] = utils.addItem(array, [input], selection);
       bracketCount--;
     }
   } else if (math.complexOps.includes(input)) {
@@ -125,8 +126,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
       clearInput = false;
     }
 
-    array = utils.addItem(array, [input], selection);
-    selection++;
+    [array, selection] = utils.addItem(array, [input], selection);
   } else if (math.functions.includes(input)) {
     if(clearInput) {
       array = ["LAST"];
@@ -134,9 +134,8 @@ export function parseButtonInput(input, array, answer, options, mode) {
       bracketCount = 0;
     }
 
-    array = utils.addItem(array, [input, "("], selection);
-    if(clearInput) selection+=3;
-    else selection+=2;
+    [array, selection] = utils.addItem(array, [input, "("], selection);
+    if(clearInput) selection++;
     bracketCount++;
   } else if (input == "logₙ" || input == "ⁿ√") {
     if(clearInput) {
@@ -163,14 +162,12 @@ export function parseButtonInput(input, array, answer, options, mode) {
 
     if (input == "logₙ") {
       var base = (prevNum.length == 0) ? "10" : prevNum.join("");
-      array = utils.addItem(array, ["log", base, "("], selection);
-      selection += 3;
+      [array, selection] = utils.addItem(array, ["log", base, "("], selection);
       bracketCount++;
     } else if (input == "ⁿ√") {
       var n = (prevNum.length == 0) ? "2" : prevNum.join("");
       var sup = utils.digitToSuperscript(n);
-      array = utils.addItem(array, [sup + "√", "("], selection);
-      selection += 2;
+      [array, selection] = utils.addItem(array, [sup + "√", "("], selection);
       bracketCount++;
     }
   } else if (math.shortcuts.includes(input)) {
@@ -182,11 +179,9 @@ export function parseButtonInput(input, array, answer, options, mode) {
     }
 
     if (input == "^2") {
-      array = utils.addItem(array, ["^", 2], selection);
-      selection += 2;
+      [array, selection] = utils.addItem(array, ["^", 2], selection);
     } else if (input == "^-1") {
-      array = utils.addItem(array, ["^", "-", 1], selection);
-      selection += 3;
+      [array, selection] = utils.addItem(array, ["^", "-", 1], selection);
     }
   } else if (math.conversion.includes(input)) {
     // Disallow conversion right after an operand
@@ -203,8 +198,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
         clearInput = false;
       }
 
-      array = utils.addItem(array, [input], selection);
-      selection++;
+      [array, selection] = utils.addItem(array, [input], selection);
     }
   } else {
     if(clearInput) {
@@ -214,8 +208,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
       clearInput = false;
     }
     
-    array = utils.addItem(array, [input], selection);
-    selection++;
+    [array, selection] = utils.addItem(array, [input], selection);
     clearInput = false;
   }
 

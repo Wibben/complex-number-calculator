@@ -1,5 +1,9 @@
-import { multiply, range, round } from "mathjs";
-import { functions, specialFunctions, constantVals, constants } from "./math";
+import { multiply, round, pi, e } from "mathjs";
+import { Alert } from "react-native";
+
+export const functions = ["sin", "cos", "tan", "asin", "acos", "atan", "sinh", "cosh", "tanh", "asinh", "acosh", "atanh", "log", "ln", "√", "abs"];
+export const constants = ["π", "e"];
+export const constantVals = [pi, e];
 
 export function snapSelectionToInput(array, selection) {
   // Due to the fact that certain inputs consist of multiple characters, we need to snap the selection to the end of the input
@@ -44,9 +48,17 @@ export function lastSelected(array,n) {
 }
 
 export function addItem(array,input,n) {
-  if(n==array.length-1) return [...array,...input];
-  else if(n==-1) return [...input,...array];
-  else return [...array.slice(0,n+1), ...input, ...array.slice(n+1)];
+  // If the
+  if(array.length >= 50) {
+    Alert.alert("Input Limit Reached", "You have reached the input limit, please split your expression into parts and compute them");
+    return [array, n];
+  }
+
+  var new_n = n + input.length;
+
+  if(n==array.length-1) return [[...array,...input], new_n];
+  else if(n==-1) return [[...input,...array], new_n];
+  else return [[...array.slice(0,n+1), ...input, ...array.slice(n+1)], new_n];
 }
 
 export function convertRadians(angle, mode) {
