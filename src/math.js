@@ -141,7 +141,8 @@ function createExpression(inputs, prevAnswer, mode) {
         if(lastElement.toString().includes("∠")) expression.push("(", lastElement, "^", complexVal, ")");
         else expression.push("(", lastElement, "×", complexVal, ")");
       } else expression.push(complexVal); // Convert constants into values
-    } else if (operands.includes(lastElement) || [...operands,...functions,...specialFunctions].includes(inputs[i])) {
+    } else if (operands.includes(lastElement) || [...operands,...functions].includes(inputs[i]) || 
+               inputs[i].toString().includes("log") || inputs[i].toString().includes("√")) {
       // Parsing for operands
       if((inputs[i]=="(" && // Implicit Multiplication of A(B)
           ![...operands,...functions,...specialFunctions,...complexOps,...specialOps].includes(lastElement) &&
@@ -153,8 +154,8 @@ function createExpression(inputs, prevAnswer, mode) {
           ![...operands,...functions,...specialFunctions,...complexOps,...specialOps].includes(inputs[i]) &&
           !inputs[i].toString().includes("log") && !inputs[i].toString().includes("√")) ||
           // Implicit multiplication of functions like Asin(B)
-          ([...functions,...specialFunctions].includes(inputs[i]) && 
-          ![...operands,...complexOps,...specialOps].includes(lastElement))
+          (([...functions].includes(inputs[i]) || inputs[i].toString().includes("log") || inputs[i].toString().includes("√")) && 
+          (![...operands,...complexOps,...specialOps].includes(lastElement) || lastElement==")"))
         ) {
         expression.push("×",inputs[i]);
       } else expression.push(inputs[i]);
@@ -180,6 +181,12 @@ function createExpression(inputs, prevAnswer, mode) {
 }
 
 function getPrecedence(operator) {
+  // nth log and nth root are displahyed differently than shown in the arrays, so need to parse back
+  var opString = operator ? operator.toString():""; // Only convert to string if it's valid
+  if(opString.includes("log") && opString != "log") operator = "logₙ";
+  else if(opString.includes("√") && opString != "√") operator = "ⁿ√";
+
+  // Find precedence
   if (["+", "−"].includes(operator)) return 1;
   //Precedence of + or - is 1
   else if (["×", "÷"].includes(operator)) return 2;
