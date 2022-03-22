@@ -141,15 +141,20 @@ function createExpression(inputs, prevAnswer, mode) {
         if(lastElement.toString().includes("∠")) expression.push("(", lastElement, "^", complexVal, ")");
         else expression.push("(", lastElement, "×", complexVal, ")");
       } else expression.push(complexVal); // Convert constants into values
-    } else if (operands.includes(lastElement) || operands.includes(inputs[i])) {
+    } else if (operands.includes(lastElement) || [...operands,...functions,...specialFunctions].includes(inputs[i])) {
       // Parsing for operands
-      if((inputs[i]=="(" &&
+      if((inputs[i]=="(" && // Implicit Multiplication of A(B)
           ![...operands,...functions,...specialFunctions,...complexOps,...specialOps].includes(lastElement) &&
           !lastElement.toString().includes("log") && !lastElement.toString().includes("√")) || 
+          // Implicit multiplication of (A)(B)
           (inputs[i]=="(" && lastElement==")") ||
+          // Implicit multiplication of (A)B
           (lastElement==")" &&
           ![...operands,...functions,...specialFunctions,...complexOps,...specialOps].includes(inputs[i]) &&
-          !inputs[i].toString().includes("log") && !inputs[i].toString().includes("√"))
+          !inputs[i].toString().includes("log") && !inputs[i].toString().includes("√")) ||
+          // Implicit multiplication of functions like Asin(B)
+          ([...functions,...specialFunctions].includes(inputs[i]) && 
+          ![...operands,...complexOps,...specialOps].includes(lastElement))
         ) {
         expression.push("×",inputs[i]);
       } else expression.push(inputs[i]);
