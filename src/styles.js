@@ -178,7 +178,7 @@ const lightTheme = StyleSheet.create({
   },
 
   ansStyle: {
-    fontSize: 25,
+    fontSize: 20,
     color: "#3CB043",
   },
 
