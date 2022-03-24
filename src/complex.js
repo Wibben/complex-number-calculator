@@ -184,23 +184,24 @@ export default class complex {
 
   toOutput() {
     let output, args;
+    let roundPrecision = 5;
 
     if (this.form == "cart") {
       args = this.val.toVector();
-      let re = roundOutput(args[0],2);
-      let im = roundOutput(args[1],2);
+      let re = roundOutput(args[0],roundPrecision);
+      let im = roundOutput(args[1],roundPrecision);
       if(im==0) output = [re];
       else if(re==0) output = [im, "j"];
       else output = [re, "+", im, "j"];
     } else if (this.form == "polar") {
       args = this.val.toPolar();
-      let re = roundOutput(args.r, 2);
-      let phi = roundOutput(convertRadians(args.phi, this.angleMode), 2);
+      let re = roundOutput(args.r, roundPrecision);
+      let phi = roundOutput(convertRadians(args.phi, this.angleMode), roundPrecision);
       output = [re, "∠", phi];
     } else if (this.form == "exp") {
       args = this.val.toPolar();
-      let re = roundOutput(args.r, 2);
-      let phi = roundOutput(args.phi, 2); // Always radians
+      let re = roundOutput(args.r, roundPrecision);
+      let phi = roundOutput(args.phi, roundPrecision); // Always radians
       if (phi == 0) output = [re];
       else output = [re, "eʲ", phi];
     }
