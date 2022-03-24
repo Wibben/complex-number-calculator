@@ -126,7 +126,17 @@ export function parseButtonInput(input, array, answer, options, mode) {
       clearInput = false;
     }
 
-    [array, selection] = utils.addItem(array, [input], selection);
+    var isValid = true;
+    var startingPos = array.length-1;
+    while (startingPos >= 0 && math.digits.includes(array[startingPos])) startingPos -= 1;
+    
+    // cannot insert 2 complex ops as part of the same number. it causes ambiguity
+    // due to how complex numbers are parsed (e.g. x+ij or xji)
+    if (startingPos >= 0 && math.complexOps.includes(array[startingPos])) isValid = false;
+
+    if (isValid) {
+      [array, selection] = utils.addItem(array, [input], selection);
+    }
   } else if (math.functions.includes(input)) {
     if(clearInput) {
       array = ["LAST"];
