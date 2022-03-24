@@ -208,7 +208,9 @@ export function parseButtonInput(input, array, answer, options, mode) {
         clearInput = false;
       }
 
-      [array, selection] = utils.addItem(array, [input], selection);
+      // quick patch since to avoid LASTLAST as requested
+      if (!(array.length > 0 && array[array.length-1] == "LAST"))
+        [array, selection] = utils.addItem(array, [input], selection);
     }
   } else {
     if(clearInput) {
