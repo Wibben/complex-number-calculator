@@ -184,7 +184,7 @@ export default class complex {
 
   toOutput() {
     let output, args;
-    let roundPrecision = 5;
+    let roundPrecision = 9;
 
     if (this.form == "cart") {
       args = this.val.toVector();
