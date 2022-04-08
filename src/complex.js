@@ -192,6 +192,7 @@ export default class complex {
       let im = roundOutput(args[1],roundPrecision);
       if(im==0) output = [re];
       else if(re==0) output = [im, "j"];
+      else if(im<0) output = [re, "−", -1*im, "j"]
       else output = [re, "+", im, "j"];
     } else if (this.form == "polar") {
       args = this.val.toPolar();

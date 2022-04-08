@@ -81,7 +81,7 @@ export function parseButtonInput(input, array, answer, options, mode) {
         [array, selection] = utils.addItem(array, [input], selection);
       }
     }
-  } else if (input == "( - )") {
+  } else if (input == "NEG") {
     // The negative sign should only be allowed in certain situations
     if (
       selection == -1 ||
@@ -273,13 +273,13 @@ export class Button extends React.Component {
       "÷": themeMode.operatorStyle,
       "=": themeMode.ansStyle,
       "LAST": themeMode.ansStyle,
-      "^": themeMode.textStyle,
+      "xⁿ": themeMode.textStyle,
       "(": themeMode.textStyle, 
       ")": themeMode.textStyle, 
       "π": themeMode.textStyle, 
       "j": themeMode.textStyle,
       ".": themeMode.textStyle,
-      "( - )": themeMode.textStyle
+      "NEG": themeMode.negStyle
     }
 
     if (disabled) style = themeMode.nonExistentButton;

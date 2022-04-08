@@ -29,7 +29,7 @@ class ComplexNumberCalculator extends React.Component {
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
     [1, 2, 3, "+", "−"],
-    [".", 0, "( - )", "LAST", "="],
+    [".", 0, "NEG", "LAST", "="],
   ];
   tabInputs = {
     STD: [
@@ -310,6 +310,7 @@ class ComplexNumberCalculator extends React.Component {
   render = () => {
     var flexDir, header;
     var theme = global.theme ? lightTheme : darkTheme;
+    var statusBarStyle = global.theme ? "dark-content" : "light-content";
 
     if (Platform.OS == "web") flexDir = "row";
     else flexDir = "column";
@@ -332,6 +333,11 @@ class ComplexNumberCalculator extends React.Component {
     return true ? (
       <SafeAreaView key="mainView" style={theme.center}>
         {header}
+        <StatusBar
+          backgroundColor={"transparent"}
+          barStyle={statusBarStyle}
+          translucent={true}
+        />
         <TutorialSlideshow
           showTutorial={this.state.showTutorial}
           toggleShowTutorial={this.toggleShowTutorial}

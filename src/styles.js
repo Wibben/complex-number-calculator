@@ -180,6 +180,11 @@ const lightTheme = StyleSheet.create({
     color: "#3CB043",
   },
 
+  negStyle: {
+    fontSize: 20,
+    color: 'black'
+  },
+
   textStyle: {
     fontSize: 25,
     color: "black",
@@ -422,6 +427,11 @@ const darkTheme = StyleSheet.create({
   ansStyle: {
     fontSize: 20,
     color: "#9F2B68",
+  },
+
+  negStyle: {
+    fontSize: 20,
+    color: 'white'
   },
 
   textStyle: {
