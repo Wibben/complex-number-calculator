@@ -299,6 +299,7 @@ class ComplexNumberCalculator extends React.Component {
   render = () => {
     var flexDir, header;
     var theme = global.theme ? lightTheme:darkTheme;
+    var statusBarStyle = global.theme ? "dark-content":"light-content";
 
     if (Platform.OS == "web") flexDir = "row";
     else flexDir = "column";
@@ -323,6 +324,12 @@ class ComplexNumberCalculator extends React.Component {
     return (
       <SafeAreaView key="mainView" style={theme.center}>
         {header}
+        <StatusBar 
+          backgroundColor={'transparent'}
+          barStyle={statusBarStyle}
+          translucent={true}
+        />
+
         <View >
           <ThemeMode
             mode={global.theme}
