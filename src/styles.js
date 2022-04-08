@@ -6,12 +6,12 @@ const lightTheme = StyleSheet.create({
   center: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
 
   inputField: {
     flex: 4,
-    color: 'black',
+    color: "black",
     textAlign: "right",
     alignSelf: "stretch",
     borderWidth: 1,
@@ -29,7 +29,7 @@ const lightTheme = StyleSheet.create({
 
   answerField: {
     flex: 1,
-    color: 'black',
+    color: "black",
     textAlign: "right",
     alignSelf: "stretch",
     borderWidth: 1,
@@ -75,7 +75,7 @@ const lightTheme = StyleSheet.create({
     borderColor: "#DEE4E7",
     shadowColor: "#171717",
     shadowOffset: { width: 4, height: 0 },
-    shadowOpacity: 0.10,
+    shadowOpacity: 0.1,
     shadowRadius: 1,
     // borderRadius: 20,
     borderTopLeftRadius: 20,
@@ -123,8 +123,6 @@ const lightTheme = StyleSheet.create({
     // justifyContent: 'space-between',
     // alignItems: 'center',
   },
-
-
 
   tabRow: {
     backgroundColor: "#D7E5F0",
@@ -188,7 +186,7 @@ const lightTheme = StyleSheet.create({
   },
 
   tabTextStyle: {
-    color: 'black',
+    color: "black",
   },
 
   ioTogglesContainer: {
@@ -201,7 +199,7 @@ const lightTheme = StyleSheet.create({
     //justifyContent: "center",
     backgroundColor: "#D7E5F0",
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20
+    borderTopRightRadius: 20,
   },
 
   ioToggles: {
@@ -211,7 +209,7 @@ const lightTheme = StyleSheet.create({
   },
 
   modeToggles: {
-    backgroundColor: '#f7edf7',
+    backgroundColor: "#f7edf7",
     paddingHorizontal: 15,
     marginVertical: 5,
     marginEnd: 5,
@@ -227,7 +225,7 @@ const lightTheme = StyleSheet.create({
     color: "#444444",
   },
 
-  buttonArea:  {
+  buttonArea: {
     flex: 4,
     flexDirection: "column",
     backgroundColor: "#DEE4E7",
@@ -239,6 +237,15 @@ const lightTheme = StyleSheet.create({
     borderRadius: 5,
     marginTop: 5,
     marginHorizontal: 40,
+  },
+
+  topBar: {
+    flexDirection: "row",
+  },
+
+  tinyLogo: {
+    height: 20,
+    width: 20,
   },
 });
 
@@ -252,7 +259,7 @@ const darkTheme = StyleSheet.create({
 
   inputField: {
     flex: 4,
-    color: 'white',
+    color: "white",
     textAlign: "right",
     alignSelf: "stretch",
     backgroundColor: "#343434",
@@ -268,7 +275,7 @@ const darkTheme = StyleSheet.create({
 
   answerField: {
     flex: 6,
-    color: 'white',
+    color: "white",
     textAlign: "right",
     alignSelf: "stretch",
     backgroundColor: "#343434",
@@ -312,7 +319,7 @@ const darkTheme = StyleSheet.create({
     borderColor: "#36454F",
     shadowColor: "#171717",
     shadowOffset: { width: 4, height: 0 },
-    shadowOpacity: 0.10,
+    shadowOpacity: 0.1,
     shadowRadius: 1,
     // borderRadius: 20,
     borderTopLeftRadius: 20,
@@ -344,12 +351,12 @@ const darkTheme = StyleSheet.create({
   },
 
   mainButtonContainer: {
-    flex: (width>height ? 1 : 4),
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    flex: width > height ? 1 : 4,
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "center",
     padding: 5,
-    backgroundColor: '#36454F',
+    backgroundColor: "#36454F",
   },
 
   buttonRow: {
@@ -363,16 +370,16 @@ const darkTheme = StyleSheet.create({
 
   button: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#28282B',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#28282B",
     padding: 0,
     borderWidth: 1,
     borderColor: "black",
     borderRadius: 20,
     margin: 4,
-    shadowColor: '#171717',
-    shadowOffset: {width: 0, height: 4},
+    shadowColor: "#171717",
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     //filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))
@@ -392,17 +399,17 @@ const darkTheme = StyleSheet.create({
 
   nonExistentButton: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#8DBDD8',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#8DBDD8",
     padding: 0,
     borderWidth: 1,
-    borderColor: '#8DBDD8',
+    borderColor: "#8DBDD8",
     borderRadius: 5,
     margin: 2,
   },
 
-  acStyle:{
+  acStyle: {
     fontSize: 25,
     color: "#C41E3A",
   },
@@ -413,17 +420,17 @@ const darkTheme = StyleSheet.create({
   },
 
   ansStyle: {
-    fontSize: 25,
+    fontSize: 20,
     color: "#9F2B68",
   },
 
   textStyle: {
-    color: 'white',
-    fontSize: 25
+    color: "white",
+    fontSize: 25,
   },
 
   tabTextStyle: {
-    color: 'white',
+    color: "white",
   },
 
   ioTogglesContainer: {
@@ -436,7 +443,7 @@ const darkTheme = StyleSheet.create({
     //justifyContent: "center",
     backgroundColor: "#5B7586",
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20
+    borderTopRightRadius: 20,
   },
 
   ioToggles: {
@@ -446,7 +453,7 @@ const darkTheme = StyleSheet.create({
   },
 
   modeToggles: {
-    backgroundColor: '#3e0042',
+    backgroundColor: "#3e0042",
     paddingHorizontal: 15,
     marginVertical: 5,
     marginEnd: 5,
@@ -462,7 +469,7 @@ const darkTheme = StyleSheet.create({
     color: "white",
   },
 
-  buttonArea:  {
+  buttonArea: {
     flex: 4,
     flexDirection: "column",
     backgroundColor: "#36454F",
@@ -475,6 +482,14 @@ const darkTheme = StyleSheet.create({
     marginTop: 5,
     marginHorizontal: 40,
   },
+
+  topBar: {
+    flexDirection: "row",
+  },
+  tinyLogo: {
+    height: 20,
+    width: 20,
+  },
 });
 
-export { lightTheme, darkTheme};
+export { lightTheme, darkTheme };
