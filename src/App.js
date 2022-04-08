@@ -7,12 +7,15 @@ import {
   StatusBar,
   ScrollView,
   Keyboard,
+  Pressable,
+  Image,
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import {lightTheme, darkTheme} from "./styles";
+import { lightTheme, darkTheme } from "./styles";
 import * as button from "./button";
 import ModeButton from "./ModeButton";
 import ThemeMode from "./ThemeMode";
+import TutorialSlideshow from "./TutorialSlideshow";
 
 class ComplexNumberCalculator extends React.Component {
   webInputs = [
@@ -50,8 +53,8 @@ class ComplexNumberCalculator extends React.Component {
   };
 
   themeInput = {
-    theme: ["light", "dark"]
-  }
+    theme: ["light", "dark"],
+  };
 
   constructor(props) {
     super(props);
@@ -78,12 +81,18 @@ class ComplexNumberCalculator extends React.Component {
       tabButtons: this.generateTabButtons(this.tabInputs),
       tabContent: this.generateTabContent(this.tabInputs),
       mainButtons: this.generateMainButtons(inputs),
+      showTutorial: false,
     };
   }
 
+  toggleShowTutorial = () => {
+    let currState = this.state.showTutorial;
+    this.setState({ showTutorial: !currState });
+  };
+
   handleTabSwitching = (input) => {
     this.setState({ tab: input });
-    var theme = global.theme ? lightTheme:darkTheme;
+    var theme = global.theme ? lightTheme : darkTheme;
 
     // Change the toggle on the tab
     for (let i = 0; i < this.state.tabButtons.length; i++) {
@@ -95,7 +104,9 @@ class ComplexNumberCalculator extends React.Component {
     // Change the tab button content based on the toggle
     for (let i = 0; i < this.state.tabContent.length; i++) {
       for (let j = 0; j < this.state.tabContent[i].length; j++) {
-        this.tabContentElement[i][j].current.setState({ content: this.tabInputs[input][i][j] });
+        this.tabContentElement[i][j].current.setState({
+          content: this.tabInputs[input][i][j],
+        });
       }
     }
   };
@@ -248,7 +259,7 @@ class ComplexNumberCalculator extends React.Component {
   renderTabButtons = () => {
     var buttonRows = [];
     var tabContainer = [];
-    var theme = global.theme ? lightTheme:darkTheme;
+    var theme = global.theme ? lightTheme : darkTheme;
 
     // Generate the tabs
     tabContainer.push(
@@ -280,10 +291,10 @@ class ComplexNumberCalculator extends React.Component {
 
   renderMainButtons = () => {
     var buttonRows = [];
-    var theme = global.theme ? lightTheme:darkTheme;
+    var theme = global.theme ? lightTheme : darkTheme;
 
     for (let i = 0; i < this.state.mainButtons.length; i++) {
-      buttonRows.push( 
+      buttonRows.push(
         <View key={"renderButtonView_" + i.toString()} style={theme.buttonRow}>
           {this.state.mainButtons[i]}
         </View>
@@ -298,8 +309,8 @@ class ComplexNumberCalculator extends React.Component {
 
   render = () => {
     var flexDir, header;
-    var theme = global.theme ? lightTheme:darkTheme;
-    var statusBarStyle = global.theme ? "dark-content":"light-content";
+    var theme = global.theme ? lightTheme : darkTheme;
+    var statusBarStyle = global.theme ? "dark-content" : "light-content";
 
     if (Platform.OS == "web") flexDir = "row";
     else flexDir = "column";
@@ -317,28 +328,46 @@ class ComplexNumberCalculator extends React.Component {
       input = `${input}${this.state.inputs[i]}`;
     }
 
-    let horizontalBar = <View
-                          style={theme.horizontalBar}
-                        />;
-    
-    return (
+    let horizontalBar = <View style={theme.horizontalBar} />;
+
+    return true ? (
       <SafeAreaView key="mainView" style={theme.center}>
         {header}
-        <StatusBar 
-          backgroundColor={'transparent'}
+        <StatusBar
+          backgroundColor={"transparent"}
           barStyle={statusBarStyle}
           translucent={true}
         />
-
-        <View >
-          <ThemeMode
-            mode={global.theme}
-            handleOnPress={this.props.handleOnPress}
-            tabs={this.state.tabButtons}
-            tabContent={this.state.tabContent}
-            main={this.state.mainButtons}
-            style={theme}
-          />
+        <TutorialSlideshow
+          showTutorial={this.state.showTutorial}
+          toggleShowTutorial={this.toggleShowTutorial}
+        />
+        <View style={theme.topBar}>
+          <View style={{ flex: 1 }}>
+            <Pressable onPress={() => this.toggleShowTutorial()}>
+              {global.theme ? (
+                <Image
+                  style={theme.tinyLogo}
+                  source={require("../icons/help-light.png")}
+                />
+              ) : (
+                <Image
+                  style={theme.tinyLogo}
+                  source={require("../icons/help-dark.png")}
+                />
+              )}
+            </Pressable>
+          </View>
+          <View style={{ flex: 1.15 }}>
+            <ThemeMode
+              mode={global.theme}
+              handleOnPress={this.props.handleOnPress}
+              tabs={this.state.tabButtons}
+              tabContent={this.state.tabContent}
+              main={this.state.mainButtons}
+              style={theme}
+            />
+          </View>
         </View>
 
         <View key="io" style={{ flex: 1, alignSelf: "stretch" }}>
@@ -356,11 +385,7 @@ class ComplexNumberCalculator extends React.Component {
             selection={this.state.selection}
             onSelectionChange={this.handleSelectionChange}
           />
-          <ScrollView 
-            key="scroll"
-            horizontal={true}
-            style={theme.scrollField}
-          >
+          <ScrollView key="scroll" horizontal={true} style={theme.scrollField}>
             <Text
               key="output"
               numberOfLines={1}
@@ -397,15 +422,18 @@ class ComplexNumberCalculator extends React.Component {
           />
         </View>
 
-        <View
-          key="buttonArea"
-          style={theme.buttonArea}
-        >
+        <View key="buttonArea" style={theme.buttonArea}>
           {this.renderTabButtons()}
           {horizontalBar}
           {this.renderMainButtons()}
         </View>
-        {Platform.isPad ? <View style={{flex: 0.25}}></View> : null}
+        {Platform.isPad ? <View style={{ flex: 0.25 }}></View> : null}
+      </SafeAreaView>
+    ) : (
+      <SafeAreaView>
+        <View>
+          <TutorialSlideshow />
+        </View>
       </SafeAreaView>
     );
   };
