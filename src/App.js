@@ -26,7 +26,7 @@ class ComplexNumberCalculator extends React.Component {
     [7, 8, 9, "DEL", "AC"],
     [4, 5, 6, "×", "÷"],
     [1, 2, 3, "+", "−"],
-    [".", 0, "( - )", "LAST", "="],
+    [".", 0, "NEG", "LAST", "="],
   ];
   tabInputs = {
     STD: [
